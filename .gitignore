@@ -49,3 +49,5 @@ coverage/
 # Resharper & Rider
 .idea/
 *.DotSettings
+
+appsettings.json
