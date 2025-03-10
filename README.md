@@ -35,8 +35,8 @@ Dự án này là một sàn giao dịch việc làm trực tuyến, giúp kết
 ### Hướng dẫn cài đặt
 1. Clone repository:
    ```sh
-   git clone https://github.com/VuHoangAnh2110/BTL-NMCNPM.git
-   cd BTL-NMCNPM
+   git clone https://github.com/VuHoangAnh2110/BTL-Web-NC.git
+   cd BTL-Web-NC
    ```
 2. Cài đặt dependencies:
    ```sh
