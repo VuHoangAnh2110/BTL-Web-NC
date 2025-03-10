@@ -1,3 +1,51 @@
-/bin/
-/obj/
-/.vscode/
+
+# Visual Studio
+.vs/
+.vscode/
+
+# .NET build
+bin/
+obj/
+out/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs, databases, and config
+logs/
+*.log
+appsettings.Development.json
+appsettings.Local.json
+
+# Entity Framework
+migrations/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Node.js dependencies (nếu có frontend với React/Angular)
+node_modules/
+npm-debug.log
+yarn.lock
+
+# Secrets & Environment
+.env
+secrets.json
+
+# Publish output
+# publish/
+# wwwroot/
+
+# Coverage & Test results
+TestResults/
+coverage/
+*.coverage
+*.trx
+
+# Resharper & Rider
+.idea/
+*.DotSettings
