@@ -39,18 +39,26 @@ Dự án này là một sàn giao dịch việc làm trực tuyến, giúp kết
    cd BTL-Web-NC
    ```
 2. Cài đặt dependencies:
+    - Đối với .NET
    ```sh
    dotnet restore
+   ```
+    - Đối với Node.js
+   ```sh
    npm install
    ```
-3. Cấu hình môi trường:
+4. Cấu hình môi trường:
    - Sao chép file `appsettings.example.json` thành `appsettings.json` và chỉnh sửa thông tin kết nối database.
-4. Chạy ứng dụng:
+5. Chạy ứng dụng:
+    - Đối với .NET
    ```sh
    dotnet run
+   ```
+    - Đối với Node.js
+   ```sh
    npm start
    ```
-5. Truy cập ứng dụng tại: `http://localhost:5000`
+7. Truy cập ứng dụng tại: `http://localhost:5000`
 
 ## Đóng Góp
 Chúng tôi hoan nghênh mọi đóng góp! Hãy fork repo, tạo branch mới, commit thay đổi và gửi pull request.
@@ -59,6 +67,6 @@ Chúng tôi hoan nghênh mọi đóng góp! Hãy fork repo, tạo branch mới, 
 Dự án này được phát hành dưới giấy phép MIT.
 
 ## Liên Hệ
-- **Email:** @gmail.com
-- **Website:** https://.com
+- **Email:** G27@gmail.com
+- **Website:** https://G27.com
 
