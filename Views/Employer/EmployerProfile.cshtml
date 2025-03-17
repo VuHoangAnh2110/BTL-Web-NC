@@ -1,99 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model BTL_Web_NC.Models.NhaTuyenDung
+
+@{
+    ViewData["Title"] = "Thông Tin Nhà Tuyển Dụng";
 }
 
-
-<div class="banner py-4 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="input-group">
-                    <!-- Dropdown danh mục nghề nghiệp -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            Chọn ngành nghề
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">IT</a></li>
-                            <li><a class="dropdown-item" href="#">Marketing</a></li>
-                            <li><a class="dropdown-item" href="#">Kế toán</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Ô input tìm kiếm -->
-                    <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm...">
-
-                    <!-- Dropdown địa điểm -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            Chọn địa điểm
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Hà Nội</a></li>
-                            <li><a class="dropdown-item" href="#">TP. Hồ Chí Minh</a></li>
-                            <li><a class="dropdown-item" href="#">Đà Nẵng</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Button tìm kiếm -->
-                    <button class=" btn btn-primary" type="button">Tìm kiếm</button>
-                </div>
-            </div>
-            
-        </div>
-        
-    </div>
-
-    <!--Thêm việc-->
-   <!-- Nút bấm mở modal -->
-<button type="button" class="addJob btn btn-outline-secondary text-white" data-bs-toggle="modal" data-bs-target="#recruitModal">
-    Tuyển dụng
-</button>
-
-
-<!-- Modal -->
-<div class="modal fade" id="recruitModal" tabindex="-1" aria-labelledby="recruitModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content border-0">
-            <div class="modal-header border-bottom-1 px-4 border-bottom-0">
-                <h5 class="modal-title text-truncate overflow-hidden font-weight-600 text-nowrap">Chào bạn,</h5>
-            </div>
-            <div class="d-flex justify-content-center">
-                <div class="w-75 text-center">
-                    <h5 class="title">Bạn hãy xác nhận thông tin!</h5>
-                    <p class="mb-4 title-content">
-                        Để tối ưu trải nghiệm trên TopCV, vui lòng chọn nhóm phù hợp với bạn.
-                        
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer content justify-content-center text-center mx-0">
-                <div class="font-weight-bold desc">
-                    Vui lòng lựa chọn nhóm phù hợp nhất với bạn.
-                </div>
-                <div class="row w-100 d-flex justify-content-between">
-                    <div class="col-6 text-center grid">
-                       
-                        
-                        <a class="btn btn-primary ml-1" asp-controller="Home" asp-action="RedirectToEmployer">Tôi là nhà tuyển dụng</a>
-                    </div>
-                    <div class="col-6 text-center grid mb-2">
-                        
-                        <a class="btn btn-primary ml-1" asp-controller="Home" asp-action="RedirectToCandidate">Tôi là ứng viên tìm việc</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-    
-</div>
-
+<h2 class="text-center">Thông Tin Công Ty</h2>
 
 <div class="container mt-4">
+    <div class="mb-3">
+        <strong>Tên Công Ty:</strong> @Model.TenCongTy
+    </div>
+
+    <div class="mb-3">
+        <strong>Địa Chỉ:</strong> @Model.DiaChi
+    </div>
+
+    <div class="mb-3">
+        <strong>Mô Tả Công Ty:</strong> @Model.MoTaCongTy
+    </div>
+
+    <div class="mb-3">
+        <strong>Website:</strong> <a href="@Model.Website" target="_blank">@Model.Website</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Logo))
+    {
+        <div class="mb-3">
+            <strong>Logo Công Ty:</strong> <br />
+            <img src="@Model.Logo" alt="Logo Công Ty" width="150">
+        </div>
+    }
+
+    <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh Sửa</a>
+    <a asp-controller="Job" asp-action="CreateJob" class="btn btn-primary">Thêm việc</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+
+</div>
+
+<h2 class="text-center">Công Việc Của Tôi</h2>
+
+<!-- Quản lý công việc -->
+<div class="container mt-4">
   <div class="row">
-    @for (int i = 0; i < 7; i++) // Hiển thị 4 card
+    @for (int i = 0; i < 7; i++) 
     {
       <div class="col-md-6 mb-4">
         <div class="card">

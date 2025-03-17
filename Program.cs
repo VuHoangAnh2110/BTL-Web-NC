@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BTL_Web_NC.Data;
+using BTL_Web_NC.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+builder.Services.AddScoped<INhaTuyenDungRepository, NhaTuyenDungRepository>();
+builder.Services.AddScoped<ICongViecRepository, CongViecRepository>();
 
 // Thêm dịch vụ Session
 builder.Services.AddDistributedMemoryCache(); 
