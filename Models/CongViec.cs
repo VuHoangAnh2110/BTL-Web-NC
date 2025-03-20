@@ -4,48 +4,42 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BTL_Web_NC.Models
 {
-    [Table("tbl_cong_viec")]
-
+    [Table("tblCongViec")]
     public class CongViec
     {
-        //Các cột công việc
         [Key]
-        [Column("id")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [Column("PK_sMaCongViec")]
+        [StringLength(50)]
+        public string? MaCongViec { get; set; }
 
-        //Id của người dùng
+        [Column("FK_sMaCongTy")]
+        [StringLength(50)]
+        public string? MaCongTy { get; set; }
+
+        [Column("sTieuDe")]
         [Required]
-        [Column("id_nha_tuyen_dung")]
-        public int IdNhaTuyenDung { get; set; }
+        [StringLength(255)]
+        public string? TieuDe { get; set; }
 
-        [Column("tieu_de")]
+        [Column("sMoTa")]
         [Required]
-        public String ?TieuDe { get; set; }
+        public string? MoTa { get; set; }
 
-        [Column("mo_ta")]
-        [Required]
-        public String ?MoTa { get; set; }
+        [Column("sDiaDiem")]
+        [StringLength(255)]
+        public string? DiaDiem { get; set; }
 
-        [Column("dia_diem")]
-        [Required]
-        public String ?DiaDiem { get; set; }
+        [Column("fMucLuong")]
+        public double? MucLuong { get; set; }
 
-        [Column("muc_luong")]
-        [Required]
-        public String ?MucLuong { get; set; }
+        [Column("sLoaiHinh")]
+        [StringLength(50)]
+        public string? LoaiHinh { get; set; }
 
-        [Column("loai_hinh")]
-        [Required]
-        public String ?LoaiHinh { get; set; }
-
-        [Column("ngay_dang")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("tNgayDang")]
         public DateTime NgayDang { get; set; } = DateTime.Now;
 
-        //Mối quan hệ với bảng người dùng
-        [ForeignKey("IdNhaTuyenDung")]
-        public NguoiDung ?NguoiDung { get; set; }
+        public virtual CongTy? CongTy { get; set; }
 
     }
 }

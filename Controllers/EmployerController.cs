@@ -9,15 +9,14 @@ namespace BTL_Web_NC.Controllers
 {
     public class EmployerController : Controller
     {
-        private readonly INhaTuyenDungRepository _nhaTuyenDungRepo;
-        private readonly INguoiDungRepository _nguoiDungRepo;
+        private readonly ICongTyRepository _CongTyRepo;
+        private readonly ITaiKhoanRepository _TaiKhoanRepo;
         private readonly ICongViecRepository _congViecRepo;
        
-
-        public EmployerController(INhaTuyenDungRepository nhaTuyenDungRepo, INguoiDungRepository nguoiDungRepo, ICongViecRepository congViecRepo)
+        public EmployerController(ICongTyRepository CongTyRepo, ITaiKhoanRepository TaiKhoanRepo, ICongViecRepository congViecRepo)
         {
-            _nhaTuyenDungRepo = nhaTuyenDungRepo;
-            _nguoiDungRepo = nguoiDungRepo;
+            _CongTyRepo = CongTyRepo;
+            _TaiKhoanRepo = TaiKhoanRepo;
             _congViecRepo = congViecRepo;
     
         }
@@ -36,35 +35,35 @@ namespace BTL_Web_NC.Controllers
             }
 
             // Lấy thông tin người dùng từ email
-            var nguoiDung = await _nguoiDungRepo.GetByEmailAsync(email);
-            if (nguoiDung == null)
+            var TaiKhoan = await _TaiKhoanRepo.GetByEmailAsync(email);
+            if (TaiKhoan == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
             // Lấy thông tin nhà tuyển dụng từ UserId
-            var nhaTuyenDung = await _nhaTuyenDungRepo.GetByUserIdAsync(nguoiDung.Id);
-            if (nhaTuyenDung == null)
+            var CongTy = await _CongTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
+            if (CongTy == null)
             {
                 return RedirectToAction("EmployerRegister", "Employer");
             }
 
            
-            return View("EmployerProfile", nhaTuyenDung);
+            return View("EmployerProfile", CongTy);
         }
 
         // Đăng ký Nhà Tuyển Dụng
         [HttpPost]
-        public async Task<IActionResult> EmployerRegister(NhaTuyenDung nhaTuyenDung)
+        public async Task<IActionResult> EmployerRegister(CongTy CongTy)
         {
-            int? nguoiDungId = HttpContext.Session.GetInt32("Id");
-            if (nguoiDungId == null)
+            string? TaiKhoanId = HttpContext.Session.GetString("Id");
+            if (TaiKhoanId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            nhaTuyenDung.NguoiDungId = nguoiDungId.Value;
-            await _nhaTuyenDungRepo.AddNhaTuyenDungAsync(nhaTuyenDung);
+            CongTy.TenTaiKhoan = TaiKhoanId;
+            await _CongTyRepo.AddCongTyAsync(CongTy);
 
             return RedirectToAction("EmployerProfile", "Employer"); // Chuyển hướng sau khi đăng ký
         }

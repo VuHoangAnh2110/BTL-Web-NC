@@ -11,14 +11,14 @@ namespace BTL_Web_NC.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly INguoiDungRepository _nguoiDungRepo;
-    private readonly INhaTuyenDungRepository _nhaTuyenDungRepo;
+    private readonly ITaiKhoanRepository _TaiKhoanRepo;
+    private readonly ICongTyRepository _CongTyRepo;
 
-    public HomeController(ILogger<HomeController> logger, INguoiDungRepository nguoiDungRepo, INhaTuyenDungRepository nhaTuyenDungRepo)
+    public HomeController(ILogger<HomeController> logger, ITaiKhoanRepository TaiKhoanRepo, ICongTyRepository CongTyRepo)
     {
         _logger = logger;
-        _nguoiDungRepo = nguoiDungRepo;
-        _nhaTuyenDungRepo = nhaTuyenDungRepo;
+        _TaiKhoanRepo = TaiKhoanRepo;
+        _CongTyRepo = CongTyRepo;
     }
 
     public IActionResult Index()
@@ -44,16 +44,16 @@ public class HomeController : Controller
        
 
         // Lấy thông tin người dùng từ email
-        var nguoiDung = await _nguoiDungRepo.GetByEmailAsync(email);
+        var TaiKhoan = await _TaiKhoanRepo.GetByEmailAsync(email);
 
-        if (nguoiDung == null)
+        if (TaiKhoan == null)
         {
             return RedirectToAction("Login", "Account");
         }
         //Kiểm tra người dùng đã có cty hay chưa
-        var nhaTuyenDung = await _nhaTuyenDungRepo.GetByUserIdAsync(nguoiDung.Id);
+        var CongTy = await _CongTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
 
-        if(nhaTuyenDung == null)
+        if(CongTy == null)
         {
             return RedirectToAction("EmployerRegister", "Employer"); // Nếu chưa có cty, chuyển đến trang Đăng ký Nhà tuyển dụng
         }

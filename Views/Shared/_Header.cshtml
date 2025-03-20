@@ -1,30 +1,50 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand text-white" href="/">Sàn giao dịch việc làm</a>
 
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold" href="#">JobMarket</a>
+
+        <!-- Button Toggle Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <!-- Nội dung Navbar -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                @* <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" asp-controller="Account" asp-action="EmployerRegister">For Employers</a>
-                </li> *@
-                @if (!string.IsNullOrEmpty(Context.Session.GetString("Email"))) 
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        @Context.Session.GetString("HoTen")
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
-                        </ul>
-                    </li>
-                }
-                else 
-                {
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" asp-controller="Account" asp-action="Login">Đăng nhập</a>
-                    </li>
-                }
+            @if (!string.IsNullOrEmpty(Context.Session.GetString("Email"))) 
+            {     
+            @* <!-- Menu Chính --> *@
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Việc làm</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Nhà tuyển dụng</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ứng viên</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
             </ul>
+
+            @* <!-- Thanh tìm kiếm --> *@
+            <form class="d-flex me-3">
+                <input class="form-control me-2" type="search" placeholder="Tìm công việc..." aria-label="Search">
+                <button class="btn btn-light" type="submit"></button>
+            </form>
+
+            @* <!-- Nếu đã đăng nhập --> *@
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                    <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle" width="40">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
+                    <li><a class="dropdown-item" href="#">Quản lý công việc</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">Đăng xuất</a></li>
+                </ul>
+            </div>
+            } else {
+            @* <!-- Nếu chưa đăng nhập --> *@
+            <a href="#" class="btn btn-warning mx-2">Đăng nhập</a>
+            <a href="#" class="btn btn-outline-light">Đăng ký</a>
+            }
         </div>
     </div>
 </nav>
