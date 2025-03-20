@@ -1,4 +1,4 @@
-@model BTL_Web_NC.Models.NhaTuyenDung
+@model BTL_Web_NC.Models.CongTy
 
 @{
     ViewData["Title"] = "Thông Tin Nhà Tuyển Dụng";
@@ -16,7 +16,7 @@
     </div>
 
     <div class="mb-3">
-        <strong>Mô Tả Công Ty:</strong> @Model.MoTaCongTy
+        <strong>Mô Tả Công Ty:</strong> @Model.MoTa
     </div>
 
     <div class="mb-3">
@@ -31,7 +31,7 @@
         </div>
     }
 
-    <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh Sửa</a>
+    <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-primary">Chỉnh Sửa</a>
     <a asp-controller="Job" asp-action="CreateJob" class="btn btn-primary">Thêm việc</a>
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 

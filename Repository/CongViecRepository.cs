@@ -15,10 +15,10 @@ namespace BTL_Web_NC.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<CongViec>> GetDsCongViecByUserIdAsync(int idNguoiDung)
+        public async Task<IEnumerable<CongViec>> GetDsCongViecByUserIdAsync(string idTaiKhoan)
         {
             return await _context.CongViecs
-                .Where(cv => cv.IdNhaTuyenDung == idNguoiDung)
+                .Where(cv => cv.MaCongTy == idTaiKhoan)
                 .ToListAsync();
         }
 

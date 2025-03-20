@@ -13,8 +13,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
-builder.Services.AddScoped<INhaTuyenDungRepository, NhaTuyenDungRepository>();
+builder.Services.AddScoped<ITaiKhoanRepository, TaiKhoanRepository>();
+builder.Services.AddScoped<ICongTyRepository, CongTyRepository>();
 builder.Services.AddScoped<ICongViecRepository, CongViecRepository>();
 
 // Thêm dịch vụ Session
