@@ -3,6 +3,7 @@
     ViewData["Title"] = "Đăng ký";
 }
 
+
 <div class="container d-flex justify-content-center align-items-center pt-3">
     <div class="card p-4 shadow-lg" style="max-width: 700px; width: 100%;">
         <h2 class="text-center text-success fw-bold mb-4">Đăng ký tài khoản</h2>
@@ -63,6 +64,21 @@
                     </div>
                     <input class="form-control rounded-pill" type="password" placeholder="Nhập lại mật khẩu">
                 </div>
+
+                <!-- Chọn vai trò -->
+                <div class="col-12 px-md-3 mb-2 d-flex">
+                    <label class="form-label fw-semibold mx-2">Bạn là:</label>
+                    <div class="gap-3 d-flex">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="VaiTro" value="ung_vien" id="timViec">
+                            <label class="form-check-label" for="timViec">Người tìm việc</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="VaiTro" value="nha_tuyen_dung" id="congTy">
+                            <label class="form-check-label" for="congTy">Công ty tuyển dụng</label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Nút đăng ký -->
@@ -83,3 +99,6 @@
 
 
 
+@section Scripts {
+    <script src="~/js/Account/Register.js"></script>
+}

@@ -6,9 +6,13 @@
     <title>@ViewData["Title"] - BTL_Web_NC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BTL_Web_NC.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/BTL_Web_NC.styles.css" asp-append-version="true" /> *@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
@@ -72,5 +76,35 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function showToast(type, message) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: type,
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+
+            var successMessage = "@Context.Session.GetString("SuccessMessage")";
+            var warningMessage = "@Context.Session.GetString("WarningMessage")";
+            var errorMessage = "@Context.Session.GetString("ErrorMessage")";
+            var infoMessage = "@Context.Session.GetString("InfoMessage")";
+
+            if (successMessage || warningMessage || errorMessage || infoMessage) {
+                if (successMessage) showToast('success', successMessage);
+                if (warningMessage) showToast('warning', warningMessage);
+                if (errorMessage) showToast('error', errorMessage);
+                if (infoMessage) showToast('info', infoMessage);
+
+                // Gửi AJAX request để xóa session
+                fetch('/Home/ClearSessionMessages', { method: 'POST' });
+            }
+        });
+    </script>
+    
 </body>
 </html>
