@@ -1,50 +1,81 @@
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm" style="background-color: #8395ad;">
+    <div class="container justify-content-between">
+        <!-- Logo bên trái -->
+        <div>
+            <a class="navbar-brand fw-bold " asp-controller="Home" asp-action="Index">Sàn giao dịch viên làm</a>
+        </div>
 
-<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
-    <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="#">JobMarket</a>
+        <div>
+            <!-- Button Toggle Mobile -->
+            <button class="navbar-toggler border-0 text-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <!-- Button Toggle Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <!-- Nội dung Navbar -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            @if (!string.IsNullOrEmpty(Context.Session.GetString("Email"))) 
-            {     
-            @* <!-- Menu Chính --> *@
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Việc làm</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Nhà tuyển dụng</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Ứng viên</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-            </ul>
-
-            @* <!-- Thanh tìm kiếm --> *@
-            <form class="d-flex me-3">
-                <input class="form-control me-2" type="search" placeholder="Tìm công việc..." aria-label="Search">
-                <button class="btn btn-light" type="submit"></button>
-            </form>
-
-            @* <!-- Nếu đã đăng nhập --> *@
-            <div class="dropdown">
-                <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                    <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle" width="40">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
-                    <li><a class="dropdown-item" href="#">Quản lý công việc</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#">Đăng xuất</a></li>
+            <!-- Nội dung Navbar (Bên phải) -->
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                @if (!string.IsNullOrEmpty(Context.Session.GetString("Email")))
+                {     
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Việc làm</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Nhà tuyển dụng</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
                 </ul>
+
+                @* <!-- Thanh tìm kiếm --> *@
+                <form class="d-flex me-3">
+                    <input class="form-control me-2 rounded-pill border-0" type="search" placeholder="Tìm công việc..." aria-label="Search">
+                    <button class="btn btn-warning rounded-pill px-3" type="submit"><i class="bi bi-search"></i></button>
+                </form>
+
+                @* <!-- Nếu đã đăng nhập --> *@
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle border border-warning" width="40">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lý công việc</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
+                    </ul>
+                </div>
+                }
+                else
+                {
+                @* <!-- Nếu chưa đăng nhập --> *@
+                <div class="d-flex">
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-warning rounded-pill me-2">Đăng nhập</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-warning rounded-pill">Đăng ký</a>
+                </div>
+                }
             </div>
-            } else {
-            @* <!-- Nếu chưa đăng nhập --> *@
-            <a href="#" class="btn btn-warning mx-2">Đăng nhập</a>
-            <a href="#" class="btn btn-outline-light">Đăng ký</a>
-            }
         </div>
     </div>
 </nav>
+
+<style>
+    /* Tạo màu chữ trắng và hiệu ứng hover vàng cho navbar */
+    .nav-link-custom {
+        color: #f8f9fa !important;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .nav-link-custom:hover {
+        color: #f8d210 !important;
+    }
+
+    .form-control::placeholder {
+        color: #b0b3b8 !important;
+    }
+
+    /* Chỉnh viền ảnh avatar */
+    .dropdown-toggle img {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .dropdown-toggle:hover img {
+        transform: scale(1.1);
+    }
+</style>

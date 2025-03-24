@@ -29,6 +29,7 @@ namespace BTL_Web_NC.Models
 
         [Column("sSoDienThoai")]
         [StringLength(20)]
+        [Required]
         public string? SoDienThoai { get; set; }
 
         [Column("sDiaChi")]
