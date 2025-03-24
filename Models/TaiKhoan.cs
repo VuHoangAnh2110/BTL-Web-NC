@@ -9,26 +9,27 @@ namespace BTL_Web_NC.Models
     {
         [Key]
         [Column("PK_sTenTaiKhoan")]
-        [StringLength(50)]
+        [StringLength(50,ErrorMessage = "Không quá 50 ký tự!")]
         public string? TenTaiKhoan { get; set; }
 
         [Column("sHoTen")]
-        [Required]
+        [Required(ErrorMessage = "Không được để trống!")]
         [StringLength(255)]
         public string? HoTen { get; set; }
 
         [Column("sEmail")]
-        [Required]
+        [Required (ErrorMessage = "Không được để trống!")]
         [StringLength(255)]
         [EmailAddress]
         public string? Email { get; set; }
 
         [Column("sMatKhau")]
-        [Required]
+        [Required (ErrorMessage = "Không được để trống!")]
         public string? MatKhau { get; set; }
 
         [Column("sSoDienThoai")]
         [StringLength(20)]
+        [Required (ErrorMessage = "Không được để trống!")]
         public string? SoDienThoai { get; set; }
 
         [Column("sDiaChi")]

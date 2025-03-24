@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 0px;
 }
 
 header{
@@ -40,4 +40,22 @@ header{
   background-color: #017110 !important;
   margin-top: 20px;
   margin-left: 170px;
+}
+
+/* Hiệu ứng hover cho liên kết */
+.link-hover:hover {
+  color: #f8d210 !important;
+}
+
+/* Hiệu ứng hover cho nút mạng xã hội */
+.social-hover:hover {
+  background-color: #f8d210 !important;
+  color: #2c2f33 !important;
+}
+
+/* Màu chữ mặc định cho tất cả liên kết trong footer */
+.footer-link {
+  color: #f8f9fa !important;
+  text-decoration: none !important;
+  transition: color 0.3s ease-in-out;
 }

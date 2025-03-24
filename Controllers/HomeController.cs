@@ -32,6 +32,16 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    [HttpPost]
+    public IActionResult ClearSessionMessages()
+    {
+        HttpContext.Session.Remove("SuccessMessage");
+        HttpContext.Session.Remove("WarningMessage");
+        HttpContext.Session.Remove("ErrorMessage");
+        HttpContext.Session.Remove("InfoMessage");
+        return Ok();
+    }
+
     // Nhà tuyển dụng
     public async Task<IActionResult> RedirectToEmployer()
     {

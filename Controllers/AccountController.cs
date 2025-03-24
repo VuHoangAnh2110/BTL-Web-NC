@@ -36,19 +36,27 @@ namespace BTL_Web_NC.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError("Email", "Email đã tồn tại!");
+                    HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
                     return View(TaiKhoan);
                 }
 
+                // Gán ngày tạo và ngày cập nhật
+                TaiKhoan.NgayTao = DateTime.Now;
+                TaiKhoan.NgayCapNhat = DateTime.Now;
+
                 await _TaiKhoanRepo.AddTaiKhoanAsync(TaiKhoan);
-                return RedirectToAction("Login");
+                HttpContext.Session.SetString("SuccessMessage", "Đăng ký tài khoản thành công!");
+                return View(TaiKhoan);
+            } else {
+                HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
+                return View(TaiKhoan);
             }
-            return View(TaiKhoan);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(string usernameOrEmail, string password)
         {
-            var user = await _TaiKhoanRepo.GetByEmailAsync(email);
+            var user = await _TaiKhoanRepo.GetByEmailAsync(usernameOrEmail);
            
             if(ModelState.IsValid){
 
@@ -70,7 +78,6 @@ namespace BTL_Web_NC.Controllers
             }
             
             return View();
-            
         }
 
         public IActionResult Logout()
