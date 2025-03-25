@@ -42,8 +42,8 @@ namespace BTL_Web_NC.Models
         [StringLength(50)]
         public string VaiTro { get; set; } = "ung_vien";
 
-        [Column("TrangThai")]
-        public bool TrangThai { get; set; } = true;
+        [Column("iTrangThai")]
+        public int TrangThai { get; set; } = 1;
 
         [Column("tNgayTao")]
         public DateTime NgayTao { get; set; } = DateTime.Now;
