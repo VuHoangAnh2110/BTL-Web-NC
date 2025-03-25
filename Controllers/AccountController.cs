@@ -46,7 +46,7 @@ namespace BTL_Web_NC.Controllers
 
                 await _TaiKhoanRepo.AddTaiKhoanAsync(TaiKhoan);
                 HttpContext.Session.SetString("SuccessMessage", "Đăng ký tài khoản thành công!");
-                return View(TaiKhoan);
+                return View();
             } else {
                 HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
                 return View(TaiKhoan);
@@ -56,12 +56,18 @@ namespace BTL_Web_NC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string usernameOrEmail, string password)
         {
+            if (usernameOrEmail == null || password == null){
+                HttpContext.Session.SetString("WarningMessage", "Nhập tài khoản và mật khẩu");
+                return View();
+            }
+
             var user = await _TaiKhoanRepo.GetByEmailAsync(usernameOrEmail);
            
             if(ModelState.IsValid){
 
                 if(user == null || user.MatKhau != password){
                     ModelState.AddModelError("mk", "Email hoặc mật khẩu không đúng!");
+                    HttpContext.Session.SetString("WarningMessage", "Tài khoản hoặc mật khẩu không chính xác!");
                     return View();
                 }
 
@@ -74,6 +80,7 @@ namespace BTL_Web_NC.Controllers
                 var currentEmail = HttpContext.Session.GetInt32("Id");
                 Console.WriteLine(currentEmail);
 
+                HttpContext.Session.SetString("SuccessMessage", "Đăng nhập thành công!");
                 return RedirectToAction("Index", "Home");
             }
             
