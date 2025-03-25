@@ -49,6 +49,11 @@ Dự án này là một sàn giao dịch việc làm trực tuyến, giúp kết
    ```
 4. Cấu hình môi trường:
    - Sao chép file `appsettings.example.json` thành `appsettings.json` và chỉnh sửa thông tin kết nối database.
+   - Đã có `appsettings.json` thì vào chỉnh sửa thông tin kết nối database.
+   - Mở terminal chạy lệnh bên dưới để không theo dõi thay đổi của file appsettings.json.
+   ```sh
+   git update-index --assume-unchanged appsettings.json
+   ```
 5. Chạy ứng dụng:
     - Đối với .NET
    ```sh
