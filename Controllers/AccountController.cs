@@ -28,28 +28,35 @@ namespace BTL_Web_NC.Controllers
 
         //Đăng ký
         [HttpPost]
-        public async Task<IActionResult> Register(TaiKhoan TaiKhoan)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            TaiKhoan taiKhoan = new TaiKhoan();
             if (ModelState.IsValid)
             {
-                var existingUser = await _TaiKhoanRepo.GetByEmailAsync(TaiKhoan.Email);
+                var existingUser = await _TaiKhoanRepo.GetByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
                     ModelState.AddModelError("Email", "Email đã tồn tại!");
                     HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
-                    return View(TaiKhoan);
+                    return View(model);
                 }
 
-                // Gán ngày tạo và ngày cập nhật
-                TaiKhoan.NgayTao = DateTime.Now;
-                TaiKhoan.NgayCapNhat = DateTime.Now;
+                // Gán dữ liệu
+                taiKhoan.NgayTao = DateTime.Now;
+                taiKhoan.NgayCapNhat = DateTime.Now;
+                taiKhoan.TenTaiKhoan = model.TenTaiKhoan;
+                taiKhoan.HoTen = model.HoTen;
+                taiKhoan.Email = model.Email;
+                taiKhoan.MatKhau = model.MatKhau;
+                taiKhoan.SoDienThoai = model.SoDienThoai;
+                taiKhoan.VaiTro = model.VaiTro;
 
-                await _TaiKhoanRepo.AddTaiKhoanAsync(TaiKhoan);
+                await _TaiKhoanRepo.AddTaiKhoanAsync(taiKhoan);
                 HttpContext.Session.SetString("SuccessMessage", "Đăng ký tài khoản thành công!");
                 return View();
             } else {
                 HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
-                return View(TaiKhoan);
+                return View(model);
             }
         }
 

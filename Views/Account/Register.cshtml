@@ -1,4 +1,4 @@
-@model BTL_Web_NC.Models.TaiKhoan
+@model RegisterViewModel;
 @{
     ViewData["Title"] = "Đăng ký";
 }
@@ -60,9 +60,9 @@
                 <div class="col-md-6 px-md-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <label class="form-label fw-semibold mb-1 ms-2">Xác nhận mật khẩu</label>
-                        <span class="text-danger small"></span>
+                        <span class="text-danger small" asp-validation-for="XacNhanMatKhau"></span>
                     </div>
-                    <input class="form-control rounded-pill" type="password" placeholder="Nhập lại mật khẩu">
+                    <input asp-for="XacNhanMatKhau" class="form-control rounded-pill" type="password" placeholder="Nhập lại mật khẩu">
                 </div>
 
                 <!-- Chọn vai trò -->
