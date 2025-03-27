@@ -1,6 +1,7 @@
-@model RegisterViewModel;
+@model BTL_Web_NC.ViewModels.RegisterViewModel;
 @{
     ViewData["Title"] = "Đăng ký";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -16,7 +17,7 @@
                         <label class="form-label fw-semibold mb-1 ms-2">Họ và tên</label>
                         <span class="text-danger small" asp-validation-for="HoTen"></span>
                     </div>
-                    <input asp-for="HoTen" class="form-control rounded-pill" placeholder="Nhập họ và tên">
+                    <input asp-for="HoTen" class="form-control rounded-pill" type="text" placeholder="Nhập họ và tên">
                 </div>
 
                 <!-- Tên tài khoản -->
@@ -25,7 +26,7 @@
                         <label class="form-label fw-semibold mb-1 ms-2">Tên tài khoản</label>
                         <span class="text-danger small" asp-validation-for="TenTaiKhoan"></span>
                     </div>
-                    <input asp-for="TenTaiKhoan" class="form-control rounded-pill" placeholder="Nhập tên tài khoản">
+                    <input asp-for="TenTaiKhoan" class="form-control rounded-pill" type="text" placeholder="Nhập tên tài khoản">
                 </div>
 
                 <!-- Email -->
@@ -53,7 +54,7 @@
                         <label class="form-label fw-semibold mb-1 ms-2">Số điện thoại</label>
                         <span class="text-danger small" asp-validation-for="SoDienThoai"></span>
                     </div>
-                    <input asp-for="SoDienThoai" class="form-control rounded-pill" placeholder="Nhập số điện thoại">
+                    <input asp-for="SoDienThoai" class="form-control rounded-pill" type="text" placeholder="Nhập số điện thoại">
                 </div>
 
                 <!-- Xác nhận mật khẩu -->
