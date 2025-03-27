@@ -25,5 +25,25 @@ namespace BTL_Web_NC.Repositories
             await _context.TaiKhoans.AddAsync(TaiKhoan);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<TaiKhoan?> GetByTenTaiKhoanAsync(string? tenTaiKhoan)
+        {
+            return await _context.TaiKhoans.FirstOrDefaultAsync(t => t.TenTaiKhoan == tenTaiKhoan);
+        }
+
+        public async Task<TaiKhoan?> GetBySoDienThoaiAsync(string? soDienThoai)
+        {
+            return await _context.TaiKhoans.FirstOrDefaultAsync(t => t.SoDienThoai == soDienThoai);
+        }
+
+        public async Task<TaiKhoan?> GetByUsernameOrEmailAsync(string? usernameOrEmail)
+        {
+            return await _context.TaiKhoans
+                .FirstOrDefaultAsync(t => 
+                    t.Email == usernameOrEmail || t.TenTaiKhoan == usernameOrEmail
+                );
+        }
+
+
     }
 }

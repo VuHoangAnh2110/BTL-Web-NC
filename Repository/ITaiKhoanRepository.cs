@@ -7,5 +7,9 @@ namespace BTL_Web_NC.Repositories
     {
         Task<TaiKhoan?> GetByEmailAsync(string? email);
         Task AddTaiKhoanAsync(TaiKhoan TaiKhoan);
+        Task<TaiKhoan?> GetByTenTaiKhoanAsync(string? tenTaiKhoan);
+        Task<TaiKhoan?> GetBySoDienThoaiAsync(string? soDienThoai);
+        Task<TaiKhoan?> GetByUsernameOrEmailAsync(string? usernameOrEmail);
+
     }
 }

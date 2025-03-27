@@ -9,8 +9,8 @@ Dự án có hai lớp Repository chính:
 
 1. **IRepository<T>**: Interface chung cho tất cả các repository.
 2. **Repository<T>**: Cài đặt chung cho các repository thao tác với database.
-3. **ISanPhamRepository**: Interface riêng cho bảng `san_pham`.
-4. **SanPhamRepository**: Cài đặt repository dành riêng cho `san_pham`.
+3. **ICongViecRepository**: Interface riêng cho bảng `tblCongViec`.
+4. **CongViecRepository**: Cài đặt repository dành riêng cho `cong_viec`.
 
 ### Interface `IRepository<T>`
 ```csharp
@@ -65,21 +65,21 @@ public class Repository<T> : IRepository<T> where T : class
 }
 ```
 
-### Interface `ISanPhamRepository`
+### Interface `ICongViecRepository`
 ```csharp
-public interface ISanPhamRepository : IRepository<SanPham>
+public interface ICongViecRepository : IRepository<CongViec>
 {
-    Task<IEnumerable<SanPham>> GetByCategory(int danhMucId);
+    Task<IEnumerable<CongViec>> GetByCategory(int danhMucId);
 }
 ```
 
-### Cài đặt `SanPhamRepository`
+### Cài đặt `CongViecRepository`
 ```csharp
-public class SanPhamRepository : Repository<SanPham>, ISanPhamRepository
+public class CongViecRepository : Repository<CongViec>, ICongViecRepository
 {
-    public SanPhamRepository(ApplicationDbContext context) : base(context) {}
+    public CongViecRepository(ApplicationDbContext context) : base(context) {}
 
-    public async Task<IEnumerable<SanPham>> GetByCategory(int danhMucId)
+    public async Task<IEnumerable<CongViec>> GetByCategory(int danhMucId)
     {
         return await _dbSet.Where(sp => sp.DanhMucId == danhMucId).ToListAsync();
     }
@@ -93,25 +93,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<ISanPhamRepository, SanPhamRepository>();
+builder.Services.AddScoped<ICongViecRepository, CongViecRepository>();
 ```
 
 ## Cách sử dụng Repository trong Controller
-Ví dụ: `SanPhamController`
+Ví dụ: `CongViecController`
 ```csharp
-public class SanPhamController : Controller
+public class CongViecController : Controller
 {
-    private readonly ISanPhamRepository _sanPhamRepository;
+    private readonly ICongViecRepository _CongViecRepository;
 
-    public SanPhamController(ISanPhamRepository sanPhamRepository)
+    public CongViecController(ICongViecRepository CongViecRepository)
     {
-        _sanPhamRepository = sanPhamRepository;
+        _CongViecRepository = CongViecRepository;
     }
 
     public async Task<IActionResult> Index()
     {
-        var sanPhams = await _sanPhamRepository.GetAll();
-        return View(sanPhams);
+        var CongViecs = await _CongViecRepository.GetAll();
+        return View(CongViecs);
     }
 }
 ```

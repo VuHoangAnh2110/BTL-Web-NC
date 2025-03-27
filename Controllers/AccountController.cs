@@ -3,6 +3,7 @@ using BTL_Web_NC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using BTL_Web_NC.ViewModels;
 
 namespace BTL_Web_NC.Controllers
 {
@@ -33,10 +34,27 @@ namespace BTL_Web_NC.Controllers
             TaiKhoan taiKhoan = new TaiKhoan();
             if (ModelState.IsValid)
             {
+                // Kiểm tra email đã tồn tại
                 var existingUser = await _TaiKhoanRepo.GetByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("Email", "Email đã tồn tại!");
+                    ModelState.AddModelError(nameof(model.Email), "Email đã tồn tại!");
+                }
+                // Kiểm tra tên tài khoản đã tồn tại
+                var existingUserName = await _TaiKhoanRepo.GetByTenTaiKhoanAsync(model.TenTaiKhoan);
+                if (existingUserName != null)
+                {
+                    ModelState.AddModelError(nameof(model.TenTaiKhoan), "Tên tài khoản đã tồn tại!");
+                }
+                // Kiểm tra số điện thoại đã tồn tại
+                var existingPhone = await _TaiKhoanRepo.GetBySoDienThoaiAsync(model.SoDienThoai);
+                if (existingPhone != null)
+                {
+                    ModelState.AddModelError(nameof(model.SoDienThoai), "Số điện thoại đã tồn tại!");
+                }
+                // Nếu có bất kỳ lỗi nào thì trả về view kèm thông báo
+                if (!ModelState.IsValid)
+                {
                     HttpContext.Session.SetString("WarningMessage", "Đăng ký tài khoản không thành công!");
                     return View(model);
                 }
@@ -51,6 +69,18 @@ namespace BTL_Web_NC.Controllers
                 taiKhoan.SoDienThoai = model.SoDienThoai;
                 taiKhoan.VaiTro = model.VaiTro;
 
+                // Gán trạng thái theo vai trò
+                if (model.VaiTro == "ung_vien")
+                {
+                    taiKhoan.TrangThai = 2;
+                }
+                else if (model.VaiTro == "nha_tuyen_dung")
+                {
+                    taiKhoan.TrangThai = 1;
+                } else {
+                    taiKhoan.TrangThai = 1;
+                }
+
                 await _TaiKhoanRepo.AddTaiKhoanAsync(taiKhoan);
                 HttpContext.Session.SetString("SuccessMessage", "Đăng ký tài khoản thành công!");
                 return View();
@@ -61,37 +91,46 @@ namespace BTL_Web_NC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string usernameOrEmail, string password)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (usernameOrEmail == null || password == null){
-                HttpContext.Session.SetString("WarningMessage", "Nhập tài khoản và mật khẩu");
-                return View();
+            var hasFile = Request.Form.Files.Any();
+            if (hasFile)
+            {
+                ModelState.AddModelError(string.Empty, "Không được upload file trong form đăng nhập.");
             }
 
-            var user = await _TaiKhoanRepo.GetByEmailAsync(usernameOrEmail);
-           
             if(ModelState.IsValid){
-
-                if(user == null || user.MatKhau != password){
-                    ModelState.AddModelError("mk", "Email hoặc mật khẩu không đúng!");
+                // Lấy tài khoản theo email hoặc tên tài khoản
+                var user = await _TaiKhoanRepo.GetByUsernameOrEmailAsync(model.UsernameOrEmail);
+                if(user == null || user.MatKhau != model.Password){
                     HttpContext.Session.SetString("WarningMessage", "Tài khoản hoặc mật khẩu không chính xác!");
-                    return View();
+                    return View(model);
                 }
 
                 // Lưu thông tin người dùng vào Session
                 HttpContext.Session.SetString("Email", user.Email ?? "");
                 HttpContext.Session.SetString("HoTen", user.HoTen ?? "");
-                HttpContext.Session.SetString("Id", user.TenTaiKhoan ?? "");
+                HttpContext.Session.SetString("TenTaiKhoan", user.TenTaiKhoan ?? "");
+                HttpContext.Session.SetString("VaiTro", user.VaiTro);
 
-
-                var currentEmail = HttpContext.Session.GetInt32("Id");
-                Console.WriteLine(currentEmail);
-
-                HttpContext.Session.SetString("SuccessMessage", "Đăng nhập thành công!");
-                return RedirectToAction("Index", "Home");
-            }
-            
-            return View();
+                if (user.TrangThai == 2)
+                {
+                    HttpContext.Session.SetString("SuccessMessage", "Đăng nhập thành công!");
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (user.TrangThai == 3)
+                {
+                    HttpContext.Session.SetString("ErrorMessage", "Tài khoản đã bị khóa!");
+                    return View(model);
+                } else 
+                {
+                    HttpContext.Session.SetString("WarningMessage", "Tài khoản đang chờ phê duyệt. Quay lại sau!");
+                    return View(model);
+                }
+            } else {
+                HttpContext.Session.SetString("WarningMessage", "Tài khoản hoặc mật khẩu không chính xác!");
+                return View(model);
+            }            
         }
 
         public IActionResult Logout()
