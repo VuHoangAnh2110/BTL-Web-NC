@@ -1,0 +1,35 @@
+@* @model IEnumerable<AccountViewModel> *@
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+}
+<h2>Quản lý tài khoản</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+    @* @foreach (var account in Model)
+    {
+        <tr>
+            <td>@account.Id</td>
+            <td>@account.HoTen</td>
+            <td>@account.Email</td>
+            <td>@account.VaiTro</td>
+            <td>@account.TrangThai</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@account.Id">Xem</a> |
+                <a asp-action="Edit" asp-route-id="@account.Id">Sửa</a> |
+                <a asp-action="Delete" asp-route-id="@account.Id">Xóa</a>
+            </td>
+        </tr>
+    } *@
+    </tbody>
+</table>

@@ -7,10 +7,13 @@ namespace BTL_Web_NC.ViewModels
     {
         [Required(ErrorMessage = "Vui lòng nhập email hoặc tên tài khoản.")]
         [StringLength(255, ErrorMessage = "Không vượt quá 255 ký tự.")]
+        [Display(Name = "Email/Tên tài khoản")]
         public string? UsernameOrEmail { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu.")]
         [MinLength(8, ErrorMessage = "Mật khẩu phải có ít nhất 8 ký tự.")]
+        [Display(Name = "Mật khẩu")]
+        [DataType(DataType.Password)]
         public string? Password { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

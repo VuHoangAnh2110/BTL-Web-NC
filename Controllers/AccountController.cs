@@ -1,9 +1,10 @@
 using BTL_Web_NC.Models;
 using BTL_Web_NC.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 using BTL_Web_NC.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BTL_Web_NC.Controllers
 {
@@ -115,12 +116,28 @@ namespace BTL_Web_NC.Controllers
 
                 if (user.TrangThai == 2)
                 {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.TenTaiKhoan),
+                        new Claim(ClaimTypes.Role, user.VaiTro) 
+                    };
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true
+                    };
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties
+                    );
+
                     HttpContext.Session.SetString("SuccessMessage", "Đăng nhập thành công!");
                     return RedirectToAction("Index", "Home");
                 }
                 else if (user.TrangThai == 3)
                 {
-                    HttpContext.Session.SetString("ErrorMessage", "Tài khoản đã bị khóa!");
+                    HttpContext.Session.SetString("ErrorMessage", "Tài khoản đã bị khóa. Liên hệ quản trị viên!");
                     return View(model);
                 } else 
                 {

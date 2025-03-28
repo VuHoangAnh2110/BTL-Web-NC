@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BTL_Web_NC.Data;
 using BTL_Web_NC.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,32 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Thêm dịch vụ xác thực
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Trang đăng nhập
+        options.AccessDeniedPath = "/Error/ThongBaoTuChoi"; // Khi không đủ quyền
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToAccessDenied = context =>
+            {
+                if (context.HttpContext.User == null || !context.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    // Nếu chưa đăng nhập, chuyển hướng đến trang login thay vì AccessDenied
+                    context.Response.Redirect(options.LoginPath);
+                }
+                else
+                {
+                    context.Response.Redirect(options.AccessDeniedPath);
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
+builder.Services.AddAuthorization();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,10 +71,19 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+// app.MapControllerRoute(
+//     name: "admin",
+//     pattern: "Admin/{controller=QLyTaiKhoan}/{action=Index}/{id?}"
+// );
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 
 app.Run();
