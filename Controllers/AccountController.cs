@@ -150,9 +150,17 @@ namespace BTL_Web_NC.Controllers
             }            
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
-            HttpContext.Session.Clear(); // Xóa toàn bộ Session
+            // Xóa thông tin người dùng khỏi Session 
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    
+            // Xóa toàn bộ session
+            HttpContext.Session.Clear();
+            
+            // Xóa cookie xác thực
+            Response.Cookies.Delete(".AspNetCore.Cookies");          
+               
             return RedirectToAction("Login");
         }
 
