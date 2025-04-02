@@ -1,3 +1,7 @@
+@{
+    var vaiTro = Context.Session.GetString("VaiTro");
+}
+
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm" style="background-color: #8395ad;">
     <div class="container justify-content-between">
         <!-- Logo bên trái -->
@@ -13,24 +17,31 @@
 
             <!-- Nội dung Navbar (Bên phải) -->
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                @if (!string.IsNullOrEmpty(Context.Session.GetString("Email")))
-                {     
+                    
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Việc làm</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Nhà tuyển dụng</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
+                    @* @if (!string.IsNullOrEmpty(vaiTro) && vaiTro !== "admin") *@        
+                    @if(User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                    <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="QLyTaiKhoan" asp-action="Index">Quản lý tài khoản</a></li>
+                    }
                 </ul>
 
                 @* <!-- Thanh tìm kiếm --> *@
-                <form class="d-flex me-3">
+                @* <form class="d-flex me-3">
                     <input class="form-control me-2 rounded-pill border-0" type="search" placeholder="Tìm công việc..." aria-label="Search">
                     <button class="btn btn-warning rounded-pill px-3" type="submit"><i class="bi bi-search"></i></button>
-                </form>
+                </form> *@
 
+                @* @if (!string.IsNullOrEmpty(Context.Session.GetString("Email"))) *@
+                @if (User.Identity.IsAuthenticated)
+                {
                 @* <!-- Nếu đã đăng nhập --> *@
-                <div class="dropdown">
+                <div class="dropdown ms-2">
                     <a class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle border border-warning" width="40">
                     </a>
