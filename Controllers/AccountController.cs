@@ -10,11 +10,11 @@ namespace BTL_Web_NC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ITaiKhoanRepository _TaiKhoanRepo;
+        private readonly ITaiKhoanRepository _taiKhoanRepo;
 
         public AccountController(ITaiKhoanRepository TaiKhoanRepo)
         {
-            _TaiKhoanRepo = TaiKhoanRepo;
+            _taiKhoanRepo = TaiKhoanRepo;
         }
 
         [HttpGet]
@@ -36,19 +36,19 @@ namespace BTL_Web_NC.Controllers
             if (ModelState.IsValid)
             {
                 // Kiểm tra email đã tồn tại
-                var existingUser = await _TaiKhoanRepo.GetByEmailAsync(model.Email);
+                var existingUser = await _taiKhoanRepo.GetByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
                     ModelState.AddModelError(nameof(model.Email), "Email đã tồn tại!");
                 }
                 // Kiểm tra tên tài khoản đã tồn tại
-                var existingUserName = await _TaiKhoanRepo.GetByTenTaiKhoanAsync(model.TenTaiKhoan);
+                var existingUserName = await _taiKhoanRepo.GetByTenTaiKhoanAsync(model.TenTaiKhoan);
                 if (existingUserName != null)
                 {
                     ModelState.AddModelError(nameof(model.TenTaiKhoan), "Tên tài khoản đã tồn tại!");
                 }
                 // Kiểm tra số điện thoại đã tồn tại
-                var existingPhone = await _TaiKhoanRepo.GetBySoDienThoaiAsync(model.SoDienThoai);
+                var existingPhone = await _taiKhoanRepo.GetBySoDienThoaiAsync(model.SoDienThoai);
                 if (existingPhone != null)
                 {
                     ModelState.AddModelError(nameof(model.SoDienThoai), "Số điện thoại đã tồn tại!");
@@ -82,7 +82,7 @@ namespace BTL_Web_NC.Controllers
                     taiKhoan.TrangThai = 1;
                 }
 
-                await _TaiKhoanRepo.AddTaiKhoanAsync(taiKhoan);
+                await _taiKhoanRepo.AddTaiKhoanAsync(taiKhoan);
                 HttpContext.Session.SetString("SuccessMessage", "Đăng ký tài khoản thành công!");
                 return View();
             } else {
@@ -102,7 +102,7 @@ namespace BTL_Web_NC.Controllers
 
             if(ModelState.IsValid){
                 // Lấy tài khoản theo email hoặc tên tài khoản
-                var user = await _TaiKhoanRepo.GetByUsernameOrEmailAsync(model.UsernameOrEmail);
+                var user = await _taiKhoanRepo.GetByUsernameOrEmailAsync(model.UsernameOrEmail);
                 if(user == null || user.MatKhau != model.Password){
                     HttpContext.Session.SetString("WarningMessage", "Tài khoản hoặc mật khẩu không chính xác!");
                     return View(model);
@@ -163,6 +163,37 @@ namespace BTL_Web_NC.Controllers
                
             return RedirectToAction("Login");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LayThongTinTK(string TenTaiKhoan)
+        {
+            if (string.IsNullOrEmpty(TenTaiKhoan))
+                return BadRequest(new { success = false, message = "Không có dữ liệu tên tài khoản" });
+
+            var account = await _taiKhoanRepo.GetByTenTaiKhoanAsync(TenTaiKhoan);
+
+            if (account == null)
+                return NotFound(new { success = false, message = "Không tìm thấy tài khoản" });
+
+            return Json(new
+            {
+                success = true,
+                taikhoan = new
+                {
+                    tenTaiKhoan = account.TenTaiKhoan,
+                    hoTen = account.HoTen,
+                    email = account.Email,
+                    soDienThoai = account.SoDienThoai,
+                    diaChi = account.DiaChi,
+                    anhDaiDien = account.AnhDaiDien,
+                    vaiTro = account.VaiTro,
+                    trangThai = account.TrangThai,
+                    ngayTao = account.NgayTao,
+                    ngayCapNhat = account.NgayCapNhat
+                }
+            });
+        }
+
 
         //Nhà tuyển dụng
        

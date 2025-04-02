@@ -1,35 +1,230 @@
 @* @model IEnumerable<AccountViewModel> *@
+@model IEnumerable<BTL_Web_NC.Models.TaiKhoan>
 @{
     ViewData["Title"] = "Quản lý tài khoản";
+    int stt = 1; // Khởi tạo biến đếm
 }
-<h2>Quản lý tài khoản</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Vai trò</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-    @* @foreach (var account in Model)
-    {
-        <tr>
-            <td>@account.Id</td>
-            <td>@account.HoTen</td>
-            <td>@account.Email</td>
-            <td>@account.VaiTro</td>
-            <td>@account.TrangThai</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@account.Id">Xem</a> |
-                <a asp-action="Edit" asp-route-id="@account.Id">Sửa</a> |
-                <a asp-action="Delete" asp-route-id="@account.Id">Xóa</a>
-            </td>
-        </tr>
-    } *@
-    </tbody>
-</table>
+
+<div class="container mb-5 mt-5">
+    <div class="card">
+        <div class="card-header d-flex align-items-end">
+            <!-- Tìm kiếm - bộ lọc -->
+            <div class="col-md-8 me-2">
+                <form method="get">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-6 col-md-3">
+                            <label for="inpSearch" class="form-label">Tài khoản</label>
+                            <input type="search" id="inpSearch" name="inpSearch" class="form-control" placeholder="Tên tài khoản ..." />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label for="selectVaiTro" class="form-label">Vai trò</label>
+                            <select id="selectVaiTro" class="form-select" name="selectVaiTro">
+                                <option value="all">Tất cả</option>
+                                <option value="admin">Admin</option>
+                                <option value="ung_vien">Ứng viên</option>
+                                <option value="nha_tuyen_ung">Nhà tuyển dụng</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="selectTrangThai" class="form-label">Trạng thái</label>
+                            <select id="selectTrangThai" class="form-select" name="selectTrangThai">
+                                <option value="all">Tất cả</option>
+                                <option value="1">Chờ duyệt</option>
+                                <option value="2">Hoạt động</option>
+                                <option value="3">Đã khóa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 text-start">
+                            <button type="submit" id="btnSearch" class="btn btn-outline-info text-nowrap">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Phần bên phải (4 cột) -->
+            <div class="col-md-4 text-end me-2">
+                <a asp-action="Create" class="btn btn-success">
+                    <i class="fas fa-user-plus"></i> Thêm tài khoản
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body mt-2">
+            @* {if isset($tendangnhap, $quyen, $donvi) && ($tendangnhap != "" || $quyen != "all" || $donvi != "all")}
+            <div class="d-flex align-items-center mb-3">
+                <i class="bx bx-search"></i> 
+                <span class="fw-semibold text-dark">Kết quả tìm kiếm với:</span>
+                {if $tendangnhap != ""}
+                    <span class='ms-2'> tài khoản: {$tendangnhap}, </span>
+                {/if}    
+                {if $quyen == admin}
+                    <span class='ms-2'>quyền: admin,</span>
+                {else if $quyen == donvi}
+                    <span class='ms-2'>quyền: đơn vị,</span>
+                {/if}
+                {if $donvi != "all"}
+                    <span class="ms-2">{$donvi.Tendonvi}</span>
+                {/if}
+            </div>
+            {/if} *@
+
+            <div class="card">
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover table-striped align-middle mb-0 text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Tài khoản</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var account in Model)
+                            {
+                            <tr>
+                                <td >@stt</td>
+                                <td >@account.TenTaiKhoan</td>
+                                <td >@account.HoTen</td>
+                                <td >@account.Email</td>
+                                <td>
+                                    @if (account.VaiTro == "admin")
+                                    {
+                                        <span class="badge bg-danger fs-6">Admin</span>
+                                    }
+                                    else if (account.VaiTro == "ung_vien")
+                                    {
+                                        <span class="badge bg-info fs-6">Ứng viên</span>
+                                    }
+                                    else if (account.VaiTro == "nha_tuyen_dung")
+                                    {
+                                        <span class="badge bg-success fs-6">Nhà tuyển dụng</span>
+                                    }
+                                </td>
+                                @if (account.TrangThai == 1)
+                                {
+                                <td ><span class="badge bg-warning fs-6">Chờ duyệt</span></td>
+                                <td >
+                                    <a asp-action="DuyetTK" asp-route-id="@account.TenTaiKhoan" class="btn btn-sm btn-outline-warning me-2">
+                                        <i class="fas fa-user-check"></i>
+                                    </a>
+                                    @* <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalKhoaTK">
+                                        <i class="fas fa-unlock"></i>
+                                    </button> *@
+                                </td>
+                                }
+                                else if (account.TrangThai == 2)
+                                {
+                                <td ><span class="badge bg-success fs-6">Hoạt động</span></td>
+                                <td >
+                                    <a asp-action="CapNhatTK" asp-route-id="@account.TenTaiKhoan" class="btn btn-sm btn-outline-success me-2">
+                                        <i class="fas fa-user-edit"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger btn-khoa-tk" data-bs-toggle="modal" data-bs-target="#modalKhoaTK" data-id="@account.TenTaiKhoan">
+                                        <i class="fas fa-user-lock"></i>
+                                    </button>
+                                </td>
+                                }
+                                else if (account.TrangThai == 3)
+                                {
+                                <td ><span class="badge bg-danger fs-6">Đã khóa</span></td>
+                                <td >
+                                    @* <a asp-action="Edit" asp-route-id="@account.TenTaiKhoan" class="btn btn-sm btn-outline-warning me-2">
+                                        <i class="fas fa-user-edit"></i>
+                                    </a> *@
+                                    <button class="btn btn-sm btn-outline-danger btn-khoa-tk" data-bs-toggle="modal" data-bs-target="#modalKhoaTK" data-id="@account.TenTaiKhoan">
+                                        <i class="fas fa-unlock"></i>
+                                    </button>
+                                </td>
+                                }
+                            </tr>
+                            stt++;
+                            }
+                        }
+                        else
+                        {                    
+                            <tr>
+                                <td colspan="7" class="text-center"> <i class="fas fa-circle-info"></i> Chưa có thông tin ... </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @* <!-- Phân trang -->
+            <!-- <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>Hiển thị 1-5 trong 10.</div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item bg active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div> --> *@
+        </div>
+    </div>
+
+    <!-- Modal khóa tài khoản -->
+    <div class="modal fade" id="modalKhoaTK" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" id="formKhoaTK">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100 text-center" id="modalKhoaTKTitle">Bạn muốn khóa tài khoản này?</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="ipKhoaid" id="ipKhoaid">
+                        <div class="mb-3">
+                            <label for="ipKhoaName" class="form-label">Tài khoản:</label>
+                            <input type="text" id="ipKhoaName" class="form-control" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ipKhoaEmail" class="form-label">Email:</label>
+                            <input type="text" id="ipKhoaEmail" class="form-control" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ipKhoaQuyen" class="form-label">Quyền:</label>
+                            <input type="text" id="ipKhoaQuyen" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" id="btnKhoaTK" class="btn btn-danger">Khóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+@section Scripts {
+    <script src="~/js/QLyTaiKhoan/Index.js"></script>
+}
