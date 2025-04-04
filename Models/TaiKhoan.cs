@@ -9,7 +9,7 @@ namespace BTL_Web_NC.Models
     {
         [Key]
         [Column("PK_sTenTaiKhoan")]
-        [StringLength(50,ErrorMessage = "Không quá 50 ký tự!")]
+        [StringLength(50, ErrorMessage = "Không quá 50 ký tự!")]
         public string? TenTaiKhoan { get; set; }
 
         [Column("sHoTen")]
@@ -18,29 +18,30 @@ namespace BTL_Web_NC.Models
         public string? HoTen { get; set; }
 
         [Column("sEmail")]
-        [Required (ErrorMessage = "Không được để trống!")]
+        [Required(ErrorMessage = "Không được để trống!")]
         [StringLength(255)]
         [EmailAddress]
         public string? Email { get; set; }
 
         [Column("sMatKhau")]
-        [Required (ErrorMessage = "Không được để trống!")]
+        [Required(ErrorMessage = "Không được để trống!")]
         public string? MatKhau { get; set; }
 
         [Column("sSoDienThoai")]
         [StringLength(20)]
-        [Required (ErrorMessage = "Không được để trống!")]
+        // SoDienThoai là NULL trong database nên không bắt buộc
         public string? SoDienThoai { get; set; }
 
         [Column("sDiaChi")]
         public string? DiaChi { get; set; }
 
         [Column("sAnhDaiDien")]
+        [StringLength(255)] // Thêm StringLength tương ứng với database
         public string? AnhDaiDien { get; set; }
 
         [Column("sVaiTro")]
         [StringLength(50)]
-        public string VaiTro { get; set; } = "ung_vien";
+        public string VaiTro { get; set; } = "user";
 
         [Column("iTrangThai")]
         public int TrangThai { get; set; } = 1;
@@ -52,9 +53,11 @@ namespace BTL_Web_NC.Models
         public DateTime NgayCapNhat { get; set; } = DateTime.Now;
 
         // Navigation Properties
-        public virtual ICollection<CongTy>? CongTys { get; set; }
-        public virtual ICollection<FileUpload>? Files { get; set; }
-        public virtual ICollection<HoSoUngVien>? HoSoUngViens { get; set; }
-        public virtual ICollection<ThongBao>? ThongBaos { get; set; }
+        public virtual ICollection<CongTy>? DanhSachCongTy { get; set; }
+        public virtual ICollection<FileUpload>? DanhSachFile { get; set; }
+        public virtual ICollection<HoSoUngVien>? DanhSachHoSo { get; set; }
+        public virtual ICollection<ThongBao>? DanhSachThongBao { get; set; }
+        public virtual ICollection<UngTuyen>? DanhSachUngTuyen { get; set; }
+
     }
 }

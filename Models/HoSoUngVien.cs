@@ -14,6 +14,7 @@ namespace BTL_Web_NC.Models
 
         [Column("FK_sTenTaiKhoan")]
         [StringLength(50)]
+        [Required] // Thêm Required vì trong DB là NOT NULL
         public string? TenTaiKhoan { get; set; }
 
         [Column("sGioiThieu")]
@@ -29,9 +30,12 @@ namespace BTL_Web_NC.Models
         [StringLength(255)]
         public string? MaFile { get; set; }
 
-        // Navigation Property
+        // Navigation Property với ForeignKey attribute
+        [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }
-        public virtual FileUpload? File { get; set; }
+        
+        // [ForeignKey("MaFile")]
+        // public virtual FileUpload? File { get; set; }
 
     }
 }

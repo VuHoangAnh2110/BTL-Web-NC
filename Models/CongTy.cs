@@ -27,15 +27,18 @@ namespace BTL_Web_NC.Models
         public string? MoTa { get; set; }
 
         [Column("sWebsite")]
+        [StringLength(255)]
         public string? Website { get; set; }
 
         [Column("sLogo")]
+        [StringLength(255)]
         public string? Logo { get; set; }
 
-        // Navigation Property
-        [ForeignKey("PK_sTenTaiKhoan")]
+        // Navigation Property - Sửa lại ForeignKey để trỏ đến tên property chứ không phải tên cột
+        [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }
         
-        public virtual ICollection<CongViec>? CongViecs { get; set; }
+        // 
+        public virtual ICollection<CongViec>? DanhSachCongViec { get; set; }
     }
 }
