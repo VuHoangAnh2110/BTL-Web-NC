@@ -14,6 +14,7 @@ namespace BTL_Web_NC.Models
 
         [Column("FK_sTenTaiKhoan")]
         [StringLength(50)]
+        [Required] // Thêm Required vì trong DB là NOT NULL
         public string? TenTaiKhoan { get; set; }
 
         [Column("sTieuDe")]
@@ -29,11 +30,29 @@ namespace BTL_Web_NC.Models
         [StringLength(50)]
         public string? LoaiThongBao { get; set; }
 
-        [Column("tNgayTao")]
-        public DateTime NgayTao { get; set; } = DateTime.Now;
+        [Column("tNgayThongBao")] // Sửa tên cột cho đúng
+        public DateTime NgayThongBao { get; set; } = DateTime.Now;
 
-        // Navigation Property
+        [Column("bDaXem")] // Thêm trường này
+        public bool DaXem { get; set; } = false;
+
+        [Column("FK_sMaCongTy")]
+        [StringLength(50)]
+        public string? MaCongTy { get; set; }
+
+        [Column("FK_sMaCongViec")]
+        [StringLength(50)]
+        public string? MaCongViec { get; set; }
+
+        // Navigation Properties - Thêm ForeignKey attributes
+        [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }
 
+        [ForeignKey("MaCongTy")]
+        public virtual CongTy? CongTy { get; set; }
+
+        [ForeignKey("MaCongViec")]
+        public virtual CongViec? CongViec { get; set; }
+        
     }
 }

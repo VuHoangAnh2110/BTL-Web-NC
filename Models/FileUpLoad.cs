@@ -14,10 +14,12 @@ namespace BTL_Web_NC.Models
 
         [Column("sTenfile")]
         [StringLength(50)]
+        [Required] // Thêm Required vì trong DB là NOT NULL
         public string? TenFile { get; set; }
 
         [Column("FK_sTenTaiKhoan")]
         [StringLength(50)]
+        [Required] // Thêm Required vì trong DB là NOT NULL
         public string? TenTaiKhoan { get; set; }
 
         [Column("sLoaiFile")]
@@ -32,9 +34,12 @@ namespace BTL_Web_NC.Models
         [Column("tNgayTaiLen")]
         public DateTime NgayTaiLen { get; set; } = DateTime.Now;
 
-        // Navigation Property
+        // Navigation Property - Thêm ForeignKey attribute
+        [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }
-
+        
+        // Navigation Property cho HoSoUngVien nếu cần
+        // public virtual HoSoUngVien? HoSoUngVien { get; set; }
 
     }
 }
