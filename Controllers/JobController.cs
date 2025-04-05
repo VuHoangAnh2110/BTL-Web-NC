@@ -1,56 +1,95 @@
-// using System.Diagnostics;
-// using Microsoft.AspNetCore.Mvc;
-// using BTL_Web_NC.Models;
-// using BTL_Web_NC.Repositories;
-// using System.Threading.Tasks;
-// using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using BTL_Web_NC.Models;
+using BTL_Web_NC.Repositories;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using BTL_Web_NC.Helpers;
+using BTL_Web_NC.ViewModels;
 
-// namespace BTL_Web_NC.Controllers
-// {
-//     public class JobController : Controller{
+namespace BTL_Web_NC.Controllers
+{
+    public class JobController : Controller{
 
-//         private readonly ICongViecRepository _congViecRepo;
-//         private readonly INhaTuyenDungRepository _nhaTuyenDungRepo;
-//         private readonly INguoiDungRepository _nguoiDungRepo;
+        private readonly ICongViecRepository _congViecRepo;
+        private readonly ICongTyRepository _congTyRepo;
+        private readonly ITaiKhoanRepository _taiKhoanRepo;
 
-//         public JobController(ICongViecRepository congViecRepo, INhaTuyenDungRepository nhaTuyenDungRepo, INguoiDungRepository nguoiDungRepo)
-//         {
-//             _congViecRepo = congViecRepo;
-//             _nhaTuyenDungRepo = nhaTuyenDungRepo;
-//             _nguoiDungRepo = nguoiDungRepo;
-//         }
+        public JobController(ICongViecRepository congViecRepo, ICongTyRepository congTyRepo, ITaiKhoanRepository taiKhoanRepo)
+        {
+            _congViecRepo = congViecRepo;
+            _congTyRepo = congTyRepo;
+            _taiKhoanRepo = taiKhoanRepo;
+        }
 
-//         public IActionResult CreateJob()
-//         {
-//             return View("Create");
-//         }
-//         [HttpPost]
-//         public async Task<IActionResult> CreateJob(CongViec congViec)
-//         {
-//             var email = HttpContext.Session.GetString("Email");
-//             if (string.IsNullOrEmpty(email))
-//             {
-//                 return RedirectToAction("Login", "Account");
-//             }
+        public IActionResult CreateJob()
+        {
+            return View("Create", new CreateCongViecViewModel());
+        }
 
-//             // Lấy thông tin người dùng từ email
-//             var nguoiDung = await _nguoiDungRepo.GetByEmailAsync(email);
-//             if (nguoiDung == null)
-//             {
-//                 return RedirectToAction("Login", "Account");
-//             }
+        [HttpPost]
+        public async Task<IActionResult> CreateJob(CreateCongViecViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", model);
+            }
 
-//             // Lấy thông tin nhà tuyển dụng từ UserId
-//             var nhaTuyenDung = await _nhaTuyenDungRepo.GetByUserIdAsync(nguoiDung.Id);
-//             if (nhaTuyenDung == null)
-//             {
-//                 return RedirectToAction("EmployerRegister", "Employer");
-//             }
+            var email = HttpContext.Session.GetString("Email");
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-//             congViec.IdNhaTuyenDung = nhaTuyenDung.Id;
-//             await _congViecRepo.AddCongViecAsync(congViec);
+            // Lấy thông tin người dùng từ email
+            var TaiKhoan = await _taiKhoanRepo.GetByEmailAsync(email);
+            if (TaiKhoan == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-//             return RedirectToAction("EmployerProfile", "Employer");
-//         }
-//     }
-// }
+            // Lấy thông tin nhà tuyển dụng từ UserId
+            var CongTy = await _congTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
+            if (CongTy == null)
+            {
+                TempData["Error"] = "Bạn cần đăng ký thông tin công ty trước khi đăng việc làm.";
+                return RedirectToAction("EmployerRegister", "Employer");
+            }
+
+            // Tạo mới công việc
+            var congViec = new CongViec
+            {
+                MaCongViec = IdGenerator.GenerateCongViecId(),
+                MaCongTy = CongTy.MaCongTy,
+                TieuDe = model.TieuDe,
+                MoTa = model.MoTa,
+                DiaDiem = model.DiaDiem,
+                MucLuong = model.MucLuong,
+                LoaiHinh = model.LoaiHinh,
+                NgayDang = DateTime.Now,
+                TrangThai = "Đang tuyển",
+            };
+            await _congViecRepo.AddCongViecAsync(congViec);
+
+            return RedirectToAction("EmployerProfile", "Employer");
+        }
+        
+        //Chi tiết
+        public async Task<IActionResult> Detail(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
+            var congViec = await _congViecRepo.GetCongViecByIdAsync(id);
+            if (congViec == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Detail", congViec);
+        }
+
+
+    }
+}

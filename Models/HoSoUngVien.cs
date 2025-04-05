@@ -30,6 +30,11 @@ namespace BTL_Web_NC.Models
         [StringLength(255)]
         public string? MaFile { get; set; }
 
+        [Required]
+        [Column("sCV")]
+        [StringLength(255)]
+        public string? CV {get; set;}
+
         // Navigation Property với ForeignKey attribute
         [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }

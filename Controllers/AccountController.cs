@@ -68,16 +68,18 @@ namespace BTL_Web_NC.Controllers
                 taiKhoan.Email = model.Email;
                 taiKhoan.MatKhau = model.MatKhau;
                 taiKhoan.SoDienThoai = model.SoDienThoai;
-                taiKhoan.VaiTro = model.VaiTro;
+                // taiKhoan.VaiTro = model.VaiTro;
 
                 // Gán trạng thái theo vai trò
                 if (model.VaiTro == "ung_vien")
-                {
+                {   
+                    taiKhoan.VaiTro = "user";
                     taiKhoan.TrangThai = 2;
                 }
                 else if (model.VaiTro == "nha_tuyen_dung")
                 {
-                    taiKhoan.TrangThai = 1;
+                    taiKhoan.VaiTro = "user";
+                    taiKhoan.TrangThai = 2;
                 } else {
                     taiKhoan.TrangThai = 1;
                 }

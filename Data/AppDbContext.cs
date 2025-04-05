@@ -37,6 +37,12 @@ namespace BTL_Web_NC.Data
                 .WithMany(ct => ct.DanhSachCongViec)
                 .HasForeignKey(cv => cv.MaCongTy);
 
+            // modelBuilder.Entity<CongViec>()
+            //     .HasMany(c => c.DanhSachThongBao)
+            //     .WithOne(t => t.CongViec)
+            //     .HasForeignKey(t => t.MaCongViec)
+            //     .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<HoSoUngVien>()
                 .HasOne(hs => hs.TaiKhoan)
                 .WithMany(tk => tk.DanhSachHoSo)
@@ -61,7 +67,7 @@ namespace BTL_Web_NC.Data
                 
             modelBuilder.Entity<ThongBao>()
                 .HasOne(tb => tb.CongViec)
-                .WithMany()
+                .WithMany(cv => cv.DanhSachThongBao) 
                 .HasForeignKey(tb => tb.MaCongViec)
                 .OnDelete(DeleteBehavior.NoAction);
                 
