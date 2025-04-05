@@ -12,7 +12,7 @@
  Target Server Version : 16001000 (16.00.1000)
  File Encoding         : 65001
 
- Date: 04/04/2025 15:34:32
+ Date: 06/04/2025 03:45:48
 */
 
 
@@ -41,6 +41,9 @@ GO
 -- ----------------------------
 -- Records of tblCongTy
 -- ----------------------------
+INSERT INTO [dbo].[tblCongTy] ([PK_sMaCongTy], [FK_sTenTaiKhoan], [sTenCongTy], [sDiaChi], [sMoTa], [sWebsite], [sLogo]) VALUES (N'CT060425wg79', N'admin', N'Công Ty OSP', N'Hoàng Mai', N'Công ty cổ phần công nghệ', NULL, NULL)
+GO
+
 
 -- ----------------------------
 -- Table structure for tblCongViec
@@ -69,6 +72,9 @@ GO
 -- ----------------------------
 -- Records of tblCongViec
 -- ----------------------------
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [dMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai]) VALUES (N'CV060425ho51', N'CT060425wg79', N'Việc làm ', N'Công nghệ Thực Tập Viên IT. Trợ cấp đầy đủ. Có chế độ', N'Hoàng Mai, Hà Nội', N'2068000.00', N'Part-time', N'2025-04-06 02:38:13.697', N'Đang tuyển')
+GO
+
 
 -- ----------------------------
 -- Table structure for tblFile
@@ -108,7 +114,8 @@ CREATE TABLE [dbo].[tblHoSoUngVien] (
   [sGioiThieu] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sKyNang] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sKinhNghiem] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
-  [FK_sMaFile] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
+  [FK_sMaFile] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sCV] nvarchar(1) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
 )
 GO
 
@@ -174,7 +181,7 @@ CREATE TABLE [dbo].[tblThongBao] (
   [FK_sTenTaiKhoan] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
   [sTieuDe] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
   [sNoiDung] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
-  [sLoaiThongBao] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sLoaiThongBao] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [tNgayThongBao] datetime DEFAULT getdate() NULL,
   [bDaXem] bit DEFAULT 0 NULL,
   [FK_sMaCongTy] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
@@ -189,6 +196,9 @@ GO
 -- ----------------------------
 -- Records of tblThongBao
 -- ----------------------------
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB060425tr05', N'admin', N'Thông báo ứng tuyển', N'Ứng viên Ông Trùm Nhà Vua đã ứng tuyển vào công việc Việc làm .', N'?ng tuy?n', N'2025-04-06 03:41:14.433', N'0', N'CT060425wg79', N'CV060425ho51')
+GO
+
 
 -- ----------------------------
 -- Table structure for tblUngTuyen
@@ -213,6 +223,12 @@ GO
 -- ----------------------------
 -- Records of tblUngTuyen
 -- ----------------------------
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT060425kp60', N'admin', N'CV060425ho51', N'2025-04-06 03:41:14.427', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT060425sm57', N'notadmin', N'CV060425ho51', N'2025-04-06 03:24:06.413', N'Đang chờ')
+GO
+
 
 -- ----------------------------
 -- Uniques structure for table tblCongTy
@@ -345,4 +361,4 @@ GO
 ALTER TABLE [dbo].[tblUngTuyen] ADD CONSTRAINT [fk_ungtuyen_congviec] FOREIGN KEY ([FK_sMaCongViec]) REFERENCES [dbo].[tblCongViec] ([PK_sMaCongViec]) ON DELETE CASCADE ON UPDATE CASCADE
 GO
 
--- ----------------------------
+-------------------------------

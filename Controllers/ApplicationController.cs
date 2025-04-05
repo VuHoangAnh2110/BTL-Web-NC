@@ -83,9 +83,9 @@ namespace BTL_Web_NC.Controllers
                 DaXem = false,
                 NgayThongBao = DateTime.Now
             };
-           
-            // await _thongBaoRepo.AddThongBaoAsync(thongBao);
-
+            Console.WriteLine($"Thông báo ứng tuyển: {thongBao.NoiDung}");
+            await _thongBaoRepo.AddThongBaoAsync(thongBao);
+            Console.WriteLine($"Thông báo ứng tuyển đã được thêm vào cơ sở dữ liệu.");
             await _ungTuyenRepo.AddHoSoUngTuyenAsync(ungTuyen);
             return Ok("Ứng tuyển và gửi thông báo thành công!");
         }
