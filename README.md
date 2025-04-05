@@ -22,13 +22,13 @@ Dự án này là một sàn giao dịch việc làm trực tuyến, giúp kết
 - **Front-end:** HTML, CSS, JavaScript (Bootstrap 5)
 - **Cơ sở dữ liệu:** MySQL, PostgreSQL
 - **Authentication:** OAuth 2.0, JWT
-- **Hỗ trợ gửi mail:** PHPMailer
+- **Hỗ trợ gửi mail:** 
 - **Triển khai:** Docker, Nginx
 
 ## Cài Đặt
 ### Yêu cầu hệ thống
 - .NET 8 SDK
-- Node.js 18+
+- Node.js 18+ (tùy)
 - MySQL hoặc PostgreSQL
 - Docker (tùy chọn)
 
