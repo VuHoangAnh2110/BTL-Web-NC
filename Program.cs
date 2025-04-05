@@ -17,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITaiKhoanRepository, TaiKhoanRepository>();
 builder.Services.AddScoped<ICongTyRepository, CongTyRepository>();
 builder.Services.AddScoped<ICongViecRepository, CongViecRepository>();
+builder.Services.AddScoped<IHoSoUngVienRepository, HoSoUngVienRepository>();
+builder.Services.AddScoped<IUngTuyenRepository, UngTuyenRepository>(); 
+builder.Services.AddScoped<IThongBaoRepository, ThongBaoRepository>();
 
 // Thêm dịch vụ Session
 builder.Services.AddDistributedMemoryCache(); 

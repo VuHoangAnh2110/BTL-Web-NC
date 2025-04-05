@@ -25,5 +25,14 @@ namespace BTL_Web_NC.Repositories
             await _context.CongTys.AddAsync(CongTy);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateCongTyAsync(CongTy CongTy)
+        {
+            Update(CongTy);
+            await SaveChangesAsync();
+        }
+
+
+
     }
 }

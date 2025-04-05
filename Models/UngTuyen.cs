@@ -27,7 +27,7 @@ namespace BTL_Web_NC.Models
 
         [Column("sTrangThai")]
         [StringLength(100)]
-        public string? TrangThai { get; set; }
+        public string? TrangThai { get; set; } = "Đang chờ";
 
         // Navigation Properties với ForeignKey attributes
         [ForeignKey("TenTaiKhoan")]

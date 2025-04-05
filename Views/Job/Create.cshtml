@@ -1,43 +1,75 @@
-@model BTL_Web_NC.Models.CongViec
+@model BTL_Web_NC.ViewModels.CreateCongViecViewModel
 
 @{
     ViewData["Title"] = "Thêm Công Việc";
 }
 
-<h2 class="text-center">@ViewData["Title"]</h2>
+<div class="container">
+    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
 
-<form asp-controller="Job" asp-action="CreateJob" method="post">
-   
-    <div class="mb-3">
-        <label asp-for="TieuDe" class="form-label">Tiêu Đề</label>
-        <input asp-for="TieuDe" class="form-control" required>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-controller="Job" asp-action="CreateJob" method="post">
+                <div class="mb-3">
+                    <label asp-for="TieuDe" class="form-label">Tiêu Đề <span class="text-danger">*</span></label>
+                    <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề công việc">
+                    <span asp-validation-for="TieuDe" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MoTa" class="form-label">Mô Tả <span class="text-danger">*</span></label>
+                    <textarea asp-for="MoTa" class="form-control" rows="5" placeholder="Mô tả chi tiết về công việc, yêu cầu, quyền lợi..."></textarea>
+                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DiaDiem" class="form-label">Địa Điểm</label>
+                    <input asp-for="DiaDiem" class="form-control" placeholder="Nhập địa điểm làm việc">
+                    <span asp-validation-for="DiaDiem" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MucLuong" class="form-label">Mức Lương</label>
+                    <div class="input-group">
+                        <input asp-for="MucLuong" class="form-control" placeholder="Nhập mức lương">
+                        <span class="input-group-text">VNĐ</span>
+                    </div>
+                    <span asp-validation-for="MucLuong" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoaiHinh" class="form-label">Loại Hình</label>
+                    <select asp-for="LoaiHinh" class="form-select">
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                    <span asp-validation-for="LoaiHinh" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-secondary">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Thêm Công Việc</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="MoTa" class="form-label">Mô Tả</label>
-        <textarea asp-for="MoTa" class="form-control"></textarea>
-    </div>
 
-    <div class="mb-3">
-        <label asp-for="DiaDiem" class="form-label">Địa Điểm</label>
-        <input asp-for="DiaDiem" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="MucLuong" class="form-label">Mức Lương</label>
-        <input asp-for="MucLuong" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="LoaiHinh" class="form-label">Loại Hình</label>
-        <select asp-for="LoaiHinh" class="form-select">
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Remote">Remote</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Thêm Công Việc</button>
-    <a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-secondary">Quay lại</a>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

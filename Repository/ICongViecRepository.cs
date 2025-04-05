@@ -5,8 +5,12 @@ namespace BTL_Web_NC.Repositories
 {
     public interface ICongViecRepository : IGenericRepository<CongViec>
     {
-        Task<IEnumerable<CongViec>> GetDsCongViecByUserIdAsync(string idTaiKhoan);
-        Task AddCongViecAsync(CongViec congViec);
+        Task<IEnumerable<CongViec>> GetDsCongViecAsync();
 
+        Task<IEnumerable<CongViec>> GetDsCongViecByCongTyIdAsync(string idTaiKhoan);
+        
+        Task AddCongViecAsync(CongViec congViec);
+        
+        Task<CongViec> GetCongViecByIdAsync(string jobId);
     }
 }

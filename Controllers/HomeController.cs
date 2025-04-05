@@ -13,16 +13,20 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly ITaiKhoanRepository _TaiKhoanRepo;
     private readonly ICongTyRepository _CongTyRepo;
+    private readonly ICongViecRepository _congViecRepo;
 
-    public HomeController(ILogger<HomeController> logger, ITaiKhoanRepository TaiKhoanRepo, ICongTyRepository CongTyRepo)
+    public HomeController(ILogger<HomeController> logger, ITaiKhoanRepository TaiKhoanRepo, ICongTyRepository CongTyRepo, ICongViecRepository CongViecRepo)
     {
         _logger = logger;
         _TaiKhoanRepo = TaiKhoanRepo;
         _CongTyRepo = CongTyRepo;
+        _congViecRepo = CongViecRepo;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var danhSachCongViec = await _congViecRepo.GetDsCongViecAsync();
+        ViewBag.DanhSachCongViec = danhSachCongViec ?? new List<CongViec>();
         return View();
     }
 
@@ -83,4 +87,8 @@ public class HomeController : Controller
 
         return RedirectToAction("Index", "Home"); // Nếu đã đăng nhập, chuyển đến trang Ứng viên
     }
+
+
+
+
 }

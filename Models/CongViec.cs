@@ -55,6 +55,7 @@ namespace BTL_Web_NC.Models
         public virtual ICollection<UngTuyen>? DanhSachUngTuyen { get; set; }
 
         // Quan hệ 1-nhiều với bảng ThongBao ()
+        [InverseProperty("CongViec")] 
         public virtual ICollection<ThongBao>? DanhSachThongBao { get; set; }
 
     }

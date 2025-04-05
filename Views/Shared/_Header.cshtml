@@ -6,7 +6,7 @@
     <div class="container justify-content-between">
         <!-- Logo bên trái -->
         <div>
-            <a class="navbar-brand fw-bold " asp-controller="Home" asp-action="Index">Sàn giao dịch viên làm</a>
+            <a class="navbar-brand fw-bold " asp-controller="Home" asp-action="Index">Sàn giao dịch việc làm</a>
         </div>
 
         <div>
@@ -41,6 +41,21 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                 @* <!-- Nếu đã đăng nhập --> *@
+                @* Thông báo *@
+                <div class="dropdown ms-3">
+                    <a class="d-flex align-items-center text-light text-decoration-none dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-bell fs-5"></i>
+                        <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem; display: none;">
+                            0
+                        </span>
+                    </a>
+                    <ul id="notificationList" class="dropdown-menu dropdown-menu-end" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                        <li class="dropdown-header text-center fw-bold">Thông Báo</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-item text-center"><em>Đang tải thông báo...</em></li>
+                    </ul>
+                </div>
+
                 <div class="dropdown ms-2">
                     <a class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle border border-warning" width="40">
@@ -90,3 +105,7 @@
         transform: scale(1.1);
     }
 </style>
+
+@section Scripts {
+    <script src="~/js/Shared/_Header.js"></script>
+}

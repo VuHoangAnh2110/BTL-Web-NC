@@ -6,6 +6,9 @@ namespace BTL_Web_NC.Repositories
     public interface ICongTyRepository : IGenericRepository<CongTy>
     {
         Task<CongTy?> GetByUserIdAsync(string idTaiKhoan);
+        
         Task AddCongTyAsync(CongTy CongTy);
+
+        Task UpdateCongTyAsync(CongTy CongTy);
     }
 }

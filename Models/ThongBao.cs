@@ -42,16 +42,17 @@ namespace BTL_Web_NC.Models
 
         [Column("FK_sMaCongViec")]
         [StringLength(50)]
+        [ForeignKey("MaCongViec")] // Thêm dòng này để chỉ định rõ khóa ngoại
         public string? MaCongViec { get; set; }
 
         // Navigation Properties - Thêm ForeignKey attributes
-        [ForeignKey("TenTaiKhoan")]
+        // [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }
 
-        [ForeignKey("MaCongTy")]
+        // [ForeignKey("MaCongTy")]
         public virtual CongTy? CongTy { get; set; }
 
-        [ForeignKey("MaCongViec")]
+        // [ForeignKey("MaCongViec")]
         public virtual CongViec? CongViec { get; set; }
         
     }
