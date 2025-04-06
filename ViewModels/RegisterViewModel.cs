@@ -19,7 +19,7 @@ namespace BTL_Web_NC.ViewModels
         [DataType(DataType.Password)]
         public string? MatKhau { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng nhập số điện thoại.")]
+        // [Required(ErrorMessage = "Vui lòng nhập số điện thoại.")]
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ.")]
         public string? SoDienThoai { get; set; }
 
@@ -28,8 +28,8 @@ namespace BTL_Web_NC.ViewModels
         [Compare("MatKhau", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
         public string? XacNhanMatKhau { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
-        public string? VaiTro { get; set; } = "ung_vien";
+        // [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
+        // public string? VaiTro { get; set; } = "ung_vien";
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
