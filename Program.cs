@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using BTL_Web_NC.Data;
 using BTL_Web_NC.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using BTL_Web_NC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddScoped<ICongViecRepository, CongViecRepository>();
 builder.Services.AddScoped<IHoSoUngVienRepository, HoSoUngVienRepository>();
 builder.Services.AddScoped<IUngTuyenRepository, UngTuyenRepository>(); 
 builder.Services.AddScoped<IThongBaoRepository, ThongBaoRepository>();
+
+// Đăng ký dịch vụ gửi email
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Thêm dịch vụ Session
 builder.Services.AddDistributedMemoryCache(); 

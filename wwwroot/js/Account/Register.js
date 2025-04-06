@@ -15,6 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
         let isValid = true;
 
+        // Kiểm tra có tệp được tải lên không
+        const fileInputs = Array.from(form.elements).filter(
+            element => element.type === "file" && element.files.length > 0
+        );
+        
+        if (fileInputs.length > 0) {
+            e.preventDefault();
+            alert("Không được tải lên tệp trong biểu mẫu đăng ký!");
+            return;
+        }
+
         // Xóa lỗi cũ
         document.querySelectorAll('[data-valmsg-for]').forEach(span => {
             span.textContent = "";
@@ -52,8 +63,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Kiểm tra mật khẩu xác nhận
         const matKhau = document.querySelector("#MatKhau");
+        if (matKhau && matKhau.value.trim() !== "") {
+            const password = matKhau.value.trim();
+            const spanMatKhau = document.querySelector('[data-valmsg-for="MatKhau"]');
+            
+            if (password.length < 8) {
+                spanMatKhau.textContent = "Mật khẩu phải có ít nhất 8 ký tự.";
+                isValid = false;
+            } else if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+                spanMatKhau.textContent = "Mật khẩu phải chứa cả chữ và số.";
+                isValid = false;
+            } else if (!/[^A-Za-z0-9]/.test(password)) {
+                spanMatKhau.textContent = "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt.";
+                isValid = false;
+            }
+        }
+
+        // Kiểm tra mật khẩu xác nhận
         const xacNhanMatKhau = document.querySelector("#XacNhanMatKhau");
         const spanConfirm = document.querySelector('[data-valmsg-for="XacNhanMatKhau"]');
         if (matKhau.value.trim() !== "" && xacNhanMatKhau.value.trim() !== "" && matKhau.value !== xacNhanMatKhau.value) {
