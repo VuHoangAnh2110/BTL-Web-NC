@@ -294,8 +294,6 @@ namespace BTL_Web_NC.Controllers
 
             await _emailService.SendEmailAsync(taiKhoan.Email, subject, body);
         }
-
-        //Nhà tuyển dụng
        
         // Phương thức này chỉ dùng để kiểm tra xem có gửi email được hay không
         [HttpGet]
@@ -314,8 +312,119 @@ namespace BTL_Web_NC.Controllers
             }
         }
 
+        // Thông tin tài khoản đang đăng nhập
+        [HttpGet]   
+        public async Task<IActionResult> ThongTinTK()
+        {
+            // Lấy tên tài khoản từ người dùng đang đăng nhập
+            var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+            
+            // Kiểm tra xem người dùng đã đăng nhập chưa
+            if (string.IsNullOrEmpty(tenTaiKhoan))
+            {
+                return RedirectToAction("Login");
+            }
 
-    
+            // Lấy thông tin tài khoản từ repository
+            var taiKhoan = await _taiKhoanRepo.GetByTenTaiKhoanAsync(tenTaiKhoan);
+            
+            if (taiKhoan == null)
+            {
+                return NotFound();
+            }
+
+            // Trả về view với thông tin tài khoản
+            return View(taiKhoan);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CapNhatThongTinTK(TaiKhoan model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ThongTinTK", model);
+            }
+
+            // Lấy thông tin tài khoản hiện tại từ database
+            var taiKhoan = await _taiKhoanRepo.GetByTenTaiKhoanAsync(model.TenTaiKhoan);
+            
+            if (taiKhoan == null)
+            {
+                return NotFound();
+            }
+
+            // Cập nhật thông tin (chỉ những trường cho phép cập nhật)
+            taiKhoan.HoTen = model.HoTen;
+            taiKhoan.SoDienThoai = model.SoDienThoai;
+            taiKhoan.DiaChi = model.DiaChi;
+            taiKhoan.NgayCapNhat = DateTime.Now;
+            
+            // Lưu thay đổi
+            await _taiKhoanRepo.UpdateAsync(taiKhoan);
+            
+            // Hiển thị thông báo thành công
+            HttpContext.Session.SetString("SuccessMessage", "Cập nhật thông tin tài khoản thành công!");
+            
+            // Cập nhật lại session nếu cần
+            HttpContext.Session.SetString("HoTen", taiKhoan.HoTen ?? "");
+            
+            return RedirectToAction("ThongTinTK");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DoiMatKhau([FromBody] DoiMatKhauViewModel model)
+        {
+            // Kiểm tra model
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.First().ErrorMessage
+                    );
+
+                return Json(new { success = false, errors });
+            }
+
+            // Lấy tên tài khoản từ người dùng đã đăng nhập
+            var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+            if (string.IsNullOrEmpty(tenTaiKhoan))
+            {
+                return Json(new { success = false, message = "Bạn chưa đăng nhập" });
+            }
+
+            // Lấy thông tin tài khoản từ repository
+            var taiKhoan = await _taiKhoanRepo.GetByTenTaiKhoanAsync(tenTaiKhoan);
+            if (taiKhoan == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy thông tin tài khoản" });
+            }
+
+            // Kiểm tra mật khẩu cũ
+            bool passwordValid = BCrypt.Net.BCrypt.Verify(model.MatKhauCu, taiKhoan.MatKhau);
+            if (!passwordValid)
+            {
+                return Json(new { 
+                    success = false, 
+                    errors = new { matKhauCu = "Mật khẩu hiện tại không chính xác" } 
+                });
+            }
+
+            // Mã hóa mật khẩu mới
+            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(model.MatKhauMoi);
+            
+            // Cập nhật mật khẩu mới
+            taiKhoan.MatKhau = newPasswordHash;
+            taiKhoan.NgayCapNhat = DateTime.Now;
+            
+            // Lưu thay đổi
+            await _taiKhoanRepo.UpdateAsync(taiKhoan);
+
+            return Json(new { success = true, message = "Đổi mật khẩu thành công" });
+        }
+
+        
 
     }
 }

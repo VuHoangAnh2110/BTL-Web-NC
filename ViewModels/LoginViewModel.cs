@@ -32,14 +32,14 @@ namespace BTL_Web_NC.ViewModels
 
             if (!string.IsNullOrEmpty(Password))
             {
-                if (!Regex.IsMatch(Password, @"[A-Za-z]") || !Regex.IsMatch(Password, @"[0-9]"))
-                {
-                    errors.Add(new ValidationResult("Mật khẩu phải chứa cả chữ và số.", new[] { nameof(Password) }));
-                }
-                if (!Regex.IsMatch(Password, @"[^A-Za-z0-9]"))
-                {
-                    errors.Add(new ValidationResult("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt.", new[] { nameof(Password) }));
-                }
+                // if (!Regex.IsMatch(Password, @"[A-Za-z]") || !Regex.IsMatch(Password, @"[0-9]"))
+                // {
+                //     errors.Add(new ValidationResult("Mật khẩu phải chứa cả chữ và số.", new[] { nameof(Password) }));
+                // }
+                // if (!Regex.IsMatch(Password, @"[^A-Za-z0-9]"))
+                // {
+                //     errors.Add(new ValidationResult("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt.", new[] { nameof(Password) }));
+                // }
             }
 
             return errors;
