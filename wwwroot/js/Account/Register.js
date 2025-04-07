@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
+    function showToast(type, message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end', // Vị trí góc phải trên cùng
+            icon: type, // 'success', 'error', 'warning', 'info'
+            title: message,
+            showConfirmButton: false,
+            timer: 3000 // Tự động ẩn sau 3 giây
+        });
+    }
 
     // Xử lý sự kiện submit form đăng ký
     const form = document.querySelector("form");
@@ -7,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { id: "TenTaiKhoan", name: "Tên tài khoản" },
         { id: "Email", name: "Email", type: "email" },
         { id: "MatKhau", name: "Mật khẩu" },
-        { id: "XacNhanMatKhau", name: "Xác nhận mật khẩu" },
-        { id: "SoDienThoai", name: "Số điện thoại", type: "phone" }
+        { id: "XacNhanMatKhau", name: "Xác nhận mật khẩu" }
     ];
     const vaiTro = document.querySelectorAll('input[name="VaiTro"]');
 
@@ -19,10 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const fileInputs = Array.from(form.elements).filter(
             element => element.type === "file" && element.files.length > 0
         );
-        
         if (fileInputs.length > 0) {
             e.preventDefault();
-            alert("Không được tải lên tệp trong biểu mẫu đăng ký!");
+            showToast("error", "Không được tải lên tệp!")
             return;
         }
 
@@ -52,17 +60,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     isValid = false;
                 }
             }
-
-            // Kiểm tra số điện thoại
-            if (field.type === "phone" && value !== "") {
-                const phoneRegex = /^(0|\+84)[0-9]{9,10}$/;
-                if (!phoneRegex.test(value)) {
-                    span.textContent = "Số điện thoại không hợp lệ.";
-                    isValid = false;
-                }
-            }
         });
 
+        // Kiểm tra số điện thoại
+        const soDienThoai = document.querySelector("#SoDienThoai");
+        const spanSoDT = document.querySelector('[data-valmsg-for="SoDienThoai"]');
+        if (soDienThoai && soDienThoai.value.trim() !== "") {
+            const phoneRegex = /^(0|\+84)[0-9]{9,10}$/;
+            if (!phoneRegex.test(soDienThoai.value.trim())) {
+                spanSoDT.textContent = "Số điện thoại không hợp lệ.";
+                isValid = false;
+            }
+        }
+
+        // Kiểm tra định dạng mật khẩu 
         const matKhau = document.querySelector("#MatKhau");
         if (matKhau && matKhau.value.trim() !== "") {
             const password = matKhau.value.trim();

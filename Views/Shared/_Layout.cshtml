@@ -30,6 +30,39 @@
         </main>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="recruitModal" tabindex="-1" aria-labelledby="recruitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0">
+                <div class="modal-header border-bottom-1 px-4 border-bottom-0">
+                    <h5 class="modal-title text-truncate overflow-hidden font-weight-600 text-nowrap">Chào bạn,</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="w-75 text-center">
+                        <h5 class="title">Bạn hãy xác nhận thông tin!</h5>
+                        <p class="mb-4 title-content">
+                            Để tối ưu trải nghiệm trên TopCV, vui lòng chọn nhóm phù hợp với bạn.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer content justify-content-center text-center mx-0">
+                    <div class="font-weight-bold desc">
+                        Vui lòng lựa chọn nhóm phù hợp nhất với bạn.
+                    </div>
+                    <div class="row w-100 d-flex justify-content-between">
+                        <div class="col-6 text-center grid">
+                            <a class="btn btn-primary ml-1" asp-controller="Home" asp-action="RedirectToEmployer">Tôi là nhà tuyển dụng</a>
+                        </div>
+                        <div class="col-6 text-center grid mb-2">
+                            <a class="btn btn-primary ml-1" asp-controller="Home" asp-action="RedirectToCandidate">Tôi là ứng viên tìm việc</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer text-light py-4 mt-3" style="background-color: #41546e;">
         <div class="container">
             <div class="row">

@@ -19,20 +19,32 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     
                 <ul class="navbar-nav me-auto">
+                    @* @if (!string.IsNullOrEmpty(vaiTro) && vaiTro !== "admin") *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if(User.IsInRole("admin"))
+                        {
+                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="QLyTaiKhoan" asp-action="Index">Quản lý tài khoản</a></li>
+                        } 
+                        else {
+                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Việc làm</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Nhà tuyển dụng</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
+                        <li class="nav-item">
+                        <button type="button" class="btn btn-outline-secondary text-white" data-bs-toggle="modal" data-bs-target="#recruitModal">
+                            Tuyển dụng
+                        </button>
+                        </li>
+                        }
+                    } else {
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Việc làm</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Nhà tuyển dụng</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
-                    <li class="nav-item">
-                    <button type="button" class="btn btn-outline-secondary text-white" data-bs-toggle="modal" data-bs-target="#recruitModal">
-                        Tuyển dụng
-                    </button>
-                    </li>
-                    @* @if (!string.IsNullOrEmpty(vaiTro) && vaiTro !== "admin") *@        
-                    @if(User.Identity.IsAuthenticated && User.IsInRole("admin"))
-                    {
-                    <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="QLyTaiKhoan" asp-action="Index">Quản lý tài khoản</a></li>
                     }
                 </ul>
 
@@ -66,8 +78,15 @@
                         <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle border border-warning" width="40">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        @if(User.IsInRole("admin"))
+                        {
+
+                        } else
+                        {
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>
                         <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
                         <li><a class="dropdown-item" href="#">Quản lý công việc</a></li>
+                        }
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
                     </ul>
@@ -85,6 +104,8 @@
         </div>
     </div>
 </nav>
+
+
 
 <style>
     /* Tạo màu chữ trắng và hiệu ứng hover vàng cho navbar */
