@@ -1,10 +1,67 @@
 ﻿@{
     ViewData["Title"] = "Trang chủ";
     var danhSachCongViec = ViewBag.DanhSachCongViec as List<BTL_Web_NC.Models.CongViec>;
+    var banners = ViewBag.Banners as List<BTL_Web_NC.Models.Banner>;
 }
 
-
 <div class="">
+    <!-- Banner Carousel -->
+    @if (banners != null && banners.Any(b => !string.IsNullOrEmpty(b.DuongDanAnh)))
+    {
+        <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+            @* <!-- Indicators --> *@
+            <div class="carousel-indicators">
+                @{
+                    int indicatorIndex = 0;
+                    foreach (var banner in banners.Where(b => !string.IsNullOrEmpty(b.DuongDanAnh)))
+                    {
+                        <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="@indicatorIndex" 
+                                class="@(indicatorIndex == 0 ? "active" : "")" aria-current="@(indicatorIndex == 0 ? "true" : "false")"></button>
+                        indicatorIndex++;
+                    }
+                }
+            </div>
+
+            @* <!-- Slides --> *@
+            <div class="carousel-inner">
+                @{
+                    int slideIndex = 0;
+                    foreach (var banner in banners.Where(b => !string.IsNullOrEmpty(b.DuongDanAnh)))
+                    {
+                        <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                            @if (!string.IsNullOrEmpty(banner.LienKet))
+                            {
+                                <a href="@banner.LienKet">
+                                    <img src="@banner.DuongDanAnh" class="d-block w-100" alt="@banner.TieuDe">
+                                </a>
+                            }
+                            else
+                            {
+                                <img src="@banner.DuongDanAnh" class="d-block w-100" alt="@banner.TieuDe">
+                            }
+                            
+                            <div class="carousel-caption">
+                                <h3>@banner.TieuDe</h3>
+                                <p>@banner.MoTa</p>
+                            </div>
+                        </div>
+                        slideIndex++;
+                    }
+                }
+            </div>
+
+            @* <!-- Controls --> *@
+            <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    }
+    
     @* <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -52,39 +109,76 @@
     Tuyển dụng
 </button> *@
     
-</div>
 
-
-@if (danhSachCongViec != null && danhSachCongViec.Any())
-{
-    <div class="container mt-4">
-      <div class ="row">
-        @foreach (var job in danhSachCongViec)
-        {
-            <div class="col-md-6 mb-4">
-                <div class="card" onclick="location.href='@Url.Action("Detail", "Job", new { id = @job.MaCongViec })';" style="cursor: pointer;">
-                    <div class="row g-0 align-items-center">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img src="@(string.IsNullOrEmpty(job.CongTy.Logo) ? Url.Content("~/img/logo-congty-default.jpg") : job.CongTy.Logo)" 
-                            alt="Company Logo" class="img-fluid rounded" style="max-width: 80%; height: auto;">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">@job.TieuDe</h5>
-                                <p class="card-text">@job.MoTa</p>
-                                <p class="card-text"><small class="text-body-secondary">Ngày Đăng: @job.NgayDang.ToString("dd/MM/yyyy")</small></p>
+    @if (danhSachCongViec != null && danhSachCongViec.Any())
+    {
+        <div class="container mt-4">
+            <div class ="row">
+                @foreach (var job in danhSachCongViec)
+                {
+                    <div class="col-md-6 mb-4">
+                        <div class="card" onclick="location.href='@Url.Action("Detail", "Job", new { id = @job.MaCongViec })';" style="cursor: pointer;">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img src="@(string.IsNullOrEmpty(job.CongTy.Logo) ? Url.Content("~/img/logo-congty-default.jpg") : job.CongTy.Logo)" 
+                                    alt="Company Logo" class="img-fluid rounded" style="max-width: 80%; height: auto;">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@job.TieuDe</h5>
+                                        <p class="card-text">@job.MoTa</p>
+                                        <p class="card-text"><small class="text-body-secondary">Ngày Đăng: @job.NgayDang.ToString("dd/MM/yyyy")</small></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
-        }
+        </div>
+    }
+    else
+    {
+        <p>Chưa có công việc nào được đăng.</p>
+    }
 
-      </div>
+    <div class="swiper-slide swiper-slide-active" style="width: auto;">
+        <a href="#" style="width:70%">
+            <img style="width:100%" src="~/img/banner/moi-banner.png" alt="">
+        </a>
     </div>
+</div>
 
-}
-else
-{
-    <p>Chưa có công việc nào được đăng.</p>
-}
+
+
+<style>
+    /* Carousel Banner Styling */
+    .carousel-item {
+        height: 400px;
+    }
+
+    .carousel-item img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 15px;
+        bottom: 20px;
+        left: 10%;
+        right: 10%;
+    }
+
+    .carousel-caption h3 {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .carousel-caption p {
+        color: #f8f9fa;
+    }
+</style>

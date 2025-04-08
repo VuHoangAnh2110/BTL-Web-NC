@@ -14,6 +14,7 @@ namespace BTL_Web_NC.Data
         public DbSet<TaiKhoan> TaiKhoans { get; set; }
         public DbSet<ThongBao> ThongBaos { get; set; }
         public DbSet<UngTuyen> UngTuyens { get; set; }
+        public DbSet<Banner> Banners { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +26,7 @@ namespace BTL_Web_NC.Data
             modelBuilder.Entity<TaiKhoan>().HasKey(tk => tk.TenTaiKhoan);
             modelBuilder.Entity<ThongBao>().HasKey(tb => tb.MaThongBao);
             modelBuilder.Entity<UngTuyen>().HasKey(ut => ut.MaUngTuyen);
+            modelBuilder.Entity<Banner>().HasKey(b => b.MaBanner); // Thêm khai báo khóa chính cho Banner
 
             // Quan hệ giữa các bảng - Cập nhật tên navigation properties theo tiếng Việt
             modelBuilder.Entity<CongTy>()

@@ -4,36 +4,326 @@
     ViewData["Title"] = "Đăng ký Nhà Tuyển Dụng";
 }
 
-<h2 class="text-center">Đăng ký Nhà Tuyển Dụng</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h2 class="fw-bold mb-0">Đăng ký Nhà Tuyển Dụng</h2>
+                    <p class="mt-2 mb-0">Chia sẻ thông tin về công ty của bạn để thu hút ứng viên tiềm năng</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form asp-controller="Employer" asp-action="EmployerRegister" method="post" enctype="multipart/form-data" id="FormDangKyCongTy">
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <h4 class="border-bottom pb-2 text-primary">Thông tin cơ bản</h4>
+                            </div>
+                            
+                            <!-- Thông tin cơ bản -->
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label asp-for="TenCongTy" class="form-label fw-bold">Tên công ty <span class="text-danger">*</span></label>
+                                    <input asp-for="TenCongTy" class="form-control form-control-lg"  
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Nhập đầy đủ tên công ty của bạn" />
+                                    <span asp-validation-for="TenCongTy" class="text-danger"></span>
+                                </div>
 
-<form asp-controller="Employer" asp-action="EmployerRegister" method="post" class="container mt-4" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label asp-for="TenCongTy" class="form-label">Tên Công Ty</label>
-        <input asp-for="TenCongTy" class="form-control" required />
+                                <div class="mb-3">
+                                    <label asp-for="Website" class="form-label fw-bold">Website công ty</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-globe2"></i></span>
+                                        <input asp-for="Website" class="form-control" placeholder="www.congty.com" />
+                                    </div>
+                                    <span asp-validation-for="Website" class="text-danger"></span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label asp-for="SoDienThoai" class="form-label fw-bold">Số điện thoại liên hệ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                        <input asp-for="SoDienThoai" class="form-control" 
+                                               pattern="[0-9]{10,11}" placeholder="0xxxxxxxxx" />
+                                    </div>
+                                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Logo upload -->
+                            <div class="col-md-4 text-center">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold d-block">Logo công ty</label>
+                                    <div class="logo-preview mb-2 mx-auto" style="width:200px;height:200px;overflow:hidden;border:2px dashed #ccc;border-radius:10px;position:relative;">
+                                        <img id="logo-preview-img" src="~/img/logo-congty-default.jpg" class="img-fluid" alt="Logo preview" style="width:100%;height:100%;object-fit:cover;" />
+                                        <div class="overlay-text" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#666;font-size:14px;">
+                                            Nhấn để tải lên
+                                        </div>
+                                    </div>
+                                    <input type="file" id="logo-upload" name="LogoFile" class="form-control d-none" accept="image/*"  />
+                                    <button type="button" id="upload-button" class="btn btn-outline-secondary">
+                                        <i class="bi bi-cloud-arrow-up"></i> Chọn logo
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Địa chỉ và mô tả công ty -->
+                            <div class="col-md-12 mb-4 mt-3">
+                                <h4 class="border-bottom pb-2 text-primary">Thông tin chi tiết</h4>
+                            </div>
+                            
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="DiaChi" class="form-label fw-bold">Địa chỉ công ty <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                    <input asp-for="DiaChi" class="form-control"  />
+                                </div>
+                                <span asp-validation-for="DiaChi" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="MoTa" class="form-label fw-bold">Mô tả công ty <span class="text-danger">*</span></label>
+                                <textarea asp-for="MoTa" class="form-control" rows="5"  
+                                          placeholder="Mô tả về lĩnh vực hoạt động, quy mô, văn hóa và các giá trị của công ty..."></textarea>
+                                <span asp-validation-for="MoTa" class="text-danger"></span>
+                                <div class="form-text">
+                                    Mô tả chi tiết sẽ giúp ứng viên hiểu rõ hơn về công ty của bạn
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 text-center mt-3">
+                                <div class="form-check mb-3 text-start">
+                                    <input class="form-check-input" type="checkbox" id="agree" >
+                                    <label class="form-check-label" for="agree">
+                                        Tôi đồng ý với <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">điều khoản sử dụng</a> của hệ thống
+                                    </label>
+                                    <input type="hidden" name="agree" id="agreeHidden" value="false" />
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="bi bi-building-add me-2"></i> Đăng ký nhà tuyển dụng
+                                </button>
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">
+                                    <i class="bi bi-arrow-left me-2"></i> Quay lại
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer bg-light py-3 text-center">
+                    <p class="mb-0">Đã có tài khoản nhà tuyển dụng? <a href="#" class="fw-bold" data-bs-toggle="modal" data-bs-target="#logoutModal">Đăng nhập</a></p>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="DiaChi" class="form-label">Địa Chỉ</label>
-        <input asp-for="DiaChi" class="form-control" required />
+<!-- Modal Điều khoản -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Điều khoản sử dụng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bằng cách đăng ký và sử dụng dịch vụ của chúng tôi, bạn đồng ý với các điều khoản sau:</p>
+                <ul>
+                    <li>Cung cấp thông tin chính xác về công ty</li>
+                    <li>Tuân thủ các quy định về đăng tin tuyển dụng</li>
+                    <li>Không chia sẻ thông tin cá nhân của ứng viên cho bên thứ ba</li>
+                    <li>Chịu trách nhiệm về nội dung thông tin đăng tải</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đồng ý</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="MoTa" class="form-label">Mô Tả Công Ty</label>
-        <textarea asp-for="MoTa" class="form-control" rows="4" required></textarea>
+<!-- Modal Xác nhận đăng xuất -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Xác nhận chuyển hướng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có muốn đăng xuất tài khoản hiện tại để đăng nhập với tài khoản khác không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" id="confirmLogout" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Website" class="form-label">Website</label>
-        <input asp-for="Website" class="form-control" />
-    </div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý preview ảnh khi upload
+            const logoUpload = document.getElementById('logo-upload');
+            const logoPreview = document.getElementById('logo-preview-img');
+            const uploadButton = document.getElementById('upload-button');
+            const logoPreviewDiv = document.querySelector('.logo-preview');
+            
+            logoPreviewDiv.addEventListener('click', function() {
+                logoUpload.click();
+            });
+            
+            uploadButton.addEventListener('click', function() {
+                logoUpload.click();
+            });
+            
+            logoUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        logoPreview.src = e.target.result;
+                        document.querySelector('.overlay-text').style.display = 'none';
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            
+            // Xử lý modal xác nhận đăng xuất
+            const confirmLogoutBtn = document.getElementById('confirmLogout');
+            if (confirmLogoutBtn) {
+                confirmLogoutBtn.addEventListener('click', function() {
+                    // Gửi yêu cầu đăng xuất
+                    fetch('/Account/Logout', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => {
+                        // Chuyển hướng đến trang đăng nhập
+                        window.location.href = '@Url.Action("Login", "Account")';
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi đăng xuất:', error);
+                        // Trong trường hợp lỗi, vẫn chuyển hướng đến trang đăng nhập
+                        window.location.href = '@Url.Action("Login", "Account")';
+                    });
+                });
+            }
 
-    <div class="mb-3">
-        <label asp-for="Logo" class="form-label">Logo Công Ty</label>
-        <input type="file" name="Logo" class="form-control" required />
-        <span asp-validation-for="Logo" class="text-danger"></span>
-    </div>
+            // Kích hoạt tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
 
+            const registerForm = document.getElementById('FormDangKyCongTy');
+            const agreeCheckbox = document.getElementById('agree');
+            // Form validation trước khi submit
+            registerForm.addEventListener('submit', function(event) {
+                // Kiểm tra các trường bắt buộc
+                const tenCongTy = document.querySelector('input[name="TenCongTy"]').value.trim();
+                const diaChi = document.querySelector('input[name="DiaChi"]').value.trim();
+                const moTa = document.querySelector('textarea[name="MoTa"]').value.trim();
+                
+                // Reset previous error messages
+                document.querySelectorAll('span[class*="text-danger"]').forEach(el => el.textContent = '');
+                
+                let isValid = true;
+                
+                // Kiểm tra tên công ty
+                if (!tenCongTy) {
+                    isValid = false;
+                    document.querySelector('span[data-valmsg-for="TenCongTy"]') ? 
+                        document.querySelector('span[data-valmsg-for="TenCongTy"]').textContent = 'Vui lòng nhập tên công ty' :
+                        document.querySelector('span[asp-validation-for="TenCongTy"]').textContent = 'Vui lòng nhập tên công ty';
+                }
+                
+                // Kiểm tra địa chỉ
+                if (!diaChi) {
+                    isValid = false;
+                    document.querySelector('span[data-valmsg-for="DiaChi"]') ? 
+                        document.querySelector('span[data-valmsg-for="DiaChi"]').textContent = 'Vui lòng nhập địa chỉ công ty' :
+                        document.querySelector('span[asp-validation-for="DiaChi"]').textContent = 'Vui lòng nhập địa chỉ công ty';
+                }
+                
+                // Kiểm tra mô tả
+                if (!moTa) {
+                    isValid = false;
+                    document.querySelector('span[data-valmsg-for="MoTa"]') ? 
+                        document.querySelector('span[data-valmsg-for="MoTa"]').textContent = 'Vui lòng nhập mô tả về công ty' :
+                        document.querySelector('span[asp-validation-for="MoTa"]').textContent = 'Vui lòng nhập mô tả về công ty';
+                }
+                
+                // Kiểm tra đồng ý điều khoản
+                if (!agreeCheckbox.checked) {
+                    isValid = false;
+                    
+                    // Với checkbox, thêm một span nếu chưa có
+                    let agreeErrorSpan = document.querySelector('#agree-error');
+                    if (!agreeErrorSpan) {
+                        agreeErrorSpan = document.createElement('span');
+                        agreeErrorSpan.id = 'agree-error';
+                        agreeErrorSpan.className = 'text-danger d-block mt-1';
+                        agreeCheckbox.parentNode.appendChild(agreeErrorSpan);
+                    }
+                    
+                    agreeErrorSpan.textContent = 'Bạn phải đồng ý với điều khoản sử dụng';
+                    
+                    // Highlight checkbox
+                    agreeCheckbox.classList.add('is-invalid');
+                } else {
+                    agreeCheckbox.classList.remove('is-invalid');
+                    const agreeErrorSpan = document.querySelector('#agree-error');
+                    if (agreeErrorSpan) {
+                        agreeErrorSpan.textContent = '';
+                    }
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    // Cuộn lên trường lỗi đầu tiên
+                    const firstErrorElement = document.querySelector('span.text-danger:not(:empty)');
+                    if (firstErrorElement) {
+                        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
 
-    <button type="submit" class="btn btn-primary">Đăng ký</button>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
-</form>
+            agreeCheckbox.addEventListener('change', function() {
+                document.getElementById('agreeHidden').value = this.checked;
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .logo-preview:hover {
+            border-color: #0d6efd !important;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+}
