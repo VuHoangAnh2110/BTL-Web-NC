@@ -80,7 +80,7 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         @if(User.IsInRole("admin"))
                         {
-
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>
                         } else
                         {
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>

@@ -1,0 +1,215 @@
+@model BTL_Web_NC.ViewModels.CapNhatTKViewModel
+@{
+    ViewData["Title"] = "Cập nhật thông tin tài khoản";
+}
+
+<div class="container my-4">
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-gradient-primary text-white py-3 rounded-top">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0 fw-bold">
+                    <i class="fas fa-user-edit me-2"></i>Cập nhật thông tin tài khoản
+                </h3>
+                <a asp-action="Index" class="btn btn-light btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Quay lại
+                </a>
+            </div>
+        </div>
+        <div class="card-body px-4">
+            <div id="canhbaotk"></div>
+            <form asp-action="CapNhatTK" method="post" id="formCapNhatTK">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="TenTaiKhoan" />
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 bg-light">
+                            <div class="card-header bg-light border-0 pt-3">
+                                <h5 class="card-title text-primary">
+                                    <i class="fas fa-info-circle me-2"></i>Thông tin cơ bản
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="TenTaiKhoan" class="form-label fw-bold">Tên tài khoản</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input asp-for="TenTaiKhoan" class="form-control" disabled />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label fw-bold">Email</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input asp-for="Email" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="HoTen" class="form-label fw-bold">Họ tên</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                        <input asp-for="HoTen" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="SoDienThoai" class="form-label fw-bold">Số điện thoại</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input asp-for="SoDienThoai" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 bg-light">
+                            <div class="card-header bg-light border-0 pt-3">
+                                <h5 class="card-title text-primary">
+                                    <i class="fas fa-cogs me-2"></i>Cài đặt tài khoản
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="DiaChi" class="form-label fw-bold">Địa chỉ</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="VaiTro" class="form-label fw-bold">Vai trò</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                        <select asp-for="VaiTro" class="form-select" id="VaiTro">
+                                            <option value="user">User</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="VaiTro" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="TrangThai" class="form-label fw-bold">Trạng thái</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fas fa-toggle-on"></i></span>
+                                        <select asp-for="TrangThai" class="form-select" id="TrangThai">
+                                            <option value="1">Chờ duyệt</option>
+                                            <option value="2">Hoạt động</option>
+                                            <option value="3">Đã khóa</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Đặt lại mật khẩu</label>
+                                    <div class="d-grid">
+                                        <button type="button" id="btnResetPassword" class="btn btn-warning">
+                                            <i class="fas fa-key me-2"></i>Reset mật khẩu
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        Đặt lại mật khẩu sẽ gửi email thông báo cho người dùng với thông tin đăng nhập mới
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <a asp-action="Index" class="btn btn-secondary me-2">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Kiểm tra nếu admin đang chỉnh sửa chính tài khoản của mình
+            const currentUser = '@User.Identity.Name';
+            const editingUser = '@Model.TenTaiKhoan';
+            
+            if (currentUser === editingUser) {
+                $('#VaiTro').prop('disabled', true);
+                $('#TrangThai').prop('disabled', true);
+                
+                const warningEl = $('<div class="alert alert-warning rounded-3 border-0 shadow-sm my-3" role="alert">' + 
+                    '<i class="fas fa-exclamation-triangle me-2"></i>' +
+                    '<strong>Lưu ý:</strong> Bạn không thể thay đổi vai trò và trạng thái của chính mình.' +
+                    '</div>');
+                
+                $('#canhbaotk').prepend(warningEl);
+            }
+            
+            // Xử lý reset mật khẩu
+            $('#btnResetPassword').on('click', function() {
+                Swal.fire({
+                    title: 'Xác nhận đặt lại mật khẩu?',
+                    html: `<p>Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản <strong>${editingUser}</strong>?</p>
+                        <p>Mật khẩu mới sẽ được gửi qua email của người dùng.</p>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy',
+                    focusCancel: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Gọi API để reset mật khẩu
+                        $.ajax({
+                            url: '@Url.Action("ResetPassword", "QLyTaiKhoan")',
+                            type: 'POST',
+                            data: { tenTaiKhoan: editingUser },
+                            beforeSend: function() {
+                                Swal.fire({
+                                    title: 'Đang xử lý...',
+                                    html: 'Vui lòng chờ trong giây lát',
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: response.message,
+                                        icon: 'success'
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: response.message,
+                                        icon: 'error'
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Có lỗi xảy ra khi đặt lại mật khẩu',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

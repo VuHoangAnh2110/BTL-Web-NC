@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
     var danhSachCongViec = ViewBag.DanhSachCongViec as List<BTL_Web_NC.Models.CongViec>;
 }
 
@@ -65,7 +65,8 @@
                 <div class="card" onclick="location.href='@Url.Action("Detail", "Job", new { id = @job.MaCongViec })';" style="cursor: pointer;">
                     <div class="row g-0 align-items-center">
                         <div class="col-md-4 d-flex justify-content-center">
-                            <img src="@job.CongTy.Logo" class="img-fluid rounded" style="max-width: 80%; height: auto;" alt="Company Logo">
+                            <img src="@(string.IsNullOrEmpty(job.CongTy.Logo) ? Url.Content("~/img/logo-congty-default.jpg") : job.CongTy.Logo)" 
+                            alt="Company Logo" class="img-fluid rounded" style="max-width: 80%; height: auto;">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

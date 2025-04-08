@@ -59,3 +59,16 @@ header{
   text-decoration: none !important;
   transition: color 0.3s ease-in-out;
 }
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white;
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%) !important;
+}

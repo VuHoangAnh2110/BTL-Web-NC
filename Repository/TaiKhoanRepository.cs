@@ -62,6 +62,40 @@ namespace BTL_Web_NC.Repositories
             await _context.SaveChangesAsync();
         }
 
+        // Tìm kiếm và lọc danh sách tài khoản
+        public async Task<IEnumerable<TaiKhoan>> BoLocTimKiemTKAsync(string search, string vaiTro, string trangThai)
+        {
+            // Lấy tất cả tài khoản
+            var query = _context.TaiKhoans.AsQueryable();
+            
+            // Lọc theo tên tài khoản hoặc họ tên hoặc email
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToLower();
+                query = query.Where(a => a.TenTaiKhoan.ToLower().Contains(search) 
+                                        || (a.HoTen != null && a.HoTen.ToLower().Contains(search)) 
+                                        || (a.Email != null && a.Email.ToLower().Contains(search))
+                                    );
+            }
+            
+            // Lọc theo vai trò
+            if (!string.IsNullOrEmpty(vaiTro) && vaiTro != "all")
+            {
+                query = query.Where(a => a.VaiTro == vaiTro);
+            }
+            
+            // Lọc theo trạng thái
+            if (!string.IsNullOrEmpty(trangThai) && trangThai != "all")
+            {
+                int trangThaiValue = int.Parse(trangThai);
+                query = query.Where(a => a.TrangThai == trangThaiValue);
+            }
+            
+            // Sắp xếp theo ngày tạo mới nhất
+            return await query.OrderByDescending(a => a.NgayTao).ToListAsync();
+        }
+
+
 
     }
 }
