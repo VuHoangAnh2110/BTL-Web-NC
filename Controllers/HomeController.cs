@@ -14,19 +14,26 @@ public class HomeController : Controller
     private readonly ITaiKhoanRepository _TaiKhoanRepo;
     private readonly ICongTyRepository _CongTyRepo;
     private readonly ICongViecRepository _congViecRepo;
+    private readonly IBannerRepository _bannerRepository;
 
-    public HomeController(ILogger<HomeController> logger, ITaiKhoanRepository TaiKhoanRepo, ICongTyRepository CongTyRepo, ICongViecRepository CongViecRepo)
+    public HomeController(ILogger<HomeController> logger, ITaiKhoanRepository TaiKhoanRepo, 
+                        ICongTyRepository CongTyRepo, ICongViecRepository CongViecRepo, 
+                        IBannerRepository BannerRepository)
     {
         _logger = logger;
         _TaiKhoanRepo = TaiKhoanRepo;
         _CongTyRepo = CongTyRepo;
         _congViecRepo = CongViecRepo;
+        _bannerRepository = BannerRepository;
     }
 
     public async Task<IActionResult> Index()
     {
         var danhSachCongViec = await _congViecRepo.GetDsCongViecAsync();
+        var dsBanner = await _bannerRepository.GetAllBannersAsync();
         ViewBag.DanhSachCongViec = danhSachCongViec ?? new List<CongViec>();
+        ViewBag.Banners = dsBanner ?? new List<Banner>();
+
         return View();
     }
 
@@ -56,7 +63,6 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Account"); // Nếu chưa đăng nhập, chuyển đến trang Login
         }
        
-
         // Lấy thông tin người dùng từ email
         var TaiKhoan = await _TaiKhoanRepo.GetByEmailAsync(email);
 

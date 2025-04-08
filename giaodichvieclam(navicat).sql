@@ -12,8 +12,45 @@
  Target Server Version : 16001000 (16.00.1000)
  File Encoding         : 65001
 
- Date: 06/04/2025 03:45:48
+ Date: 08/04/2025 18:59:44
 */
+
+
+-- ----------------------------
+-- Table structure for tblBanner
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[tblBanner]') AND type IN ('U'))
+	DROP TABLE [dbo].[tblBanner]
+GO
+
+CREATE TABLE [dbo].[tblBanner] (
+  [PK_sMaBanner] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
+  [sTieuDe] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sMoTa] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sDuongDanAnh] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sLienKet] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [tNgayTao] datetime DEFAULT getdate() NULL
+)
+GO
+
+ALTER TABLE [dbo].[tblBanner] SET (LOCK_ESCALATION = TABLE)
+GO
+
+
+-- ----------------------------
+-- Records of tblBanner
+-- ----------------------------
+INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN001', N'Tìm việc nhanh chóng', N'Hàng ngàn công việc đang chờ bạn', N'/img/banner/banner1.jpg', NULL, N'2025-04-08 18:50:56.953')
+GO
+
+INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN002', N'Tuyển dụng hiệu quả', N'Kết nối với ứng viên tiềm năng', N'/img/banner/banner2.jpg', NULL, N'2025-04-08 18:51:40.297')
+GO
+
+INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN003', N'Cơ hội nghề nghiệp', N'Phát triển sự nghiệp của bạn', N'/img/banner/banner3.jpg', NULL, N'2025-04-08 18:52:14.847')
+GO
+
+INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN004', N'Tìm kiếm cơ hội', N'Cùng tương tác và phát triển mạnh mẽ', N'/img/banner/banner4.jpg', NULL, N'2025-04-08 18:53:42.260')
+GO
 
 
 -- ----------------------------
@@ -41,9 +78,6 @@ GO
 -- ----------------------------
 -- Records of tblCongTy
 -- ----------------------------
-INSERT INTO [dbo].[tblCongTy] ([PK_sMaCongTy], [FK_sTenTaiKhoan], [sTenCongTy], [sDiaChi], [sMoTa], [sWebsite], [sLogo]) VALUES (N'CT060425wg79', N'admin', N'Công Ty OSP', N'Hoàng Mai', N'Công ty cổ phần công nghệ', NULL, NULL)
-GO
-
 
 -- ----------------------------
 -- Table structure for tblCongViec
@@ -72,9 +106,6 @@ GO
 -- ----------------------------
 -- Records of tblCongViec
 -- ----------------------------
-INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [dMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai]) VALUES (N'CV060425ho51', N'CT060425wg79', N'Việc làm ', N'Công nghệ Thực Tập Viên IT. Trợ cấp đầy đủ. Có chế độ', N'Hoàng Mai, Hà Nội', N'2068000.00', N'Part-time', N'2025-04-06 02:38:13.697', N'Đang tuyển')
-GO
-
 
 -- ----------------------------
 -- Table structure for tblFile
@@ -156,16 +187,10 @@ GO
 -- ----------------------------
 -- Records of tblTaiKhoan
 -- ----------------------------
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'admin', N'Ông Trùm Nhà Vua', N'admin@gmail.com', N'admin123#', N'01232132131', NULL, NULL, N'admin', N'2', N'2025-03-27 11:12:47.523', N'2025-03-27 11:12:47.523')
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'admin', N'admin', N'22a1001d0027@students.hou.edu.vn', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'admin', N'2', N'2025-04-08 18:57:28.143', N'2025-04-08 18:57:28.143')
 GO
 
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'anhhuuu', N'anh và ', N'22a1001d0027@students.hou.edu.vn', N'admin123#', N'00120123113', NULL, NULL, N'ung_vien', N'1', N'2025-03-25 13:20:09.237', N'2025-03-25 13:20:09.240')
-GO
-
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'anhwe24', N'anh siuuu', N'chuataidau@gmail.com', N'admin123#', N'00120123113', NULL, NULL, N'nha_tuyen_dung', N'3', N'2025-03-25 19:40:07.153', N'2025-03-25 19:40:07.153')
-GO
-
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'notadmin', N'Thợ', N'notadmin@gmail.com', N'admin123#', N'01231231233', NULL, NULL, N'ung_vien', N'2', N'2025-03-28 13:50:01.713', N'2025-03-28 13:50:01.713')
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'vhanh2k4', N'Vũ Hoàng Anh', N'vhanh2k4@gmail.com', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'user', N'2', N'2025-04-08 18:55:49.903', N'2025-04-08 18:55:49.903')
 GO
 
 
@@ -196,9 +221,6 @@ GO
 -- ----------------------------
 -- Records of tblThongBao
 -- ----------------------------
-INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB060425tr05', N'admin', N'Thông báo ứng tuyển', N'Ứng viên Ông Trùm Nhà Vua đã ứng tuyển vào công việc Việc làm .', N'?ng tuy?n', N'2025-04-06 03:41:14.433', N'0', N'CT060425wg79', N'CV060425ho51')
-GO
-
 
 -- ----------------------------
 -- Table structure for tblUngTuyen
@@ -223,10 +245,13 @@ GO
 -- ----------------------------
 -- Records of tblUngTuyen
 -- ----------------------------
-INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT060425kp60', N'admin', N'CV060425ho51', N'2025-04-06 03:41:14.427', N'Đang chờ')
-GO
 
-INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT060425sm57', N'notadmin', N'CV060425ho51', N'2025-04-06 03:24:06.413', N'Đang chờ')
+-- ----------------------------
+-- Primary Key structure for table tblBanner
+-- ----------------------------
+ALTER TABLE [dbo].[tblBanner] ADD CONSTRAINT [PK__tblBanne__816110D6E38AA608] PRIMARY KEY CLUSTERED ([PK_sMaBanner])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
 GO
 
 
@@ -361,4 +386,3 @@ GO
 ALTER TABLE [dbo].[tblUngTuyen] ADD CONSTRAINT [fk_ungtuyen_congviec] FOREIGN KEY ([FK_sMaCongViec]) REFERENCES [dbo].[tblCongViec] ([PK_sMaCongViec]) ON DELETE CASCADE ON UPDATE CASCADE
 GO
 
--------------------------------

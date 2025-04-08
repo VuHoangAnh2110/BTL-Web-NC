@@ -34,6 +34,17 @@ namespace BTL_Web_NC.Models
         [StringLength(255)]
         public string? Logo { get; set; }
 
+        [Column("sSoDienThoai")]
+        [StringLength(20)]
+        // SoDienThoai là NULL trong database nên không bắt buộc
+        public string? SoDienThoai { get; set; }
+
+        [Column("iTrangThai")]
+        public int TrangThai { get; set; } = 2;
+
+        [Column("tNgayDangKy")]
+        public DateTime NgayTao { get; set; } = DateTime.Now;
+
         // Navigation Property - Sửa lại ForeignKey để trỏ đến tên property chứ không phải tên cột
         [ForeignKey("TenTaiKhoan")]
         public virtual TaiKhoan? TaiKhoan { get; set; }

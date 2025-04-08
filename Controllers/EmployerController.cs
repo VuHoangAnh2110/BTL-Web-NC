@@ -59,8 +59,26 @@ namespace BTL_Web_NC.Controllers
         
         //Đăng ký
         [HttpPost]
-        public async Task<IActionResult> EmployerRegister(CongTy nhaTuyenDung, IFormFile? LogoFile)
+        public async Task<IActionResult> EmployerRegister(CongTy nhaTuyenDung, IFormFile? LogoFile, bool agree)
         {
+            // Kiểm tra người dùng đã đồng ý với điều khoản chưa
+            if (!agree)
+            {
+                ModelState.AddModelError("", "Bạn phải đồng ý với điều khoản sử dụng");
+            }
+            // Kiểm tra các trường bắt buộc
+            if (string.IsNullOrWhiteSpace(nhaTuyenDung.TenCongTy))
+            {
+                ModelState.AddModelError("TenCongTy", "Tên công ty không được để trống");
+            }
+            if (string.IsNullOrWhiteSpace(nhaTuyenDung.DiaChi))
+            {
+                ModelState.AddModelError("DiaChi", "Địa chỉ công ty không được để trống");
+            }
+            if (string.IsNullOrWhiteSpace(nhaTuyenDung.MoTa))
+            {
+                ModelState.AddModelError("MoTa", "Mô tả công ty không được để trống");
+            }
             if (!ModelState.IsValid)
             {
                 return View("EmployerRegister", nhaTuyenDung);
@@ -88,40 +106,76 @@ namespace BTL_Web_NC.Controllers
             // Kiểm tra file logo trước khi lưu
             if (LogoFile != null && LogoFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(uploadsFolder))
+                // Kiểm tra kích thước file
+                if (LogoFile.Length > 5 * 1024 * 1024) // 5MB limit
                 {
-                    Directory.CreateDirectory(uploadsFolder);
+                    ModelState.AddModelError("LogoFile", "Kích thước file không được vượt quá 5MB");
+                    return View("EmployerRegister", nhaTuyenDung);
                 }
 
-                var uniqueFileName = $"{tenCT}_{Path.GetFileName(LogoFile.FileName)}";
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Kiểm tra loại file
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(LogoFile.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
                 {
-                    await LogoFile.CopyToAsync(stream);
+                    ModelState.AddModelError("LogoFile", "Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)");
+                    return View("EmployerRegister", nhaTuyenDung);
                 }
 
-                // Kiểm tra xem file đã tồn tại chưa
-                if (System.IO.File.Exists(filePath))
+                var logoFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logoCongTy");
+                if (!Directory.Exists(logoFolder))
                 {
-                    Console.WriteLine($"✅ Logo đã được tải lên: {filePath}");
-                    nhaTuyenDung.Logo = $"/uploads/{uniqueFileName}";
+                    Directory.CreateDirectory(logoFolder);
                 }
-                else
+
+                var uniqueFileName = $"{tenCT}_{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(LogoFile.FileName)}";
+                var filePath = Path.Combine(logoFolder, uniqueFileName);
+
+                try
                 {
-                    Console.WriteLine("❌ Lỗi: File không tồn tại sau khi tải lên!");
-                    ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await LogoFile.CopyToAsync(stream);
+                    }
+
+                    // Kiểm tra xem file đã tồn tại chưa
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        Console.WriteLine($"Logo đã được tải lên: {filePath}");
+                        nhaTuyenDung.Logo = $"/img/logoCongTy/{uniqueFileName}";
+                    }
+                    else
+                    {
+                        Console.WriteLine("Lỗi: File không tồn tại sau khi tải lên!");
+                        ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                        return View("EmployerRegister", nhaTuyenDung);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi tải lên file: {ex.Message}");
+                    ModelState.AddModelError("LogoFile", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
                     return View("EmployerRegister", nhaTuyenDung);
                 }
             }
             else
             {
-                Console.WriteLine("⚠️ Không có logo được tải lên.");
+                // Sử dụng logo mặc định
+                nhaTuyenDung.Logo = "/img/logo-congty-default.jpg";
             }
 
-            await _congTyRepo.AddCongTyAsync(nhaTuyenDung);
-            return RedirectToAction("EmployerProfile", "Employer");
+            try
+            {
+                await _congTyRepo.AddCongTyAsync(nhaTuyenDung);
+                TempData["Success"] = "Đăng ký công ty thành công!";
+                return RedirectToAction("EmployerProfile", "Employer");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi lưu thông tin công ty: {ex.Message}");
+                ModelState.AddModelError("", "Có lỗi xảy ra khi đăng ký công ty. Vui lòng thử lại.");
+                return View("EmployerRegister", nhaTuyenDung);
+            }
         }
 
         //Edit
