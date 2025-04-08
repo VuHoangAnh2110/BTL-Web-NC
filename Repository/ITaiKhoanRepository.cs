@@ -21,5 +21,9 @@ namespace BTL_Web_NC.Repositories
         Task UpdateAsync(TaiKhoan TaiKhoan);
         // Xóa tài khoản
         // Task DeleteTaiKhoanAsync(string? id);
+        // Tìm kiếm và lọc danh sách tài khoản
+        Task<IEnumerable<TaiKhoan>> BoLocTimKiemTKAsync(string search, string vaiTro, string trangThai);
+
+
     }
 }

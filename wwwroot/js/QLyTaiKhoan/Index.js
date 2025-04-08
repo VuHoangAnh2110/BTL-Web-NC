@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById('ipKhoaid').value = username;
                     document.getElementById('ipKhoaName').value = account.tenTaiKhoan;
                     document.getElementById('ipKhoaEmail').value = account.email;
-                    document.getElementById('ipKhoaQuyen').value = account.vaiTro;
+                    if (account.vaiTro === "admin") {
+                        document.getElementById('ipKhoaQuyen').value = "Quản trị viên";
+                    } else {
+                        document.getElementById('ipKhoaQuyen').value = "Người dùng";
+                    }
                     if (account.trangThai === 2) {
                         document.getElementById('modalKhoaTKTitle').innerHTML = "Bạn muốn khóa tài khoản này?";
                         document.getElementById('btnKhoaTK').innerHTML = "Khóa";
@@ -64,6 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
             showToast("error", "Có lỗi xảy ra, vui lòng thử lại!");
         });
     });
+
+
 
 });
 

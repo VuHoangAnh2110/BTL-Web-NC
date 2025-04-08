@@ -21,9 +21,10 @@
                             <label for="selectVaiTro" class="form-label">Vai trò</label>
                             <select id="selectVaiTro" class="form-select" name="selectVaiTro">
                                 <option value="all">Tất cả</option>
-                                <option value="admin">Admin</option>
-                                <option value="ung_vien">Ứng viên</option>
-                                <option value="nha_tuyen_ung">Nhà tuyển dụng</option>
+                                <option value="admin">Quản trị viên</option>
+                                <option value="user">Người dùng</option>
+                                @* <option value="ung_vien">Ứng viên</option>
+                                <option value="nha_tuyen_ung">Nhà tuyển dụng</option> *@
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -46,30 +47,64 @@
 
             <!-- Phần bên phải (4 cột) -->
             <div class="col-md-4 text-end me-2">
-                <a asp-action="Create" class="btn btn-success">
+                <a asp-action="ThemTK" class="btn btn-success">
                     <i class="fas fa-user-plus"></i> Thêm tài khoản
                 </a>
             </div>
         </div>
 
         <div class="card-body mt-2">
-            @* {if isset($tendangnhap, $quyen, $donvi) && ($tendangnhap != "" || $quyen != "all" || $donvi != "all")}
-            <div class="d-flex align-items-center mb-3">
-                <i class="bx bx-search"></i> 
-                <span class="fw-semibold text-dark">Kết quả tìm kiếm với:</span>
-                {if $tendangnhap != ""}
-                    <span class='ms-2'> tài khoản: {$tendangnhap}, </span>
-                {/if}    
-                {if $quyen == admin}
-                    <span class='ms-2'>quyền: admin,</span>
-                {else if $quyen == donvi}
-                    <span class='ms-2'>quyền: đơn vị,</span>
-                {/if}
-                {if $donvi != "all"}
-                    <span class="ms-2">{$donvi.Tendonvi}</span>
-                {/if}
-            </div>
-            {/if} *@
+            <!-- Thêm hiển thị thông báo kết quả tìm kiếm -->
+            @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch) || 
+                (ViewBag.CurrentVaiTro != null && ViewBag.CurrentVaiTro != "all") || 
+                (ViewBag.CurrentTrangThai != null && ViewBag.CurrentTrangThai != "all"))            
+            {
+                <div class="alert alert-info mb-2 d-flex align-items-center">
+                    <i class="fas fa-search me-2"></i>
+                    <div>
+                        <span class="fw-bold">Kết quả tìm kiếm với: </span>
+                        @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
+                        {
+                            <span class="badge bg-primary me-2">Từ khóa: @ViewBag.CurrentSearch</span>
+                        }
+                        @if (ViewBag.CurrentVaiTro != "all" && ViewBag.CurrentVaiTro != null)
+                        {
+                            <span class="badge bg-secondary me-2">
+                                Vai trò: 
+                                @switch(ViewBag.CurrentVaiTro)
+                                {
+                                    case "admin": <text>Admin</text>; break;
+                                    case "user": <text>User</text>; break;
+                                    @* case "ung_vien": <text>Ứng viên</text>; break;
+                                    case "nha_tuyen_dung": <text>Nhà tuyển dụng</text>; break; *@
+                                }
+                            </span>
+                        }
+                        @if (ViewBag.CurrentTrangThai != "all" && ViewBag.CurrentTrangThai != null)
+                        {
+                            <span class="badge bg-secondary me-2">
+                                Trạng thái: 
+                                @switch(ViewBag.CurrentTrangThai)
+                                {
+                                    case "1": <text>Chờ duyệt</text>; break;
+                                    case "2": <text>Hoạt động</text>; break;
+                                    case "3": <text>Đã khóa</text>; break;
+                                }
+                            </span>
+                        }
+                        <span class="ms-2">(@Model.Count() kết quả)</span>
+                    </div>
+                </div>
+            }
+
+            <!-- Hiển thị thông báo không tìm thấy kết quả -->
+            @if (ViewBag.SearchMessage != null)
+            {
+                <div class="alert alert-warning mt-2">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    @ViewBag.SearchMessage
+                </div>
+            }
 
             <div class="card">
                 <div class="table-responsive text-nowrap">
@@ -100,14 +135,17 @@
                                     {
                                         <span class="badge bg-danger fs-6">Admin</span>
                                     }
-                                    else if (account.VaiTro == "ung_vien")
+                                    else {
+                                        <span class="badge bg-info fs-6">User</span>
+                                    }
+                                    @* if (account.VaiTro == "ung_vien")
                                     {
                                         <span class="badge bg-info fs-6">Ứng viên</span>
                                     }
                                     else if (account.VaiTro == "nha_tuyen_dung")
                                     {
                                         <span class="badge bg-success fs-6">Nhà tuyển dụng</span>
-                                    }
+                                    } *@
                                 </td>
                                 @if (account.TrangThai == 1)
                                 {

@@ -23,26 +23,26 @@
         </div>
 
         <div class="employer-infor col-md-4">
-          <div class="card">
-              <div class="card-body">
-                  @if (Model.CongTy != null)
-                  {
-                      <div class="d-flex align-items-start">
-                          <img src="@Model.CongTy.Logo" alt="Logo Công Ty" class="img-fluid me-3" style="max-width: 100px; height: auto;">
-                          <h5 class="card-title m-0">@Model.CongTy.TenCongTy</h5>
-                      </div>
+            <div class="card">
+                <div class="card-body">
+                    @if (Model.CongTy != null)
+                    {
+                        <div class="d-flex align-items-start">
+                            <img src="@(string.IsNullOrEmpty(Model.CongTy.Logo) ? Url.Content("~/img/logo-congty-default.jpg") : Model.CongTy.Logo)" 
+                                alt="Company Logo" class="img-fluid me-3" style="max-width: 100px; height: auto;">
+                            <h5 class="card-title m-0">@Model.CongTy.TenCongTy</h5>
+                        </div>
 
-                      <p class="mt-4"><strong>Địa chỉ:</strong> @Model.CongTy.DiaChi</p>
-                      <p class="mt-2"><strong>Website:</strong> <a href="@Model.CongTy.Website" target="_blank">@Model.CongTy.Website</a></p>
-                  }
-                  else
-                  {
-                      <p>Thông tin nhà tuyển dụng không khả dụng.</p>
-                  }
-
-              </div>
-          </div>
-      </div>
+                        <p class="mt-4"><strong>Địa chỉ:</strong> @Model.CongTy.DiaChi</p>
+                        <p class="mt-2"><strong>Website:</strong> <a href="@Model.CongTy.Website" target="_blank">@Model.CongTy.Website</a></p>
+                    }
+                    else
+                    {
+                        <p>Thông tin nhà tuyển dụng không khả dụng.</p>
+                    }
+                </div>
+            </div>
+        </div>
 
     </div>
 

@@ -60,10 +60,12 @@ namespace BTL_Web_NC.Controllers
                     ModelState.AddModelError(nameof(model.TenTaiKhoan), "Tên tài khoản đã tồn tại!");
                 }
                 // Kiểm tra số điện thoại đã tồn tại
-                var existingPhone = await _taiKhoanRepo.GetBySoDienThoaiAsync(model.SoDienThoai);
-                if (existingPhone != null)
-                {
-                    ModelState.AddModelError(nameof(model.SoDienThoai), "Số điện thoại đã tồn tại!");
+                if (!string.IsNullOrEmpty(model.SoDienThoai)){
+                    var existingPhone = await _taiKhoanRepo.GetBySoDienThoaiAsync(model.SoDienThoai);
+                    if (existingPhone != null)
+                    {
+                        ModelState.AddModelError(nameof(model.SoDienThoai), "Số điện thoại đã tồn tại!");
+                    }
                 }
                 // Nếu có bất kỳ lỗi nào thì trả về view kèm thông báo
                 if (!ModelState.IsValid)
