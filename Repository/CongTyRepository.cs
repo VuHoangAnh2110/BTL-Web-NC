@@ -14,10 +14,18 @@ namespace BTL_Web_NC.Repositories
             _context = context;
         }
 
+        // Lấy thông tin công ty theo id tài khoản
         public async Task<CongTy?> GetByUserIdAsync(string idTaiKhoan)
         {
             return await _context.CongTys
                 .FirstOrDefaultAsync(n => n.TenTaiKhoan == idTaiKhoan);
+        }
+
+        // Lấy thông tin công ty theo mã công ty
+        public async Task<CongTy?> LayCongTyTheoMaCTAsync(string idCongTy)
+        {
+            return await _context.CongTys
+                .FirstOrDefaultAsync(n => n.MaCongTy == idCongTy);
         }
 
         public async Task AddCongTyAsync(CongTy CongTy)
