@@ -7,6 +7,8 @@ namespace BTL_Web_NC.Repositories
     {
         Task<CongTy?> GetByUserIdAsync(string idTaiKhoan);
         
+        Task<CongTy?> LayCongTyTheoMaCTAsync(string idCongTy);
+        
         Task AddCongTyAsync(CongTy CongTy);
 
         Task UpdateCongTyAsync(CongTy CongTy);

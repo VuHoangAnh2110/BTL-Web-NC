@@ -32,6 +32,7 @@ namespace BTL_Web_NC.Controllers
             var email = HttpContext.Session.GetString("Email");
             if (string.IsNullOrEmpty(email))
             {
+                HttpContext.Session.SetString("WarningMessage", "Đăng nhập để tiếp tục!");
                 return RedirectToAction("Login", "Account");
             }
 
@@ -39,6 +40,7 @@ namespace BTL_Web_NC.Controllers
             var nguoiDung = await _taiKhoanRepo.GetByEmailAsync(email);
             if (nguoiDung == null)
             {
+                HttpContext.Session.SetString("WarningMessage", "Đăng nhập để tiếp tục!");
                 return RedirectToAction("Login", "Account");
             }
 
@@ -46,6 +48,7 @@ namespace BTL_Web_NC.Controllers
             var nhaTuyenDung = await _congTyRepo.GetByUserIdAsync(nguoiDung.TenTaiKhoan);
             if (nhaTuyenDung == null)
             {
+                HttpContext.Session.SetString("InfoMessage", "Bạn chưa đăng ký công ty!");
                 return RedirectToAction("EmployerRegister", "Employer");
             }
            
@@ -81,12 +84,14 @@ namespace BTL_Web_NC.Controllers
             }
             if (!ModelState.IsValid)
             {
+                HttpContext.Session.SetString("WarningMessage", "Đăng ký không thành công!");
                 return View("EmployerRegister", nhaTuyenDung);
             }
 
             var nguoiDungId = HttpContext.Session.GetString("TenTaiKhoan");
             if (nguoiDungId == null)
             {
+                HttpContext.Session.SetString("WarningMessage", "Vui lòng đăng ký hoặc đăng nhập vào tài khoản.");
                 return RedirectToAction("Login", "Account");
             }
 
@@ -94,7 +99,7 @@ namespace BTL_Web_NC.Controllers
             var existingCongTy = await _congTyRepo.GetByUserIdAsync(nguoiDungId);
             if (existingCongTy != null)
             {
-                TempData["Error"] = "Bạn đã đăng ký công ty rồi!";
+                HttpContext.Session.SetString("InfoMessage", "Tài khoản đã đăng ký công ty!");;
                 return RedirectToAction("EmployerProfile");
             }
 
@@ -110,6 +115,7 @@ namespace BTL_Web_NC.Controllers
                 if (LogoFile.Length > 5 * 1024 * 1024) // 5MB limit
                 {
                     ModelState.AddModelError("LogoFile", "Kích thước file không được vượt quá 5MB");
+                    HttpContext.Session.SetString("WarningMessage", "File vượt quá 5MB.");
                     return View("EmployerRegister", nhaTuyenDung);
                 }
 
@@ -119,6 +125,7 @@ namespace BTL_Web_NC.Controllers
                 if (!allowedExtensions.Contains(extension))
                 {
                     ModelState.AddModelError("LogoFile", "Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)");
+                    HttpContext.Session.SetString("WarningMessage", "File không hợp lệ.");
                     return View("EmployerRegister", nhaTuyenDung);
                 }
 
@@ -146,8 +153,8 @@ namespace BTL_Web_NC.Controllers
                     }
                     else
                     {
-                        Console.WriteLine("Lỗi: File không tồn tại sau khi tải lên!");
                         ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                        HttpContext.Session.SetString("WarningMessage", "Không thể tải lên logo. Vui lòng thử lại.");
                         return View("EmployerRegister", nhaTuyenDung);
                     }
                 }
@@ -155,6 +162,7 @@ namespace BTL_Web_NC.Controllers
                 {
                     Console.WriteLine($"Lỗi khi tải lên file: {ex.Message}");
                     ModelState.AddModelError("LogoFile", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
+                    HttpContext.Session.SetString("WarningMessage", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
                     return View("EmployerRegister", nhaTuyenDung);
                 }
             }
@@ -167,13 +175,14 @@ namespace BTL_Web_NC.Controllers
             try
             {
                 await _congTyRepo.AddCongTyAsync(nhaTuyenDung);
-                TempData["Success"] = "Đăng ký công ty thành công!";
+                HttpContext.Session.SetString("SuccessMessage", "Đăng ký công ty thành công!");
                 return RedirectToAction("EmployerProfile", "Employer");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Lỗi khi lưu thông tin công ty: {ex.Message}");
                 ModelState.AddModelError("", "Có lỗi xảy ra khi đăng ký công ty. Vui lòng thử lại.");
+                HttpContext.Session.SetString("WarningMessage", "Đăng ký không thành công! Vui lòng thử lại.");
                 return View("EmployerRegister", nhaTuyenDung);
             }
         }
@@ -181,7 +190,7 @@ namespace BTL_Web_NC.Controllers
         //Edit
         public async Task<IActionResult> Edit(string id)
         {
-            var nhaTuyenDung = await _congTyRepo.GetByUserIdAsync(id);
+            var nhaTuyenDung = await _congTyRepo.LayCongTyTheoMaCTAsync(id);
             if (nhaTuyenDung == null)
             {
                 return NotFound();
@@ -194,6 +203,14 @@ namespace BTL_Web_NC.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Lấy thông tin hiện tại của công ty từ database để giữ nguyên logo
+                var existingCompany = await _congTyRepo.LayCongTyTheoMaCTAsync(nhaTuyenDung.MaCongTy);
+                if (existingCompany != null)
+                {
+                    // Giữ lại logo hiện tại
+                    nhaTuyenDung.Logo = existingCompany.Logo;
+                }
+                HttpContext.Session.SetString("WarningMessage", "Cập nhật không thành công. Vui lòng thử lại.");
                 return View("Edit", nhaTuyenDung);
             }
 
@@ -203,40 +220,73 @@ namespace BTL_Web_NC.Controllers
                 return NotFound();
             }
 
+            // Kiểm tra file logo trước khi lưu
             if (LogoFile != null && LogoFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(uploadsFolder))
+                // Kiểm tra kích thước file
+                if (LogoFile.Length > 5 * 1024 * 1024) // 5MB limit
                 {
-                    Directory.CreateDirectory(uploadsFolder);
+                    ModelState.AddModelError("LogoFile", "Kích thước file không được vượt quá 5MB");
+                    HttpContext.Session.SetString("WarningMessage", "File vượt quá 5MB.");
+                    return View("Edit", nhaTuyenDung);
                 }
 
-                var uniqueFileName = $"{nhaTuyenDung.TenCongTy}_{Path.GetFileName(LogoFile.FileName)}";
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Kiểm tra loại file
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(LogoFile.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
                 {
-                    await LogoFile.CopyToAsync(stream);
+                    ModelState.AddModelError("LogoFile", "Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)");
+                    HttpContext.Session.SetString("WarningMessage", "File không hợp lệ.");
+                    return View("Edit", nhaTuyenDung);
                 }
 
-                if (System.IO.File.Exists(filePath))
+                var logoFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logoCongTy");
+                if (!Directory.Exists(logoFolder))
                 {
-                    existingNhaTuyenDung.Logo = $"/uploads/{uniqueFileName}";
+                    Directory.CreateDirectory(logoFolder);
                 }
-                else
+
+                var uniqueFileName = $"{nhaTuyenDung.TenCongTy}_{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(LogoFile.FileName)}";
+                var filePath = Path.Combine(logoFolder, uniqueFileName);
+
+                try
                 {
-                    ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await LogoFile.CopyToAsync(stream);
+                    }
+
+                    // Kiểm tra xem file đã tồn tại chưa
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        Console.WriteLine($"Logo đã được tải lên: {filePath}");
+                        existingNhaTuyenDung.Logo = $"/img/logoCongTy/{uniqueFileName}";
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                        HttpContext.Session.SetString("WarningMessage", "Không thể tải lên logo. Vui lòng thử lại.");
+                        return View("Edit", nhaTuyenDung);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi tải lên file: {ex.Message}");
+                    ModelState.AddModelError("LogoFile", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
+                    HttpContext.Session.SetString("WarningMessage", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
                     return View("Edit", nhaTuyenDung);
                 }
             }
 
             existingNhaTuyenDung.TenCongTy = nhaTuyenDung.TenCongTy;
             existingNhaTuyenDung.DiaChi = nhaTuyenDung.DiaChi;
+            existingNhaTuyenDung.SoDienThoai = nhaTuyenDung.SoDienThoai;
             existingNhaTuyenDung.MoTa = nhaTuyenDung.MoTa;
             existingNhaTuyenDung.Website = nhaTuyenDung.Website;
 
             await _congTyRepo.UpdateCongTyAsync(existingNhaTuyenDung);
-
+            HttpContext.Session.SetString("SuccessMessage", "Chỉnh sửa thông tin công ty thành công.");
             return RedirectToAction("EmployerProfile", "Employer");
         }
 

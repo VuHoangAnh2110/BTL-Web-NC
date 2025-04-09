@@ -1,76 +1,255 @@
 @model BTL_Web_NC.Models.CongTy
 
 @{
-    ViewData["Title"] = "Thông Tin Nhà Tuyển Dụng";
-    var CongTy = ViewBag.CongTy as BTL_Web_NC.Models.CongTy;
+    ViewData["Title"] = Model.TenCongTy;
     var danhSachCongViec = ViewBag.DanhSachCongViec as List<BTL_Web_NC.Models.CongViec>;
 }
 
-<h2 class="text-center">Thông Tin Công Ty</h2>
-
-<div class="container mt-4">
-    <div class="mb-3">
-        <strong>Tên Công Ty:</strong> @Model.TenCongTy
-    </div>
-
-    <div class="mb-3">
-        <strong>Địa Chỉ:</strong> @Model.DiaChi
-    </div>
-
-    <div class="mb-3">
-        <strong>Mô Tả Công Ty:</strong> @Model.MoTa
-    </div>
-
-    <div class="mb-3">
-        <strong>Website:</strong> <a href="@Model.Website" target="_blank">@Model.Website</a>
-    </div>
-
-    
-
-
-    @if (!string.IsNullOrEmpty(Model.Logo))
-    {
-        <div class="mb-3">
-            <strong>Logo Công Ty:</strong> <br />
-            <img src="@Model.Logo" alt="Logo Công Ty" width="150">
+<div class="container-fluid py-4">
+    <!-- Phần header với banner công ty -->
+    <div class="card mb-4 border-0 shadow">
+        <div class="card-body p-0">
+            <div class="bg-primary text-white p-4 position-relative" style="height: 140px;">
+                <div class="container position-relative">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <!-- Logo và thông tin chính -->
+                            <div class="d-flex">
+                                <div class="company-logo-wrapper bg-white rounded-3 shadow-sm me-4" 
+                                      style="width:120px;height:120px;margin-top:30px;border:4px solid #fff;overflow:hidden">
+                                    <img src="@(string.IsNullOrEmpty(Model.Logo) ? "/img/logo-congty-default.jpg" : Model.Logo)" 
+                                        alt="@Model.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover">
+                                </div>
+                                <div class="company-info mt-4">
+                                    <h1 class="display-6 fw-bold">@Model.TenCongTy</h1>
+                                    <!-- Thêm các badge về quy mô, địa điểm, -->
+                                    <div class="mt-2">
+                                        @if (!string.IsNullOrEmpty(Model.DiaChi))
+                                        {
+                                            <span class="badge bg-light text-dark me-2"><i class="bi bi-geo-alt"></i> @Model.DiaChi</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.Website))
+                                        {
+                                            <a href="@(Model.Website.StartsWith("http") ? Model.Website : $"https://{Model.Website}")" target="_blank" 
+                                                class="badge bg-light text-dark me-2 text-decoration-none">
+                                                <i class="bi bi-globe"></i> Website
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <div class="dropdown mt-4">
+                                <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Edit", "Employer", new { id = Model.MaCongTy })">
+                                            <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa thông tin
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("CreateJob", "Job")">
+                                            <i class="bi bi-plus-circle me-2"></i>Đăng tuyển mới
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Home")">
+                                            <i class="bi bi-house me-2"></i>Về trang chủ
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    }
+    </div>
+    
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Cột trái: Thông tin chi tiết công ty -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="card-title mb-0">Thông tin liên hệ</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item border-0 ps-0">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="icon-box bg-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                            <i class="bi bi-geo-alt text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Địa chỉ</h6>
+                                        <p class="text-muted mb-0">@Model.DiaChi</p>
+                                    </div>
+                                </div>
+                            </li>             
 
-    <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-primary">Chỉnh Sửa</a>
-    <a asp-controller="Job" asp-action="CreateJob" class="btn btn-primary">Thêm việc</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
-
+                            <li class="list-group-item border-0 ps-0">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="icon-box bg-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                            <i class="bi bi-globe text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Website</h6>
+                                        @if (!string.IsNullOrEmpty(Model.Website))
+                                        {
+                                        <a href="@(Model.Website.StartsWith("http") ? Model.Website : $"https://{Model.Website}")" 
+                                            target="_blank" class="text-decoration-none">@Model.Website</a>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li class="list-group-item border-0 ps-0">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="icon-box bg-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                            <i class="bi bi-telephone text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Số điện thoại</h6>
+                                        @if (!string.IsNullOrEmpty(Model.SoDienThoai))
+                                        {
+                                        <p class="text-muted mb-0">@Model.SoDienThoai</p>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="@Url.Action("Edit", "Employer", new { id = Model.MaCongTy })" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil-square me-2"></i>Cập nhật thông tin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cột phải: Mô tả công ty -->
+            <div class="col-md-8 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Giới thiệu công ty</h5>
+                        <a href="@Url.Action("CreateJob", "Job")" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-2"></i>Đăng tuyển mới
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="company-description">
+                            @if (!string.IsNullOrEmpty(Model.MoTa))
+                            {
+                                <p class="mb-0">@Model.MoTa</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted fst-italic">Chưa có thông tin mô tả về công ty. Vui lòng cập nhật thông tin.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Danh sách công việc đã đăng -->
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h4 class="border-bottom pb-2">
+                    <i class="bi bi-briefcase me-2"></i>Danh sách công việc đang tuyển (@(danhSachCongViec?.Count ?? 0))
+                </h4>
+            </div>
+            
+            @if (danhSachCongViec != null && danhSachCongViec.Any())
+            {
+                @foreach (var job in danhSachCongViec)
+                {
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm border-0 position-relative job-card" 
+                            onclick="location.href='@Url.Action("Detail", "Job", new { id = job.MaCongViec })';">
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-primary">@(job.TrangThai)</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate">@job.TieuDe</h5>
+                                <p class="card-text text-muted small mb-3">
+                                    <i class="bi bi-calendar me-1"></i> Ngày đăng: @job.NgayDang.ToString("dd/MM/yyyy")
+                                </p>
+                                <p class="card-text job-description">@(job.MoTa?.Length > 100 ? job.MoTa.Substring(0, 100) + "..." : job.MoTa)</p>
+                            </div>
+                            <div class="card-footer bg-white border-0">
+                              <div class="d-flex justify-content-between align-items-center">
+                                  @if (job.MucLuong.HasValue)
+                                  {
+                                      <span class="text-success fw-bold"><i class="bi bi-cash me-1"></i>@job.MucLuong.Value.ToString("N0") VNĐ</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="text-muted"><i class="bi bi-cash me-1"></i>Thỏa thuận</span>
+                                  }
+                                  <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); window.location='@Url.Action("Edit", "Job", new { id = job.MaCongViec })'">
+                                      <i class="bi bi-pencil"></i>
+                                  </button>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>Chưa có công việc nào được đăng.
+                        <a href="@Url.Action("CreateJob", "Job")" class="alert-link">Đăng tin tuyển dụng ngay!</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
-<h3 class="text-center">Danh sách công việc đã đăng</h3>
-@if (danhSachCongViec != null && danhSachCongViec.Any())
-{
-    <div class="container mt-4">
-      <div class ="row">
-        @foreach (var job in danhSachCongViec)
-        {
-        <div class="col-md-6 mb-4">
-            <div class="card" onclick="location.href='@Url.Action("Detail", "Job", new { id = @job.MaCongViec })';" style="cursor: pointer;">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="@job.CongTy.Logo" class="img-fluid rounded-start" alt="Image">
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">@job.TieuDe</h5>
-                    <p class="card-text">@job.MoTa</p>
-                    <p class="card-text"><small class="text-body-secondary">Ngày Đăng: @job.NgayDang.ToString("dd/MM/yyyy")</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
-
-}
-else
-{
-    <p>Chưa có công việc nào được đăng.</p>
-}
+<style>
+    .job-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1) !important;
+    }
+    
+    .job-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .icon-box {
+        transition: all 0.3s ease;
+    }
+    
+    .list-group-item:hover .icon-box {
+        background-color: #0d6efd !important;
+        color: white !important;
+    }
+    
+    .list-group-item:hover .icon-box i {
+        color: white !important;
+    }
+</style>
