@@ -116,6 +116,7 @@ namespace BTL_Web_NC.Controllers
                 {
                     ModelState.AddModelError("LogoFile", "Kích thước file không được vượt quá 5MB");
                     HttpContext.Session.SetString("WarningMessage", "File vượt quá 5MB.");
+
                     return View("EmployerRegister", nhaTuyenDung);
                 }
 
@@ -126,6 +127,7 @@ namespace BTL_Web_NC.Controllers
                 {
                     ModelState.AddModelError("LogoFile", "Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)");
                     HttpContext.Session.SetString("WarningMessage", "File không hợp lệ.");
+
                     return View("EmployerRegister", nhaTuyenDung);
                 }
 
@@ -163,6 +165,7 @@ namespace BTL_Web_NC.Controllers
                     Console.WriteLine($"Lỗi khi tải lên file: {ex.Message}");
                     ModelState.AddModelError("LogoFile", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
                     HttpContext.Session.SetString("WarningMessage", "Có lỗi xảy ra khi tải lên logo. Vui lòng thử lại.");
+
                     return View("EmployerRegister", nhaTuyenDung);
                 }
             }
@@ -176,6 +179,7 @@ namespace BTL_Web_NC.Controllers
             {
                 await _congTyRepo.AddCongTyAsync(nhaTuyenDung);
                 HttpContext.Session.SetString("SuccessMessage", "Đăng ký công ty thành công!");
+
                 return RedirectToAction("EmployerProfile", "Employer");
             }
             catch (Exception ex)
@@ -183,6 +187,7 @@ namespace BTL_Web_NC.Controllers
                 Console.WriteLine($"Lỗi khi lưu thông tin công ty: {ex.Message}");
                 ModelState.AddModelError("", "Có lỗi xảy ra khi đăng ký công ty. Vui lòng thử lại.");
                 HttpContext.Session.SetString("WarningMessage", "Đăng ký không thành công! Vui lòng thử lại.");
+
                 return View("EmployerRegister", nhaTuyenDung);
             }
         }
