@@ -141,8 +141,24 @@
             const editingUser = '@Model.TenTaiKhoan';
             
             if (currentUser === editingUser) {
-                $('#VaiTro').prop('disabled', true);
-                $('#TrangThai').prop('disabled', true);
+                const vaiTroValue = $('#VaiTro').val();
+                const trangThaiValue = $('#TrangThai').val();
+                
+                // Thêm hidden fields để lưu giá trị
+                $('<input>').attr({
+                    type: 'hidden', name: 'VaiTro', value: vaiTroValue
+                }).appendTo('#formCapNhatTK');
+                
+                $('<input>').attr({
+                    type: 'hidden', name: 'TrangThai', value: trangThaiValue
+                }).appendTo('#formCapNhatTK');
+                
+                // Đổi ID của các select gốc để tránh xung đột name khi submit
+                $('#VaiTro').attr('id', 'VaiTro_display').attr('name', 'VaiTro_display');
+                $('#TrangThai').attr('id', 'TrangThai_display').attr('name', 'TrangThai_display');
+                
+                $('#VaiTro_display').prop('disabled', true);
+                $('#TrangThai_display').prop('disabled', true);
                 
                 const warningEl = $('<div class="alert alert-warning rounded-3 border-0 shadow-sm my-3" role="alert">' + 
                     '<i class="fas fa-exclamation-triangle me-2"></i>' +
