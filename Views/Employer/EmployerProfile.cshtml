@@ -191,9 +191,9 @@
                             </div>
                             <div class="card-footer bg-white border-0">
                               <div class="d-flex justify-content-between align-items-center">
-                                  @if (job.MucLuong.HasValue)
+                                  @if (!string.IsNullOrEmpty(job.MucLuong))
                                   {
-                                      <span class="text-success fw-bold"><i class="bi bi-cash me-1"></i>@job.MucLuong.Value.ToString("N0") VNĐ</span>
+                                      <span class="text-success fw-bold"><i class="bi bi-cash me-1"></i>@job.MucLuong VNĐ</span>
                                   }
                                   else
                                   {

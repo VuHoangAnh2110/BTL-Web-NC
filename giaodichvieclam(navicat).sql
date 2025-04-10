@@ -12,7 +12,7 @@
  Target Server Version : 16001000 (16.00.1000)
  File Encoding         : 65001
 
- Date: 08/04/2025 18:59:44
+ Date: 10/04/2025 15:25:04
 */
 
 
@@ -40,7 +40,7 @@ GO
 -- ----------------------------
 -- Records of tblBanner
 -- ----------------------------
-INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN001', N'Tìm việc nhanh chóng', N'Hàng ngàn công việc đang chờ bạn', N'/img/banner/banner1.jpg', NULL, N'2025-04-08 18:50:56.953')
+INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN001', N'Tìm việc nhanh chóng', N'Hàng ngàn công việc đang chờ bạn', N'/img/banner/banner5.jpg', NULL, N'2025-04-08 18:50:56.953')
 GO
 
 INSERT INTO [dbo].[tblBanner] ([PK_sMaBanner], [sTieuDe], [sMoTa], [sDuongDanAnh], [sLienKet], [tNgayTao]) VALUES (N'BN002', N'Tuyển dụng hiệu quả', N'Kết nối với ứng viên tiềm năng', N'/img/banner/banner2.jpg', NULL, N'2025-04-08 18:51:40.297')
@@ -67,7 +67,10 @@ CREATE TABLE [dbo].[tblCongTy] (
   [sDiaChi] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sMoTa] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sWebsite] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
-  [sLogo] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
+  [sLogo] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sSoDienThoai] varchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [tNgayDangKy] datetime DEFAULT getdate() NULL,
+  [iTrangThai] int DEFAULT 2 NULL
 )
 GO
 
@@ -78,6 +81,15 @@ GO
 -- ----------------------------
 -- Records of tblCongTy
 -- ----------------------------
+INSERT INTO [dbo].[tblCongTy] ([PK_sMaCongTy], [FK_sTenTaiKhoan], [sTenCongTy], [sDiaChi], [sMoTa], [sWebsite], [sLogo], [sSoDienThoai], [tNgayDangKy], [iTrangThai]) VALUES (N'CT090425cf51', N'vhanh2k4', N'Trương Phan Đình Vũ', N'15-17 Cộng Hoà, p4, quận Tân Bình', N'Công Ty CP Người Bạn Vàng được thành lập năm 2017, tới 2018 chúng tôi tự hào trở thành đối tác chiến lược của PNJ Việt Nam.Trải qua hơn 5 năm phát triển, cho tới hiện tại chuỗi Cầm đồ và Thu mua Người Bạn Vàng đã mở rộng mô hình cầm đồ hiện đại tới trên 25 tỉnh thành với 65 cửa hàng hoạt động. Người Bạn Vàng nhận được sự yêu mến và tin tưởng từ Quý Khách Hàng bởi những lợi thế cạnh tranh sau.
+
+Sau 5 năm hoạt động, NBV đã cho ra 2 lĩnh vực mũi nhọn là Cầm Cố (kim cương, trang sức đá quý, vàng bạc các loại, điện thoại, laptop, túi xách, đồng hồ,… và Thu Mua các sản phẩm có giá trị (kim cương, vàng, trang sức, đồng hồ cơ, túi xách hàng hiệu,….)
+ĐỊA ĐIỂM HOẠT ĐỘNG 
+1.Văn Phòng Miền Nam: Tầng 6, Toà nhà PLS, 240 Nguyễn Đình Chính, Phường 11, Phú Nhuận, TP. Hồ Chí Minh
+
+2.  Văn Phòng Miền Bắc: Tầng 13, Tòa nhà M3M4, 91 Nguyễn Chí Thanh, Trung Hoà, Đống Đa, Hà Nội', N'https://nguoibanvang.vn/', N'/img/logoCongTy/Trương Phan Đình Vũ_20250409012255_logo1.png', N'0829285025', N'2025-04-09 01:22:55.527', N'2')
+GO
+
 
 -- ----------------------------
 -- Table structure for tblCongViec
@@ -89,13 +101,19 @@ GO
 CREATE TABLE [dbo].[tblCongViec] (
   [PK_sMaCongViec] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
   [FK_sMaCongTy] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
-  [sTieuDe] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
+  [sTieuDe] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sMoTa] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
   [sDiaDiem] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
-  [dMucLuong] decimal(10,2)  NULL,
-  [sLoaiHinh] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sMucLuong] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sLoaiHinh] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [tNgayDang] datetime DEFAULT getdate() NULL,
-  [sTrangThai] nvarchar(25) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
+  [sTrangThai] nvarchar(25) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [iSoLuongTuyen] int DEFAULT 1 NULL,
+  [tNgayHetHan] datetime  NULL,
+  [sCapBac] nvarchar(200) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sNganhNghe] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sQuyenLoi] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [sYeuCau] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
 )
 GO
 
@@ -174,7 +192,7 @@ CREATE TABLE [dbo].[tblTaiKhoan] (
   [sDiaChi] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sAnhDaiDien] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sVaiTro] varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS DEFAULT 'user' NOT NULL,
-  [iTrangThai] int DEFAULT 1 NOT NULL,
+  [iTrangThai] int DEFAULT 2 NOT NULL,
   [tNgayTao] datetime DEFAULT getdate() NULL,
   [tNgayCapNhat] datetime DEFAULT getdate() NULL
 )
@@ -187,10 +205,16 @@ GO
 -- ----------------------------
 -- Records of tblTaiKhoan
 -- ----------------------------
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'admin', N'admin', N'22a1001d0027@students.hou.edu.vn', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'admin', N'2', N'2025-04-08 18:57:28.143', N'2025-04-08 18:57:28.143')
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'22a1001d0027', N'admin', N'22a1001d0027@students.hou.edu.vn', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'admin', N'2', N'2025-04-08 18:57:28.143', N'2025-04-10 14:23:12.833')
 GO
 
-INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'vhanh2k4', N'Vũ Hoàng Anh', N'vhanh2k4@gmail.com', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'user', N'2', N'2025-04-08 18:55:49.903', N'2025-04-08 18:55:49.903')
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'admin', N'Quản trị viên', N'admin@gmail.com', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'admin', N'2', N'2025-04-10 14:33:09.827', N'2025-04-10 14:33:09.827')
+GO
+
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'user', N'Người dùng ', N'user@gmail.com', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'user', N'2', N'2025-04-10 14:33:46.767', N'2025-04-10 14:33:46.767')
+GO
+
+INSERT INTO [dbo].[tblTaiKhoan] ([PK_sTenTaiKhoan], [sHoTen], [sEmail], [sMatKhau], [sSoDienThoai], [sDiaChi], [sAnhDaiDien], [sVaiTro], [iTrangThai], [tNgayTao], [tNgayCapNhat]) VALUES (N'vhanh2k4', N'Vũ Hoàng Anh', N'vhanh2k4@gmail.com', N'$2a$11$AgAkpxotMtaMNz88Uo6q7emgH0YzxBsMm6peX7AEIpSdYXxotK5FS', NULL, NULL, NULL, N'user', N'2', N'2025-04-08 18:55:49.903', N'2025-04-10 14:09:55.250')
 GO
 
 

@@ -15,8 +15,8 @@ namespace BTL_Web_NC.ViewModels
         [StringLength(255, ErrorMessage = "Địa điểm không được vượt quá 255 ký tự.")]
         public string? DiaDiem { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public decimal? MucLuong { get; set; }
+        [StringLength(225)]
+        public string? MucLuong { get; set; }
 
         [StringLength(50, ErrorMessage = "Loại hình không được vượt quá 50 ký tự.")]
         public string? LoaiHinh { get; set; } = "Full-time";
@@ -26,13 +26,13 @@ namespace BTL_Web_NC.ViewModels
             var errors = new List<ValidationResult>();
 
             // Kiểm tra MucLuong nếu được nhập phải lớn hơn 0
-            if (MucLuong.HasValue && MucLuong <= 0)
-            {
-                errors.Add(new ValidationResult(
-                    "Mức lương phải lớn hơn 0.",
-                    new[] { nameof(MucLuong) }
-                ));
-            }
+            // if (MucLuong.HasValue && MucLuong <= 0)
+            // {
+            //     errors.Add(new ValidationResult(
+            //         "Mức lương phải lớn hơn 0.",
+            //         new[] { nameof(MucLuong) }
+            //     ));
+            // }
 
             // Kiểm tra độ dài của mô tả
             if (!string.IsNullOrEmpty(MoTa) && MoTa.Length < 50)
