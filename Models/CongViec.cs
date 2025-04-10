@@ -30,10 +30,9 @@ namespace BTL_Web_NC.Models
         [StringLength(255)]
         public string? DiaDiem { get; set; }
 
-        // Sửa tên cột từ fMucLuong thành dMucLuong và kiểu dữ liệu từ double sang decimal
-        [Column("dMucLuong")]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public decimal? MucLuong { get; set; }
+        [Column("sMucLuong")]
+        [StringLength(225)]
+        public string? MucLuong { get; set; }
 
         [Column("sLoaiHinh")]
         [StringLength(50)]
@@ -46,6 +45,26 @@ namespace BTL_Web_NC.Models
         [Column("sTrangThai")]
         [StringLength(25)]
         public string? TrangThai { get; set; }
+
+        [Column("iSoLuongTuyen")]
+        public int? SoLuongTuyen { get; set; } = 1;
+
+        [Column("tNgayHetHan")]
+        public DateTime? NgayHetHan { get; set; }
+
+        [Column("sCapBac")]
+        [StringLength(200)]
+        public string? CapBac { get; set; }
+
+        [Column("sNganhNghe")]
+        [StringLength(225)]
+        public string? NganhNghe { get; set; }
+
+        [Column("sQuyenLoi")]
+        public string? QuyenLoi { get; set; }
+
+        [Column("sYeuCau")]
+        public string? YeuCau { get; set; }
 
         // Quan hệ với bảng CongTy
         [ForeignKey("MaCongTy")]
