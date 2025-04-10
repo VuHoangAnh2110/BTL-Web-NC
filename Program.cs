@@ -22,6 +22,7 @@ builder.Services.AddScoped<IHoSoUngVienRepository, HoSoUngVienRepository>();
 builder.Services.AddScoped<IUngTuyenRepository, UngTuyenRepository>(); 
 builder.Services.AddScoped<IThongBaoRepository, ThongBaoRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
+builder.Services.AddScoped<IFileUpLoadRepository, FileUpLoadRepository>();
 
 // Đăng ký dịch vụ gửi email
 builder.Services.AddScoped<IEmailService, EmailService>();

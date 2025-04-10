@@ -12,82 +12,140 @@ namespace BTL_Web_NC.Controllers
         private readonly ICongViecRepository _congViecRepo;
         private readonly IHoSoUngVienRepository _hoSoUngVienRepo;
         private readonly IThongBaoRepository _thongBaoRepo;
+        private readonly IFileUpLoadRepository _fileUploadRepo;
 
-        public ApplicationController(IUngTuyenRepository ungTuyenRepo, 
-                                        ITaiKhoanRepository taiKhoanRepo, 
-                                        ICongViecRepository congViecRepo,
-                                        IHoSoUngVienRepository hoSoUngVienRepo,
-                                        IThongBaoRepository thongBaoRepo)
+        public ApplicationController(IUngTuyenRepository ungTuyenRepo, ITaiKhoanRepository taiKhoanRepo, 
+                                        ICongViecRepository congViecRepo, IHoSoUngVienRepository hoSoUngVienRepo,
+                                        IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileUploadRepo)
         {
             _ungTuyenRepo = ungTuyenRepo;
             _taiKhoanRepo = taiKhoanRepo;
             _congViecRepo = congViecRepo;
             _hoSoUngVienRepo = hoSoUngVienRepo;
             _thongBaoRepo = thongBaoRepo;
-
+            _fileUploadRepo = fileUploadRepo;
         }
 
         [HttpPost]
         [Route("Application/ApplyJob")]
-        public async Task<IActionResult> ApplyJob(string jobId, IFormFile cv, string fullName, string email, string phone)
+        public async Task<IActionResult> ApplyJob(string maCongViec, IFormFile cv)
         {
-            if (cv == null || cv.Length == 0)
+            try
             {
-                return BadRequest("Vui lòng tải lên CV.");
-            }
+                // Kiểm tra đăng nhập
+                var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+                if (string.IsNullOrEmpty(tenTaiKhoan))
+                {
+                    return Json(new { success = false, message = "Vui lòng đăng nhập để ứng tuyển." });
+                }
 
-            // Lưu file CV vào thư mục (nếu cần)
-            var filePath = Path.Combine("wwwroot/uploads", cv.FileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await cv.CopyToAsync(stream);
-            }
+                // Lấy thông tin người dùng
+                var user = await _taiKhoanRepo.GetByTenTaiKhoanAsync(tenTaiKhoan);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin tài khoản." });
+                }
 
-            // Kiểm tra nếu đã ứng tuyển rồi
-            var user = await _taiKhoanRepo.GetByEmailAsync(email);
-            if (user == null)
-            {
-                return BadRequest("Người dùng không tồn tại.");
-            }
+                // Kiểm tra công việc tồn tại
+                var job = await _congViecRepo.GetCongViecByIdAsync(maCongViec);
+                if (job == null)
+                {
+                    return Json(new { success = false, message = "Công việc không tồn tại!" });
+                }
 
-            var existingApplication = await _ungTuyenRepo.GetByUserIdAndJobIdAsync(user.TenTaiKhoan, jobId);
-            if (existingApplication != null)
-            {
-                return BadRequest("Bạn đã ứng tuyển công việc này.");
-            }
+                // Kiểm tra người dùng đã ứng tuyển chưa
+                var existingApplication = await _ungTuyenRepo.GetByUserIdAndJobIdAsync(tenTaiKhoan, maCongViec);
+                if (existingApplication != null)
+                {
+                    return Json(new { success = false, message = "Bạn đã ứng tuyển công việc này." });
+                }
 
-            // Tạo mới ứng tuyển
-            var ungTuyen = new UngTuyen
-            {
-                MaUngTuyen = IdGenerator.GenerateUngTuyenId(),
-                TenTaiKhoan = user.TenTaiKhoan,
-                MaCongViec = jobId,
-                NgayUngTuyen = DateTime.Now,
-                TrangThai = "Đang chờ"
-            };
+                // Kiểm tra file CV
+                if (cv == null || cv.Length == 0)
+                {
+                    return Json(new { success = false, message = "Vui lòng tải lên CV." });
+                }
 
-            var job = await _congViecRepo.GetCongViecByIdAsync(jobId);
-            if(job == null)
-            {
-                return BadRequest("Công việc không tồn tại");
+                // Kiểm tra định dạng file
+                var allowedExtensions = new[] { ".pdf", ".doc", ".docx" };
+                var fileExtension = Path.GetExtension(cv.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return Json(new { success = false, message = "Chỉ chấp nhận file PDF, DOC, DOCX." });
+                }
+
+                // Kiểm tra kích thước file (tối đa 5MB)
+                if (cv.Length > 5 * 1024 * 1024)
+                {
+                    return Json(new { success = false, message = "Kích thước file tối đa là 5MB." });
+                }
+
+                // Tạo thư mục nếu chưa tồn tại
+                var uploadDir = Path.Combine("wwwroot", "uploads", "fiveCV", maCongViec);
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                // Tạo tên file duy nhất để tránh trùng lặp
+                var fileName = $"{tenTaiKhoan}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}{fileExtension}";
+                var filePath = Path.Combine(uploadDir, fileName);
+
+                // Lưu file CV
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await cv.CopyToAsync(stream);
+                }
+
+                // Đường dẫn tương đối để lưu vào DB
+                var relativeFilePath = $"/upload/fiveCV/{maCongViec}/{fileName}";
+
+                // Tạo mới ứng tuyển
+                var ungTuyen = new UngTuyen
+                {
+                    MaUngTuyen = IdGenerator.GenerateUngTuyenId(),
+                    TenTaiKhoan = tenTaiKhoan,
+                    MaCongViec = maCongViec,
+                    NgayUngTuyen = DateTime.Now,
+                    TrangThai = "Đang chờ",
+                    // DuongDanCV = relativeFilePath
+                };
+                
+                var file = new FileUpload
+                {
+                    MaFile = IdGenerator.GenerateFileId(),
+                    DuongDan = relativeFilePath,
+                    TenFile = fileName,
+                    LoaiFile = "CV",
+                    TenTaiKhoan = tenTaiKhoan,
+                    NgayTaiLen = DateTime.Now
+                };
+
+                // Tạo thông báo cho nhà tuyển dụng
+                var thongBao = new ThongBao
+                {
+                    MaThongBao = IdGenerator.GenerateThongBaoId(),
+                    MaCongTy = job.MaCongTy,
+                    MaCongViec = maCongViec,
+                    TenTaiKhoan = job.CongTy?.TenTaiKhoan, // Gửi thông báo cho chủ công ty
+                    TieuDe = "Thông báo ứng tuyển mới",
+                    LoaiThongBao = "Ứng tuyển",
+                    NoiDung = $"Ứng viên {user.HoTen} đã ứng tuyển vào công việc {job.TieuDe}.",
+                    DaXem = false,
+                    NgayThongBao = DateTime.Now
+                };
+
+                // Lưu thông tin vào cơ sở dữ liệu
+                await _fileUploadRepo.AddFileAsync(file);
+                await _thongBaoRepo.AddThongBaoAsync(thongBao);
+                await _ungTuyenRepo.AddHoSoUngTuyenAsync(ungTuyen);
+
+                return Json(new { success = true, message = "Ứng tuyển thành công! Nhà tuyển dụng sẽ liên hệ với bạn sớm." });
             }
-            var thongBao = new ThongBao
+            catch (Exception ex)
             {
-                MaThongBao = IdGenerator.GenerateThongBaoId(),
-                MaCongTy = job.MaCongTy,
-                MaCongViec = jobId,
-                TenTaiKhoan = user.TenTaiKhoan,
-                TieuDe = "Thông báo ứng tuyển",
-                LoaiThongBao = "Ứng tuyển",
-                NoiDung = $"Ứng viên {user.HoTen} đã ứng tuyển vào công việc {job.TieuDe}.",
-                DaXem = false,
-                NgayThongBao = DateTime.Now
-            };
-            Console.WriteLine($"Thông báo ứng tuyển: {thongBao.NoiDung}");
-            await _thongBaoRepo.AddThongBaoAsync(thongBao);
-            Console.WriteLine($"Thông báo ứng tuyển đã được thêm vào cơ sở dữ liệu.");
-            await _ungTuyenRepo.AddHoSoUngTuyenAsync(ungTuyen);
-            return Ok("Ứng tuyển và gửi thông báo thành công!");
+                return Json(new { success = false, message = $"Có lỗi xảy ra: {ex.Message}" });
+            }
         }
 
 
