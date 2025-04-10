@@ -12,7 +12,7 @@
             <div class="bg-primary text-white p-4 position-relative" style="height: 140px;">
                 <div class="container position-relative">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-10">
                             <!-- Logo và thông tin chính -->
                             <div class="d-flex">
                                 <div class="company-logo-wrapper bg-white rounded-3 shadow-sm me-4" 
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 text-end">
+                        <div class="col-md-2 text-end">
                             <div class="dropdown mt-4">
                                 <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-three-dots-vertical"></i>
@@ -74,7 +74,7 @@
         <div class="row">
             <!-- Cột trái: Thông tin chi tiết công ty -->
             <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100 border-0">
+                <div class="card shadow-sm border-0">
                     <div class="card-header bg-white border-0">
                         <h5 class="card-title mb-0">Thông tin liên hệ</h5>
                     </div>
@@ -178,7 +178,7 @@
                 {
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm border-0 position-relative job-card" 
-                            onclick="location.href='@Url.Action("Detail", "Job", new { id = job.MaCongViec })';">
+                            onclick="location.href='@Url.Action("DuyetHoSo", "Job", new { idCongViec = job.MaCongViec })';">
                             <div class="position-absolute top-0 end-0 m-2">
                                 <span class="badge bg-primary">@(job.TrangThai)</span>
                             </div>
@@ -187,7 +187,7 @@
                                 <p class="card-text text-muted small mb-3">
                                     <i class="bi bi-calendar me-1"></i> Ngày đăng: @job.NgayDang.ToString("dd/MM/yyyy")
                                 </p>
-                                <p class="card-text job-description">@(job.MoTa?.Length > 100 ? job.MoTa.Substring(0, 100) + "..." : job.MoTa)</p>
+                                @* <p class="card-text job-description">@(job.MoTa?.Length > 100 ? job.MoTa.Substring(0, 100) + "..." : job.MoTa)</p> *@
                             </div>
                             <div class="card-footer bg-white border-0">
                               <div class="d-flex justify-content-between align-items-center">
@@ -199,7 +199,7 @@
                                   {
                                       <span class="text-muted"><i class="bi bi-cash me-1"></i>Thỏa thuận</span>
                                   }
-                                  <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); window.location='@Url.Action("Edit", "Job", new { id = job.MaCongViec })'">
+                                  <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); window.location=''">
                                       <i class="bi bi-pencil"></i>
                                   </button>
                               </div>

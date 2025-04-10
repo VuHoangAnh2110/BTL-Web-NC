@@ -10,5 +10,12 @@ namespace BTL_Web_NC.Repositories
         Task<UngTuyen?> GetByUserIdAndJobIdAsync(string userId, string jobId);
 
         Task AddHoSoUngTuyenAsync( UngTuyen ungTuyen);
+
+        Task<List<UngTuyen>> GetDSUngTuyenByCongViecAsync(string jobId);
+
+        Task<UngTuyen?> GetUngTuyenByIdAsync(string ungTuyenId);
+
+        Task UpdateUngTuyenAsync(UngTuyen ungTuyen);
+        
     }
 }

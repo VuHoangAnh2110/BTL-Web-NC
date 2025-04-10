@@ -12,5 +12,10 @@ namespace BTL_Web_NC.Repositories
         Task AddCongTyAsync(CongTy CongTy);
 
         Task UpdateCongTyAsync(CongTy CongTy);
+
+        Task<List<CongTy>> GetCongTyMoiNhatAsync(int soLuong);
+
+
+        
     }
 }

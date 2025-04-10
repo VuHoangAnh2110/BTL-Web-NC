@@ -31,8 +31,10 @@ public class HomeController : Controller
     {
         var danhSachCongViec = await _congViecRepo.GetDsCongViecAsync();
         var dsBanner = await _bannerRepository.GetAllBannersAsync();
+        var danhSachCongTy = await _CongTyRepo.GetCongTyMoiNhatAsync(6);
         ViewBag.DanhSachCongViec = danhSachCongViec ?? new List<CongViec>();
         ViewBag.Banners = dsBanner ?? new List<Banner>();
+        ViewBag.DanhSachCongTy = danhSachCongTy ?? new List<CongTy>();
 
         return View();
     }

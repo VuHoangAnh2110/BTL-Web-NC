@@ -26,11 +26,33 @@ namespace BTL_Web_NC.Repositories
                 .FirstOrDefaultAsync(ut => ut.TenTaiKhoan == userId && ut.MaCongViec == jobId);
         }
 
-
         public async Task AddHoSoUngTuyenAsync( UngTuyen ungTuyen)
         {
             await AddAsync(ungTuyen);
             await SaveChangesAsync();
         }
+
+        public async Task<List<UngTuyen>> GetDSUngTuyenByCongViecAsync(string jobId)
+        {
+            return await _context.UngTuyens
+                .Include(u => u.TaiKhoan) // Đảm bảo có dòng này để eager loading
+                .Where(u => u.MaCongViec == jobId)
+                .OrderByDescending(u => u.NgayUngTuyen)
+                .ToListAsync();
+        }
+
+        public async Task<UngTuyen?> GetUngTuyenByIdAsync(string ungTuyenId)
+        {
+            return await _context.UngTuyens
+                .FirstOrDefaultAsync(ut => ut.MaUngTuyen == ungTuyenId);
+        }
+
+        public async Task UpdateUngTuyenAsync(UngTuyen ungTuyen)
+        {
+            _context.UngTuyens.Update(ungTuyen);
+            await SaveChangesAsync();
+        }
+
+
     }
 }

@@ -40,6 +40,13 @@ namespace BTL_Web_NC.Repositories
             await SaveChangesAsync();
         }
 
+        public async Task<List<CongTy>> GetCongTyMoiNhatAsync(int soLuong)
+        {
+            return await _context.CongTys
+                .OrderByDescending(c => c.NgayTao)
+                .Take(soLuong)
+                .ToListAsync();
+        }
 
 
     }

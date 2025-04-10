@@ -1,131 +1,276 @@
 @model BTL_Web_NC.Models.CongViec
 
 @{
-    ViewData["Title"] = "Chi Tiết Công Việc";
+    ViewData["Title"] = Model.TieuDe;
 }
 
-<h2 class="text-center">Chi Tiết Công Việc</h2>
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Job" asp-action="DanhSachCongViec">Việc làm</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.TieuDe</li>
+        </ol>
+    </nav>
 
-<div class="container mt-4">
-    <div class="row">
-
-        <div class="job-detail col-md-8">
-            <div class="card">
+    <div class="row mt-3">
+        <!-- Thông tin công việc -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h3 class="card-title mb-1">@Model.TieuDe</h3>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">@Model.TieuDe</h4>
-                    <p><strong>Mô tả:</strong> @Model.MoTa</p>
-                    <p><strong>Địa điểm:</strong> @Model.DiaDiem</p>
-                    <p><strong>Mức lương:</strong> @Model.MucLuong</p>
-                    <p><strong>Loại hình:</strong> @Model.LoaiHinh</p>
-                    <p><strong>Ngày đăng:</strong> @Model.NgayDang.ToString("dd/MM/yyyy")</p>
+                    <div class="job-meta mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-geo-alt text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Địa điểm</p>
+                                        <strong>@Model.DiaDiem</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-cash text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Mức lương</p>
+                                        <strong>@(string.IsNullOrEmpty(Model.MucLuong) ? "Thỏa thuận" : Model.MucLuong)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-briefcase text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Loại hình</p>
+                                        <strong>@Model.LoaiHinh</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-diagram-3 text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Cấp bậc</p>
+                                        <strong>@(string.IsNullOrEmpty(Model.CapBac) ? "Không yêu cầu" : Model.CapBac)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-calendar-check text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Ngày đăng</p>
+                                        <strong>@Model.NgayDang.ToString("dd/MM/yyyy")</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-calendar-x text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Hạn nộp hồ sơ</p>
+                                        <strong>@(Model.NgayHetHan.HasValue ? Model.NgayHetHan.Value.ToString("dd/MM/yyyy") : "Không giới hạn")</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-people text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Số lượng tuyển</p>
+                                        <strong>@Model.SoLuongTuyen người</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                                        <i class="bi bi-layers text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-0">Ngành nghề</p>
+                                        <strong>@(string.IsNullOrEmpty(Model.NganhNghe) ? "Không xác định" : Model.NganhNghe)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chi tiết mô tả công việc -->
+                    <div class="job-description mb-4">
+                        <h5><i class="bi bi-file-text me-2"></i>Chi tiết công việc</h5>
+                        <div class="bg-light p-3 rounded">
+                            @Html.Raw(Model.MoTa?.Replace("\n", "<br/>"))
+                        </div>
+                    </div>
+
+                    <!-- Yêu cầu công việc -->
+                    @if (!string.IsNullOrEmpty(Model.YeuCau))
+                    {
+                        <div class="job-requirements mb-4">
+                            <h5><i class="bi bi-list-check me-2"></i>Yêu cầu công việc</h5>
+                            <div class="bg-light p-3 rounded">
+                                @Html.Raw(Model.YeuCau.Replace("\n", "<br/>"))
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Quyền lợi -->
+                    @if (!string.IsNullOrEmpty(Model.QuyenLoi))
+                    {
+                        <div class="job-benefits mb-4">
+                            <h5><i class="bi bi-award me-2"></i>Quyền lợi</h5>
+                            <div class="bg-light p-3 rounded">
+                                @Html.Raw(Model.QuyenLoi.Replace("\n", "<br/>"))
+                            </div>
+                        </div>
+                    }
+
+                    <div class="d-grid mt-4">
+                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#applyModal">
+                            <i class="bi bi-send me-2"></i>Ứng tuyển ngay
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="employer-infor col-md-4">
-            <div class="card">
+        <!-- Thông tin công ty -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">Thông tin công ty</h5>
+                </div>
                 <div class="card-body">
                     @if (Model.CongTy != null)
                     {
                         <div class="d-flex align-items-start">
-                            <img src="@(string.IsNullOrEmpty(Model.CongTy.Logo) ? Url.Content("~/img/logo-congty-default.jpg") : Model.CongTy.Logo)" 
-                                alt="Company Logo" class="img-fluid me-3" style="max-width: 100px; height: auto;">
-                            <h5 class="card-title m-0">@Model.CongTy.TenCongTy</h5>
+                            <div class="company-logo mb-2" style="width:100px;height:100px;overflow:hidden;border-radius:8px;">
+                                <img src="@(string.IsNullOrEmpty(Model.CongTy.Logo) ? "/img/logo-congty-default.jpg" : Model.CongTy.Logo)" 
+                                    alt="@Model.CongTy.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
+                                </div>
+                            <h5 class="card-title ms-2">@Model.CongTy.TenCongTy</h5>
                         </div>
 
-                        <p class="mt-4"><strong>Địa chỉ:</strong> @Model.CongTy.DiaChi</p>
-                        <p class="mt-2"><strong>Website:</strong> <a href="@Model.CongTy.Website" target="_blank">@Model.CongTy.Website</a></p>
+                        <ul class="list-group list-group-flush">
+                            @if (!string.IsNullOrEmpty(Model.CongTy.DiaChi))
+                            {
+                                <li class="list-group-item border-0 px-0">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="bi bi-geo-alt text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Địa chỉ</h6>
+                                            <p class="text-muted mb-0">@Model.CongTy.DiaChi</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.CongTy.Website))
+                            {
+                                <li class="list-group-item border-0 px-0">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="bi bi-globe text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Website</h6>
+                                            <a href="@(Model.CongTy.Website.StartsWith("http") ? Model.CongTy.Website : $"https://{Model.CongTy.Website}")" 
+                                               target="_blank" class="text-decoration-none">@Model.CongTy.Website</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.CongTy.SoDienThoai))
+                            {
+                                <li class="list-group-item border-0 px-0">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="bi bi-telephone text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Liên hệ</h6>
+                                            <p class="text-muted mb-0">@Model.CongTy.SoDienThoai</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+
+                        @if (!string.IsNullOrEmpty(Model.CongTy.MoTa))
+                        {
+                            <div class="mt-3">
+                                <h6 class="mb-2">Giới thiệu công ty</h6>
+                                <p class="text-muted">@(Model.CongTy.MoTa?.Length > 200 ? Model.CongTy.MoTa.Substring(0, 200) + "..." : Model.CongTy.MoTa)</p>
+                            </div>
+                        }
                     }
                     else
                     {
-                        <p>Thông tin nhà tuyển dụng không khả dụng.</p>
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Không có thông tin công ty
+                        </div>
                     }
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
-
-<button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#applyModal">
-    Ứng tuyển
-</button>
-<a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-primary mt-3">Quay lại</a>
-
 
 <!-- Modal ứng tuyển -->
 <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="applyModalLabel">Ứng Tuyển Ngay</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="applyForm">
-          <!-- Trường tải lên CV -->
-          <div class="mb-3">
-            <label for="cvUpload" class="form-label"><strong>Tải lên CV</strong></label>
-            <input type="file" class="form-control" id="cvUpload" accept=".pdf,.doc,.docx">
-          </div>
-
-          <!-- Trường nhập liệu -->
-          <div class="mb-3">
-            <label for="fullName" class="form-label"><strong>Họ tên</strong></label>
-            <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên">
-          </div>
-
-          <div class="mb-3">
-            <label for="email" class="form-label"><strong>Email</strong></label>
-            <input type="email" class="form-control" id="email" placeholder="Nhập email">
-          </div>
-
-          <div class="mb-3">
-            <label for="phone" class="form-label"><strong>Số điện thoại</strong></label>
-            <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại">
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn btn-primary" onclick="submitApplication()">Nộp hồ sơ ứng tuyển</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="applyModalLabel">Ứng tuyển vị trí: @Model.TieuDe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="applyForm">
+                    <div class="mb-4">
+                        <input type="hidden" id="maCongViec" value="@Model.MaCongViec">
+                        <label for="cvUpload" class="form-label fw-bold">Tải lên CV của bạn</label>
+                        <input type="file" class="form-control" id="cvUpload" accept=".pdf,.doc,.docx">
+                        <div class="form-text">Hỗ trợ định dạng: PDF, DOC, DOCX (tối đa 5MB)</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" onclick="submitApplication()">
+                    <i class="bi bi-send me-1"></i>Nộp hồ sơ
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<script>
-  function submitApplication() {
-    let fullName = document.getElementById('fullName').value;
-    let email = document.getElementById('email').value;
-    let phone = document.getElementById('phone').value;
-    let cvFile = document.getElementById('cvUpload').files[0];
 
-    if (!fullName || !email || !phone || !cvFile) {
-      alert('Vui lòng điền đầy đủ thông tin và tải lên CV.');
-      return;
-    }
-
-    let formData = new FormData();
-    formData.append('jobId', '@Model.MaCongViec');
-    formData.append('cv', cvFile);
-    formData.append('fullName', fullName);
-    formData.append('email', email);
-    formData.append('phone', phone);
-
-    fetch('/Application/ApplyJob', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-      alert(data);
-      let modalElement = document.getElementById('applyModal');
-      let modalInstance = bootstrap.Modal.getInstance(modalElement);
-      modalInstance.hide();
-    })
-    .catch(error => console.error('Lỗi:', error));
-  }
-</script>
+@section Scripts {
+    <script src="~/js/Job/Detail.js"></script>
+}
