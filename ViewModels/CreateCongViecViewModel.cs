@@ -5,6 +5,9 @@ namespace BTL_Web_NC.ViewModels
 {
     public class CreateCongViecViewModel : IValidatableObject
     {
+        [Required ]
+        public string MaCongViec { get; set; } // thêm dòng này
+
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề công việc.")]
         [StringLength(255, ErrorMessage = "Tiêu đề không được vượt quá 255 ký tự.")]
         public string? TieuDe { get; set; }

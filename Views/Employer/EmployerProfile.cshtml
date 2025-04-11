@@ -1,76 +1,89 @@
 @model BTL_Web_NC.Models.CongTy
 
 @{
-    ViewData["Title"] = "Thông Tin Nhà Tuyển Dụng";
+    ViewData["Title"] = "Trang Nhà Tuyển Dụng";
     var CongTy = ViewBag.CongTy as BTL_Web_NC.Models.CongTy;
     var danhSachCongViec = ViewBag.DanhSachCongViec as List<BTL_Web_NC.Models.CongViec>;
 }
 
-<h2 class="text-center">Thông Tin Công Ty</h2>
-
-<div class="container mt-4">
-    <div class="mb-3">
-        <strong>Tên Công Ty:</strong> @Model.TenCongTy
+<div class="container mt-5 text-center">
+    <!-- Logo và tên công ty -->
+    <div class="mb-4">
+        @if (!string.IsNullOrEmpty(Model.Logo))
+        {
+            <img src="@Model.Logo" alt="Logo Công Ty" class="rounded-circle mb-2" style="width: 120px; height: 120px; object-fit: cover;">
+        }
+        else
+        {
+            <div class="border bg-light rounded-circle d-inline-block" style="width: 120px; height: 120px; line-height: 120px;">No Logo</div>
+        }
+        <h4 class="mt-2 text-uppercase">@Model.TenCongTy</h4>
     </div>
 
-    <div class="mb-3">
-        <strong>Địa Chỉ:</strong> @Model.DiaChi
-    </div>
-
-    <div class="mb-3">
-        <strong>Mô Tả Công Ty:</strong> @Model.MoTa
-    </div>
-
-    <div class="mb-3">
-        <strong>Website:</strong> <a href="@Model.Website" target="_blank">@Model.Website</a>
-    </div>
-
-    
-
-
-    @if (!string.IsNullOrEmpty(Model.Logo))
-    {
-        <div class="mb-3">
-            <strong>Logo Công Ty:</strong> <br />
-            <img src="@Model.Logo" alt="Logo Công Ty" width="150">
+    <div class="row text-start">
+        <!-- Giới thiệu nhà tuyển dụng -->
+        <div class="col-md-6 mb-4">
+            <h5 class="text-danger">Giới thiệu nhà tuyển dụng</h5>
+            <p>@Model.MoTa</p>
         </div>
-    }
 
-    <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-primary">Chỉnh Sửa</a>
-    <a asp-controller="Job" asp-action="CreateJob" class="btn btn-primary">Thêm việc</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        <!-- Thông tin nhà tuyển dụng -->
+        <div class="col-md-6 mb-4">
+            <h5 class="text-danger">Thông tin nhà tuyển dụng</h5>
+            <ul class="list-unstyled">
+                <li><i class="text-success bi bi-check-circle-fill"></i> <strong>Website:</strong> <a href="@Model.Website" target="_blank">@Model.Website</a></li>
+                
+                <li><i class="text-success bi bi-check-circle-fill"></i> <strong>Địa chỉ:</strong> @Model.DiaChi</li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="d-flex gap-2 justify-content-center mt-3">
+        <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-outline-primary">Chỉnh Sửa Công Ty</a>
+        <a asp-controller="Job" asp-action="Create" class="btn btn-success">+ Đăng Tin Tuyển Dụng</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay Lại Trang Chủ</a>
+    </div>
 </div>
 
-<h3 class="text-center">Danh sách công việc đã đăng</h3>
+
+<h4 class="mb-3 text-danger">Việc làm cùng công ty</h4>
+
 @if (danhSachCongViec != null && danhSachCongViec.Any())
 {
-    <div class="container mt-4">
-      <div class ="row">
-        @foreach (var job in danhSachCongViec)
-        {
-        <div class="col-md-6 mb-4">
-            <div class="card" onclick="location.href='@Url.Action("Detail", "Job", new { id = @job.MaCongViec })';" style="cursor: pointer;">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="@job.CongTy.Logo" class="img-fluid rounded-start" alt="Image">
+    @foreach (var job in danhSachCongViec)
+    {
+        <div class="card mb-3 shadow-sm @((job == danhSachCongViec.First()) ? "bg-info-subtle" : "")">
+            <div class="card-body d-flex">
+                <!-- Logo -->
+                <div class="me-3">
+                    <img src="@Model.Logo" alt="Logo công ty" style="width: 60px; height: 60px; object-fit: contain;" />
                 </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">@job.TieuDe</h5>
-                    <p class="card-text">@job.MoTa</p>
-                    <p class="card-text"><small class="text-body-secondary">Ngày Đăng: @job.NgayDang.ToString("dd/MM/yyyy")</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
 
+                <!-- Nội dung chính -->
+                <div class="flex-grow-1">
+                    <h5 class="fw-bold mb-1">@job.TieuDe</h5>
+                    <span class="badge bg-success mb-2">Hà Nội</span> <!-- Có thể thay bằng job.DiaDiem nếu muốn động -->
+
+                    <p class="mb-1"><i class="bi bi-currency-dollar"></i> Lương: @((job.MucLuong.HasValue) ? $"{job.MucLuong.Value:N0} VNĐ" : "Thỏa thuận")</p>
+                    <p class="mb-1">
+                        <i class="bi bi-calendar"></i> Ngày đăng: @job.NgayDang.ToString("dd/MM/yyyy") &nbsp;
+                    </p>
+                    <p class="mb-0 text-secondary">
+                        <i class="bi bi-clock"></i> @job.LoaiHinh
+                    </p>
+                </div>
+
+                <!-- Icon yêu thích -->
+                <div class="ms-3 align-self-start">
+                    <i class="bi bi-heart text-primary fs-5"></i>
+                </div>
+            </div>
+        </div>
+    }
 }
 else
 {
-    <p>Chưa có công việc nào được đăng.</p>
+    <div class="alert alert-info">Không có việc làm nào cùng công ty.</div>
 }
+
+</div>

@@ -8,6 +8,7 @@ namespace BTL_Web_NC.Repositories
         Task<CongTy?> GetByUserIdAsync(string idTaiKhoan);
         
         Task AddCongTyAsync(CongTy CongTy);
+        Task<CongTy?> GetByIdAsync(string id);
 
         Task UpdateCongTyAsync(CongTy CongTy);
     }

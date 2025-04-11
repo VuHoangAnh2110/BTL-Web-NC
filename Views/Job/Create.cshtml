@@ -1,9 +1,10 @@
 @model BTL_Web_NC.ViewModels.CreateCongViecViewModel
 
 @{
-    ViewData["Title"] = "Thêm Công Việc";
+    ViewData["Title"] = "Thêm mới tin tuyển dụng ";
 }
 
+<h2>Thêm mới tin tuyển dụng</h2>
 <div class="container">
     <h2 class="text-center mb-4">@ViewData["Title"]</h2>
 
@@ -21,7 +22,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form asp-controller="Job" asp-action="CreateJob" method="post">
+            <form asp-controller="Job" asp-action="Create" method="post">
                 <div class="mb-3">
                     <label asp-for="TieuDe" class="form-label">Tiêu Đề <span class="text-danger">*</span></label>
                     <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề công việc">

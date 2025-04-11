@@ -125,26 +125,93 @@ namespace BTL_Web_NC.Controllers
         }
 
         //Edit
+        /* public async Task<IActionResult> Edit(string id)
+         {
+             var nhaTuyenDung = await _congTyRepo.GetByUserIdAsync(id);
+             if (nhaTuyenDung == null)
+             {
+                 return NotFound();
+             }
+             return View("Edit", nhaTuyenDung);
+         }
+
+         [HttpPost]
+         public async Task<IActionResult> Edit(CongTy nhaTuyenDung, IFormFile? LogoFile)
+         {
+             if (!ModelState.IsValid)
+             {
+                 return View("Edit", nhaTuyenDung);
+             }
+
+             var existingNhaTuyenDung = await _congTyRepo.GetByUserIdAsync(nhaTuyenDung.TenTaiKhoan);
+             if (existingNhaTuyenDung == null)
+             {
+                 return NotFound();
+             }
+
+             if (LogoFile != null && LogoFile.Length > 0)
+             {
+                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                 if (!Directory.Exists(uploadsFolder))
+                 {
+                     Directory.CreateDirectory(uploadsFolder);
+                 }
+
+                 var uniqueFileName = $"{nhaTuyenDung.TenCongTy}_{Path.GetFileName(LogoFile.FileName)}";
+                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                 using (var stream = new FileStream(filePath, FileMode.Create))
+                 {
+                     await LogoFile.CopyToAsync(stream);
+                 }
+
+                 if (System.IO.File.Exists(filePath))
+                 {
+                     existingNhaTuyenDung.Logo = $"/uploads/{uniqueFileName}";
+                 }
+                 else
+                 {
+                     ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
+                     return View("Edit", nhaTuyenDung);
+                 }
+             }
+
+             existingNhaTuyenDung.TenCongTy = nhaTuyenDung.TenCongTy;
+             existingNhaTuyenDung.DiaChi = nhaTuyenDung.DiaChi;
+             existingNhaTuyenDung.MoTa = nhaTuyenDung.MoTa;
+             existingNhaTuyenDung.Website = nhaTuyenDung.Website;
+
+             await _congTyRepo.UpdateCongTyAsync(existingNhaTuyenDung);
+
+             return RedirectToAction("EmployerProfile", "Employer");
+         }*/
+        // Hiển thị form chỉnh sửa
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var nhaTuyenDung = await _congTyRepo.GetByUserIdAsync(id);
-            if (nhaTuyenDung == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
-            return View("Edit", nhaTuyenDung);
+            var congTy = await _congTyRepo.GetByIdAsync(id); // id là MaCongTy
+            if (congTy == null)
+            {
+                return NotFound();
+            }
+            return View("Edit", congTy); // Trả về view Edit.cshtml
         }
 
+        // Xử lý khi submit form
         [HttpPost]
-        public async Task<IActionResult> Edit(CongTy nhaTuyenDung, IFormFile? LogoFile)
+        public async Task<IActionResult> Edit(CongTy congTy, IFormFile? LogoFile)
         {
             if (!ModelState.IsValid)
             {
-                return View("Edit", nhaTuyenDung);
+                return View("Edit", congTy);
             }
 
-            var existingNhaTuyenDung = await _congTyRepo.GetByUserIdAsync(nhaTuyenDung.TenTaiKhoan);
-            if (existingNhaTuyenDung == null)
+            var existing = await _congTyRepo.GetByIdAsync(congTy.MaCongTy);
+            if (existing == null)
             {
                 return NotFound();
             }
@@ -157,7 +224,7 @@ namespace BTL_Web_NC.Controllers
                     Directory.CreateDirectory(uploadsFolder);
                 }
 
-                var uniqueFileName = $"{nhaTuyenDung.TenCongTy}_{Path.GetFileName(LogoFile.FileName)}";
+                var uniqueFileName = $"{congTy.MaCongTy}_{Path.GetFileName(LogoFile.FileName)}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -165,28 +232,22 @@ namespace BTL_Web_NC.Controllers
                     await LogoFile.CopyToAsync(stream);
                 }
 
-                if (System.IO.File.Exists(filePath))
-                {
-                    existingNhaTuyenDung.Logo = $"/uploads/{uniqueFileName}";
-                }
-                else
-                {
-                    ModelState.AddModelError("LogoFile", "Không thể tải lên logo. Vui lòng thử lại.");
-                    return View("Edit", nhaTuyenDung);
-                }
+                existing.Logo = $"/uploads/{uniqueFileName}";
             }
 
-            existingNhaTuyenDung.TenCongTy = nhaTuyenDung.TenCongTy;
-            existingNhaTuyenDung.DiaChi = nhaTuyenDung.DiaChi;
-            existingNhaTuyenDung.MoTa = nhaTuyenDung.MoTa;
-            existingNhaTuyenDung.Website = nhaTuyenDung.Website;
+            // Cập nhật các trường thông tin
+            existing.TenCongTy = congTy.TenCongTy;
+            existing.DiaChi = congTy.DiaChi;
+            existing.MoTa = congTy.MoTa;
+            existing.Website = congTy.Website;
 
-            await _congTyRepo.UpdateCongTyAsync(existingNhaTuyenDung);
+            await _congTyRepo.UpdateCongTyAsync(existing);
 
-            return RedirectToAction("EmployerProfile", "Employer");
+            return RedirectToAction("EmployerProfile", "Employer"); // Quay lại trang thông tin
         }
 
-        
+
+
 
 
 

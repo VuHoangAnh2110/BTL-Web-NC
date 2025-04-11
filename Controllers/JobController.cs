@@ -22,13 +22,14 @@ namespace BTL_Web_NC.Controllers
             _taiKhoanRepo = taiKhoanRepo;
         }
 
-        public IActionResult CreateJob()
+        [HttpGet]
+        public IActionResult Create()
         {
             return View("Create", new CreateCongViecViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateJob(CreateCongViecViewModel model)
+        public async Task<IActionResult> Create(CreateCongViecViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,6 +74,29 @@ namespace BTL_Web_NC.Controllers
 
             return RedirectToAction("EmployerProfile", "Employer");
         }
+        [HttpGet]
+public async Task<IActionResult> Edit(string id)
+{
+            var congViec = await _congViecRepo.GetCongViecByIdAsync(id);
+            if (congViec == null)
+    {
+        return NotFound();
+    }
+
+    var viewModel = new CreateCongViecViewModel
+    {
+        MaCongViec = congViec.MaCongViec,
+        TieuDe = congViec.TieuDe,
+        MoTa = congViec.MoTa,
+        DiaDiem = congViec.DiaDiem,
+        MucLuong = congViec.MucLuong,
+        LoaiHinh = congViec.LoaiHinh
+    };
+
+    return View(viewModel);
+}
+
+
         
         //Chi tiết
         public async Task<IActionResult> Detail(string id)

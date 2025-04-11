@@ -19,18 +19,25 @@ namespace BTL_Web_NC.Repositories
             return await _context.CongTys
                 .FirstOrDefaultAsync(n => n.TenTaiKhoan == idTaiKhoan);
         }
+        public async Task<CongTy?> GetByIdAsync(string maCongTy)
+        {
+            return await _context.CongTys
+                .FirstOrDefaultAsync(c => c.MaCongTy == maCongTy);
+        }
+
 
         public async Task AddCongTyAsync(CongTy CongTy)
         {
             await _context.CongTys.AddAsync(CongTy);
             await _context.SaveChangesAsync();
         }
-
-        public async Task UpdateCongTyAsync(CongTy CongTy)
+        public async Task UpdateCongTyAsync(CongTy congTy)
         {
-            Update(CongTy);
-            await SaveChangesAsync();
+            _context.CongTys.Update(congTy);
+            await _context.SaveChangesAsync();
         }
+
+        
 
 
 
