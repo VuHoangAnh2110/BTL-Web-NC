@@ -38,11 +38,18 @@
         </div>
     </div>
 
-    <div class="d-flex gap-2 justify-content-center mt-3">
-        <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-outline-primary">Chỉnh Sửa Công Ty</a>
-        <a asp-controller="Job" asp-action="Create" class="btn btn-success">+ Đăng Tin Tuyển Dụng</a>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay Lại Trang Chủ</a>
+    <div class="d-flex justify-content-end gap-2 mt-3">
+        <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-sm btn-outline-primary">
+            Chỉnh Sửa Công Ty
+        </a>
+        <a asp-controller="Job" asp-action="Create" class="btn btn-sm btn-success">
+            + Đăng Tin Tuyển Dụng
+        </a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-sm btn-secondary">
+            Quay Lại Trang Chủ
+        </a>
     </div>
+
 </div>
 
 

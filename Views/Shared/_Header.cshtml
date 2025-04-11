@@ -21,7 +21,17 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Việc làm</a></li>
-                    <a asp-controller="Employer" asp-action="EmployerProfile">Quản lý tuyển dụng</a>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" asp-controller="Employer" asp-action="EmployerProfile">Nhà tuyển dụng</a>
+                    </li>
+
+                    @if (!string.IsNullOrEmpty(vaiTro) && vaiTro == "admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" asp-controller="AdminEmployer" asp-action="Index">Admin Nhà Tuyển Dụng</a>
+                        </li>
+                    }
+
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
                     <li class="nav-item">
