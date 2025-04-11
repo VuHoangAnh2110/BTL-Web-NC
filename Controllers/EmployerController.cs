@@ -191,6 +191,20 @@ namespace BTL_Web_NC.Controllers
                 return View("EmployerRegister", nhaTuyenDung);
             }
         }
+        // Trang danh sách nhà tuyển dụng
+        public async Task<IActionResult> DanhSachNhaTuyenDung(string? search)
+        {
+            var congTyList = await _congTyRepo.GetAllAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                congTyList = congTyList
+                    .Where(c => c.TenCongTy != null && c.TenCongTy.ToLower().Contains(search.ToLower()))
+                    .ToList();
+            }
+
+            return View(congTyList);
+        }
 
         //Edit
         public async Task<IActionResult> Edit(string id)
