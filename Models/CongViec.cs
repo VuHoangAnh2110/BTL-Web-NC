@@ -31,9 +31,9 @@ namespace BTL_Web_NC.Models
         public string? DiaDiem { get; set; }
 
         // Sửa tên cột từ fMucLuong thành dMucLuong và kiểu dữ liệu từ double sang decimal
-        [Column("dMucLuong")]
+        [Column("sMucLuong")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
-        public decimal? MucLuong { get; set; }
+        public string? MucLuong { get; set; }
 
         [Column("sLoaiHinh")]
         [StringLength(50)]

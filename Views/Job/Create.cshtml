@@ -1,12 +1,14 @@
 @model BTL_Web_NC.ViewModels.CreateCongViecViewModel
 
 @{
-    ViewData["Title"] = "Thêm mới tin tuyển dụng ";
+    ViewData["Title"] = "Thêm Công Việc";
 }
 
-<h2>Thêm mới tin tuyển dụng</h2>
-<div class="container">
-    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h2><i class="bi bi-briefcase-fill text-primary me-2"></i> @ViewData["Title"]</h2>
+        <p class="text-muted">Vui lòng điền đầy đủ thông tin để đăng tin tuyển dụng.</p>
+    </div>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -20,39 +22,58 @@
         </div>
     }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <form asp-controller="Job" asp-action="Create" method="post">
+    <div class="card shadow rounded-4">
+        <div class="card-body p-4">
+            <form asp-controller="Job" asp-action="CreateJob" method="post">
+
+                <!-- Tiêu đề -->
                 <div class="mb-3">
-                    <label asp-for="TieuDe" class="form-label">Tiêu Đề <span class="text-danger">*</span></label>
-                    <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề công việc">
+                    <label asp-for="TieuDe" class="form-label fw-bold">
+                        <i class="bi bi-card-text me-1 text-primary"></i> Tiêu Đề <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="TieuDe" class="form-control" placeholder="VD: Tuyển lập trình viên C#, Java...">
                     <span asp-validation-for="TieuDe" class="text-danger"></span>
                 </div>
 
+                <!-- Mô tả -->
                 <div class="mb-3">
-                    <label asp-for="MoTa" class="form-label">Mô Tả <span class="text-danger">*</span></label>
-                    <textarea asp-for="MoTa" class="form-control" rows="5" placeholder="Mô tả chi tiết về công việc, yêu cầu, quyền lợi..."></textarea>
+                    <label asp-for="MoTa" class="form-label fw-bold">
+                        <i class="bi bi-file-text me-1 text-primary"></i> Mô Tả Chi Tiết <span class="text-danger">*</span>
+                    </label>
+                    <textarea asp-for="MoTa" class="form-control" rows="5" placeholder="Mô tả công việc, yêu cầu, quyền lợi..."></textarea>
                     <span asp-validation-for="MoTa" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="DiaDiem" class="form-label">Địa Điểm</label>
-                    <input asp-for="DiaDiem" class="form-control" placeholder="Nhập địa điểm làm việc">
-                    <span asp-validation-for="DiaDiem" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="MucLuong" class="form-label">Mức Lương</label>
-                    <div class="input-group">
-                        <input asp-for="MucLuong" class="form-control" placeholder="Nhập mức lương">
-                        <span class="input-group-text">VNĐ</span>
+                <div class="row">
+                    <!-- Địa điểm -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DiaDiem" class="form-label fw-bold">
+                            <i class="bi bi-geo-alt-fill me-1 text-primary"></i> Địa Điểm Làm Việc
+                        </label>
+                        <input asp-for="DiaDiem" class="form-control" placeholder="VD: Hà Nội, TP.HCM...">
+                        <span asp-validation-for="DiaDiem" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="MucLuong" class="text-danger"></span>
+
+                    <!-- Mức lương -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="MucLuong" class="form-label fw-bold">
+                            <i class="bi bi-cash-coin me-1 text-primary"></i> Mức Lương
+                        </label>
+                        <div class="input-group">
+                            <input asp-for="MucLuong" class="form-control" placeholder="VD: 10.000.000 - 15.000.000">
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <span asp-validation-for="MucLuong" class="text-danger"></span>
+                    </div>
                 </div>
 
+                <!-- Loại hình -->
                 <div class="mb-3">
-                    <label asp-for="LoaiHinh" class="form-label">Loại Hình</label>
+                    <label asp-for="LoaiHinh" class="form-label fw-bold">
+                        <i class="bi bi-briefcase me-1 text-primary"></i> Loại Hình Công Việc
+                    </label>
                     <select asp-for="LoaiHinh" class="form-select">
+                        <option value="">-- Chọn loại hình --</option>
                         <option value="Full-time">Full-time</option>
                         <option value="Part-time">Part-time</option>
                         <option value="Freelance">Freelance</option>
@@ -61,15 +82,20 @@
                     <span asp-validation-for="LoaiHinh" class="text-danger"></span>
                 </div>
 
-                <div class="d-flex gap-2 justify-content-end">
-                    <a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-secondary">Hủy</a>
-                    <button type="submit" class="btn btn-primary">Thêm Công Việc</button>
+                <!-- Nút hành động -->
+                <div class="d-flex justify-content-end mt-4 gap-2">
+                    <a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle me-1"></i> Hủy
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm Công Việc
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
