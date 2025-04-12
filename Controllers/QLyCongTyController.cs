@@ -18,9 +18,24 @@ namespace BTL_Web_NC.Controllers
             _congTyRepository = congTyRepository;
         }
 
-        public async Task<IActionResult> QuanLyCongTy()
+        public async Task<IActionResult> QuanLyCongTy(string ten , string diaChi)
         {
             var danhSachCongTy = await _congTyRepository.GetAllAsync(); // sử dụng từ GenericRepository
+            if (!string.IsNullOrWhiteSpace(ten))
+            {
+                ten = ten.ToLower();
+                danhSachCongTy = danhSachCongTy
+                    .Where(ct => !string.IsNullOrEmpty(ct.TenCongTy) && ct.TenCongTy.ToLower().Contains(ten))
+                    .ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(diaChi))
+            {
+                diaChi = diaChi.ToLower();
+                danhSachCongTy = danhSachCongTy
+                    .Where(ct => !string.IsNullOrEmpty(ct.DiaChi) && ct.DiaChi.ToLower().Contains(diaChi))
+                    .ToList();
+            }
             return View(danhSachCongTy);
         }
         [HttpGet]
@@ -60,5 +75,25 @@ namespace BTL_Web_NC.Controllers
 
             return RedirectToAction("QuanLyCongTy");
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> XoaCongTy(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Json(new { success = false, message = "Không tìm thấy công ty." });
+            }
+
+            var congTy = await _congTyRepository.GetByIdAsync(id);
+            if (congTy == null)
+            {
+                return Json(new { success = false, message = "Công ty không tồn tại." });
+            }
+
+            await _congTyRepository.DeleteCongTyAsync(congTy);
+            await _congTyRepository.SaveChangesAsync();
+            return Json(new { success = true, message = "Xóa công ty thành công!" });
+        }
+
     }
 }
