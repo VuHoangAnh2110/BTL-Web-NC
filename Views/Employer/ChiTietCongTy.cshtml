@@ -1,0 +1,47 @@
+﻿@model BTL_Web_NC.Models.CongTy
+
+@{
+    ViewData["Title"] = "Chi tiết công ty";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        @if (!string.IsNullOrEmpty(Model.Logo))
+        {
+            <img src="@Model.Logo" alt="Logo Công Ty" class="rounded-circle border shadow" style="width: 140px; height: 140px; object-fit: cover;">
+        }
+        else
+        {
+            <div class="rounded-circle bg-light border d-inline-block text-muted"
+                 style="width: 140px; height: 140px; line-height: 140px;">
+                No Logo
+            </div>
+        }
+
+        <h3 class="mt-3 text-uppercase text-primary">@Model.TenCongTy</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-danger">Giới thiệu</h5>
+            <p>@Model.MoTa</p>
+        </div>
+        <div class="col-md-6">
+            <h5 class="text-danger">Thông tin liên hệ</h5>
+            <ul class="list-unstyled">
+                <li><strong><i class="bi bi-geo-alt-fill text-success"></i> Địa chỉ:</strong> @Model.DiaChi</li>
+                <li><strong><i class="bi bi-globe text-success"></i> Website:</strong> <a href="@Model.Website" target="_blank">@Model.Website</a></li>
+                <li><strong><i class="bi bi-telephone text-success"></i> SĐT:</strong> @Model.SoDienThoai</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4 gap-2">
+        <a asp-controller="Employer" asp-action="Edit" asp-route-id="@Model.MaCongTy" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+        </a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-house-door-fill me-1"></i> Trang chủ
+        </a>
+    </div>
+</div>

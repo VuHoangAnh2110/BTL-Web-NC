@@ -1,10 +1,11 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using BTL_Web_NC.Helpers;
 using BTL_Web_NC.Models;
 using BTL_Web_NC.Repositories;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using BTL_Web_NC.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BTL_Web_NC.Controllers
 {
@@ -205,6 +206,19 @@ namespace BTL_Web_NC.Controllers
 
             return View(congTyList);
         }
+        // Trang chi tiết công ty
+        public async Task<IActionResult> ChiTietCongTy(string id)
+        {
+            var congTy = await _congTyRepo.GetByIdAsync(id);
+            if (congTy == null)
+            {
+                return NotFound();
+            }
+
+            return View(congTy);
+        }
+
+
 
         //Edit
         public async Task<IActionResult> Edit(string id)

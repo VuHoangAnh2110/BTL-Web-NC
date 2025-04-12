@@ -48,6 +48,9 @@ namespace BTL_Web_NC.Repositories
                 .ToListAsync();
         }
 
-
+        public async Task<CongTy> GetByIdAsync(string id)
+        {
+            return await _context.CongTys.FindAsync(id);
+        }
     }
 }
