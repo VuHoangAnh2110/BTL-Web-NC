@@ -11,15 +11,19 @@ function showToast(type, message) {
 
 function submitApplication() {
     let cvFile = document.getElementById('cvUpload').files[0];
+    let cvFileInput = document.getElementById('cvUpload');
+    cvFileInput.classList.remove('is-invalid');
 
     if (!cvFile) {
         showToast('warning', 'Vui lòng tải lên CV của bạn.');
+        cvFileInput.classList.add('is-invalid');
         return;
     }
 
     // Kiểm tra kích thước file (tối đa 5MB)
     if (cvFile.size > 5 * 1024 * 1024) {
         showToast('warning', 'Kích thước file quá lớn. Vui lòng tải lên file có dung lượng nhỏ hơn 5MB.');
+        cvFileInput.classList.add('is-invalid');
         return;
     }
 
@@ -43,6 +47,7 @@ function submitApplication() {
             // Đóng modal
             bootstrap.Modal.getInstance(document.getElementById('applyModal')).hide();
         } else {
+            cvFileInput.classList.add('is-invalid');
             showToast('warning', data.message);
         }
     })
