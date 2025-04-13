@@ -22,10 +22,12 @@ namespace BTL_Web_NC.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<CongViec>> GetDsCongViecByCongTyIdAsync(string idTaiKhoan)
+        public async Task<IEnumerable<CongViec>> GetDsCongViecByCongTyIdAsync(string maCongTy)
         {
             return await _context.CongViecs
-                .Where(cv => cv.MaCongTy == idTaiKhoan)
+                .Include(cv => cv.CongTy)
+                .Where(cv => cv.MaCongTy == maCongTy)
+                .OrderByDescending(c => c.NgayDang)
                 .ToListAsync();
         }
 

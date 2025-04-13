@@ -295,7 +295,29 @@ namespace BTL_Web_NC.Controllers
             return RedirectToAction("EmployerProfile", "Employer");
         }
 
-        
+        [HttpGet]
+        public async Task<IActionResult> ChiTietCongTy(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+            
+            // Lấy thông tin công ty theo id
+            var congTy = await _congTyRepo.LayCongTyTheoMaCTAsync(id);
+            if (congTy == null)
+            {
+                return NotFound();
+            }
+            
+            // Lấy danh sách công việc của công ty
+            var danhSachCongViec = await _congViecRepo.GetDsCongViecByCongTyIdAsync(id);
+            
+            // Truyền dữ liệu sang view
+            ViewBag.DanhSachCongViec = danhSachCongViec;
+            
+            return View(congTy);
+        }
 
 
 

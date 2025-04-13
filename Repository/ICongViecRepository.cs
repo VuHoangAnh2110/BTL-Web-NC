@@ -7,7 +7,7 @@ namespace BTL_Web_NC.Repositories
     {
         Task<IEnumerable<CongViec>> GetDsCongViecAsync();
 
-        Task<IEnumerable<CongViec>> GetDsCongViecByCongTyIdAsync(string idTaiKhoan);
+        Task<IEnumerable<CongViec>> GetDsCongViecByCongTyIdAsync(string maCongTy);
         
         Task AddCongViecAsync(CongViec congViec);
         

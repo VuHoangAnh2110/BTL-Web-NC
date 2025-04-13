@@ -1,0 +1,175 @@
+@model BTL_Web_NC.Models.CongTy
+@{
+    ViewData["Title"] = Model.TenCongTy;
+    var danhSachCongViec = ViewBag.DanhSachCongViec as List<BTL_Web_NC.Models.CongViec>;
+}
+
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Employer" asp-action="DanhSachCongTy">Danh sách công ty</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.TenCongTy</li>
+        </ol>
+    </nav>
+
+    <!-- Thông tin công ty -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 text-center mb-4 mb-md-0">
+                    <div class="company-logo mx-auto mb-3" style="width:150px;height:150px;overflow:hidden;border-radius:10px;">
+                        <img src="@(string.IsNullOrEmpty(Model.Logo) ? "/img/logo-congty-default.jpg" : Model.Logo)" 
+                             alt="@Model.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Website))
+                    {
+                        <a href="@(Model.Website.StartsWith("http") ? Model.Website : $"https://{Model.Website}")" 
+                           target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+                            <i class="bi bi-globe me-1"></i>Truy cập website
+                        </a>
+                    }
+                </div>
+                <div class="col-lg-9 col-md-8">
+                    <h1 class="h2 mb-3">@Model.TenCongTy</h1>
+                    
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(Model.DiaChi))
+                        {
+                            <div class="mb-2">
+                                <i class="bi bi-geo-alt text-muted me-2"></i>
+                                <span>@Model.DiaChi</span>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.SoDienThoai))
+                        {
+                            <div class="mb-2">
+                                <i class="bi bi-telephone text-muted me-2"></i>
+                                <span>@Model.SoDienThoai</span>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="mb-0">
+                        <h5 class="mb-3">Giới thiệu công ty</h5>
+                        @if (!string.IsNullOrEmpty(Model.MoTa))
+                        {
+                            <p>@Model.MoTa</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Chưa có thông tin giới thiệu</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danh sách công việc -->
+    <h2 class="h3 mb-3 position-relative">
+        <i class="bi bi-briefcase me-2"></i>Danh sách công việc
+        <span class="position-absolute start-0 bottom-0 border-primary border-bottom" style="width:60px;"></span>
+    </h2>
+    
+    <div class="row mt-4">
+        @if (danhSachCongViec != null && danhSachCongViec.Any())
+        {
+            foreach (var job in danhSachCongViec)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card job-card h-100 shadow-sm border-0" 
+                         onclick="location.href='@Url.Action("Detail", "Job", new { id = job.MaCongViec })';">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2 text-truncate" title="@job.TieuDe">@job.TieuDe</h5>
+                            
+                            <div class="job-info d-flex flex-wrap mb-3">
+                                <span class="badge bg-light text-dark me-2 mb-1"><i class="bi bi-geo-alt me-1"></i>@job.DiaDiem</span>
+                                <span class="badge bg-light text-dark me-2 mb-1"><i class="bi bi-clock me-1"></i>@job.LoaiHinh</span>
+                                @if (!string.IsNullOrEmpty(job.NganhNghe))
+                                {
+                                    <span class="badge bg-light text-dark mb-1"><i class="bi bi-tag me-1"></i>@job.NganhNghe</span>
+                                }
+                            </div>
+                            
+                            <p class="card-text small text-muted mb-0" style="height:40px;overflow:hidden;text-overflow:ellipsis;">
+                                @(job.MoTa != null && job.MoTa.Length > 100 ? job.MoTa.Substring(0, 100) + "..." : job.MoTa)
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">
+                                    <i class="bi bi-cash me-1"></i>@(string.IsNullOrEmpty(job.MucLuong) ? "Thỏa thuận" : job.MucLuong)
+                                </span>
+                                <span class="badge @GetStatusClass(job.TrangThai)">
+                                    @GetStatusText(job.TrangThai)
+                                </span>
+                            </div>
+                            <div class="small text-danger mt-2 text-end">
+                                <i class="bi bi-calendar-x me-1"></i>
+                                @(job.NgayHetHan.HasValue ? $"Hết hạn: {job.NgayHetHan.Value.ToString("dd/MM/yyyy")}" : "Không giới hạn")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Công ty hiện chưa có tin tuyển dụng nào.
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@functions {
+    public string GetStatusClass(string status)
+    {
+        if (string.IsNullOrEmpty(status)) return "bg-secondary";
+        
+        return status.ToLower() switch
+        {
+            "đang tuyển" => "bg-success",
+            "hết hạn" => "bg-danger",
+            "tạm dừng" => "bg-warning",
+            "đã đóng" => "bg-secondary",
+            _ => "bg-info"
+        };
+    }
+    
+    public string GetStatusText(string status)
+    {
+        if (string.IsNullOrEmpty(status)) return "Không xác định";
+        return status;
+    }
+}
+
+<style>
+    .job-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .company-logo img {
+        transition: transform 0.3s ease;
+    }
+    
+    .company-logo:hover img {
+        transform: scale(1.05);
+    }
+    
+    .breadcrumb {
+        background-color: #f8f9fa;
+        padding: 0.75rem 1rem;
+        border-radius: 0.25rem;
+    }
+</style>
