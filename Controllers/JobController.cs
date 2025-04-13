@@ -269,5 +269,104 @@ namespace BTL_Web_NC.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DownloadCV(string tenTaiKhoan, string maCongViec)
+        {
+            try
+            {
+                // Kiểm tra đăng nhập
+                var currentUser = HttpContext.Session.GetString("TenTaiKhoan");
+                if (string.IsNullOrEmpty(currentUser))
+                {
+                    return Json(new { success = false, message = "Vui lòng đăng nhập để tải CV" });
+                }
+
+                // Kiểm tra 
+                if (string.IsNullOrEmpty(tenTaiKhoan) || string.IsNullOrEmpty(maCongViec))
+                {
+                    return Json(new { success = false, message = "Dữ liệu không hợp lệ" });
+                }
+
+                // Lấy thông tin công việc
+                var congViec = await _congViecRepo.GetCongViecByIdAsync(maCongViec);
+                if (congViec == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin công việc" });
+                }
+
+                // Kiểm tra quyền truy cập (người dùng phải là nhà tuyển dụng của công việc này)
+                var congTy = await _congTyRepo.GetByUserIdAsync(currentUser);
+                if (congTy == null || congTy.MaCongTy != congViec.MaCongTy)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền tải CV này" });
+                }
+
+                // Lấy thông tin ứng tuyển
+                var ungTuyen = await _ungTuyenRepo.GetByUserIdAndJobIdAsync(tenTaiKhoan, maCongViec);
+                if (ungTuyen == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin ứng tuyển" });
+                }
+
+                // Tìm bảng File để tìm CV của ứng viên
+                var files = await _fileRepo.GetFilesByUserIdAsync(tenTaiKhoan);
+                if (files == null || !files.Any())
+                {
+                    return Json(new { success = false, message = "Không tìm thấy CV của ứng viên" });
+                }
+
+                // Tìm file CV phù hợp với mã công việc này
+                var cvFile = files.FirstOrDefault(f => 
+                    f.DuongDan != null && 
+                    f.DuongDan.Contains($"/fiveCV/{maCongViec}/")
+                );
+
+                if (cvFile == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy CV cho công việc này" });
+                }
+
+                // Lấy đường dẫn vật lý của file
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", cvFile.DuongDan.TrimStart('/'));
+                
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return Json(new { success = false, message = "Không tìm thấy file CV" });
+                }
+
+                // Lấy tên file gốc hoặc tạo tên file mới nếu không có
+                // var fileName = Path.GetFileName(filePath);
+                // if (string.IsNullOrEmpty(fileName))
+                // {
+                    var fileName = $"CV_{tenTaiKhoan}_{DateTime.Now.ToString("yyyyMMdd")}.pdf";
+                // }
+
+                // Đọc file và trả về để download
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var contentType = GetContentType(filePath);
+                
+                return File(fileBytes, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Lỗi: {ex.Message}" });
+            }
+        }
+
+        private string GetContentType(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            return extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".doc" => "application/msword",
+                ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => "application/octet-stream"
+            };
+        }
+    
+    
     }
 }

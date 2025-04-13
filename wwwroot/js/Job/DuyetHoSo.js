@@ -75,25 +75,25 @@ function showToast(type, message) {
                 // Hiển thị thông báo lỗi
                 showToast("warning", "Duyệt hồ sơ không thành công!")
             }
-        },
-        error: function() {
-            // Khôi phục trạng thái cũ nếu có lỗi
-            cotTrangThai.html(TrangThaiCu);
-            actionButtonCell.prop('disabled', false);
-            
-            // Hiển thị thông báo lỗi
-            showToast("error", "Có lỗi khi duyệt hồ sơ!")
-        }
-    });
-}
+            },
+            error: function() {
+                // Khôi phục trạng thái cũ nếu có lỗi
+                cotTrangThai.html(TrangThaiCu);
+                actionButtonCell.prop('disabled', false);
+                
+                // Hiển thị thông báo lỗi
+                showToast("error", "Có lỗi khi duyệt hồ sơ!")
+            }
+        });
+    }
 
     function xemCV(tenTaiKhoan, maCongViec) {
         var modal = new bootstrap.Modal(document.getElementById('cvModal'));
         modal.show();
         
         // Cập nhật nút tải xuống CV
-        document.getElementById('downloadCvBtn').href = `/Job/DownloadCV?tenTaiKhoan=${tenTaiKhoan}&maCongViec=${maCongViec}`;
-        
+        document.getElementById('downloadCvBtn').href = `/Job/DownloadCV?tenTaiKhoan=${encodeURIComponent(tenTaiKhoan)}&maCongViec=${encodeURIComponent(maCongViec)}`; 
+
         // Hiển thị trạng thái loading
         document.getElementById('cvModalBody').innerHTML = `
             <div class="text-center">
@@ -148,8 +148,86 @@ function showToast(type, message) {
             });
     }
 
+// Xử lý sự kiện click nút tải xuống CV
+document.addEventListener('DOMContentLoaded', function() {
+
+});
+
 $(document).ready(function() {
-    
+    // Lấy thẻ a có id là downloadCvBtn
+    const downloadBtn = document.getElementById('downloadCvBtn');
+            
+    // Thêm sự kiện click cho nút tải xuống
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định
+            
+            // Lấy URL từ href của nút
+            const url = this.getAttribute('href');
+            if (!url || url === '#') {
+                showToast('warning', 'Không có thông tin CV để tải xuống');
+                return;
+            }
+            
+            // Hiển thị trạng thái đang tải
+            const btnText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang tải...';
+            this.disabled = true;
+            
+            // Gọi API để tải xuống file
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Không thể tải xuống CV');
+                        });
+                    }
+                    
+                    // Lấy tên file từ header Content-Disposition nếu có
+                    const disposition = response.headers.get('Content-Disposition');
+                    let filename = 'cv.pdf';
+                    
+                    if (disposition && disposition.includes('filename=')) {
+                        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        const matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) {
+                            filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    return response.blob().then(blob => {
+                        // Tạo URL cho blob
+                        const url = window.URL.createObjectURL(blob);
+                        
+                        // Tạo thẻ a tạm thời để tải xuống
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        
+                        // Thêm vào DOM và kích hoạt sự kiện click
+                        document.body.appendChild(a);
+                        a.click();
+                        
+                        // Xóa thẻ a tạm thời
+                        window.URL.revokeObjectURL(url);
+                        a.remove();
+                        
+                        showToast('success', 'Tải xuống CV thành công!');
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi tải CV:', error);
+                    showToast('error', error.message || 'Có lỗi xảy ra khi tải xuống CV');
+                })
+                .finally(() => {
+                    // Khôi phục trạng thái nút
+                    this.innerHTML = btnText;
+                    this.disabled = false;
+                });
+        });
+    }
+
 
     $("#searchInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();
