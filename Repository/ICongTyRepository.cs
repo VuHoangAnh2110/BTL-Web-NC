@@ -14,8 +14,8 @@ namespace BTL_Web_NC.Repositories
         Task UpdateCongTyAsync(CongTy CongTy);
 
         Task<List<CongTy>> GetCongTyMoiNhatAsync(int soLuong);
-        
-        Task<CongTy> GetByIdAsync(string id);
 
+
+        
     }
 }

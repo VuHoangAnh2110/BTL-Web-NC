@@ -42,7 +42,6 @@ namespace BTL_Web_NC.Repositories
                 .FirstOrDefaultAsync(cv => cv.MaCongViec == jobId);
             return congViec ?? new CongViec();
         }
-       
 
 
     }
