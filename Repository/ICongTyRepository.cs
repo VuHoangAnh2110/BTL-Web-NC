@@ -15,7 +15,10 @@ namespace BTL_Web_NC.Repositories
 
         Task<List<CongTy>> GetCongTyMoiNhatAsync(int soLuong);
 
+        Task<(List<CongTy> Items, int TotalCount)> LocDsCongTyAsync(
+            string keyword, int page, int pageSize);
 
+        
         
     }
 }

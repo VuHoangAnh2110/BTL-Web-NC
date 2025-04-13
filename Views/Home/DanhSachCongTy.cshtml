@@ -1,0 +1,164 @@
+@model List<BTL_Web_NC.Models.CongTy>
+@{
+    ViewData["Title"] = "Danh sách nhà tuyển dụng";
+    var keyword = ViewBag.Keyword ?? "";
+    @* var industry = ViewBag.Industry ?? ""; *@
+    var currentPage = ViewBag.CurrentPage;
+    var totalPages = ViewBag.TotalPages;
+}
+
+<div class="container py-4">
+    <h1 class="h3 mb-4">Danh sách nhà tuyển dụng</h1>
+    
+    <!-- Bộ lọc -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-controller="Home" asp-action="DanhSachCongTy" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Tìm kiếm công ty</label>
+                    <input type="text" class="form-control" name="keyword" value="@keyword" placeholder="Nhập tên công ty, địa chỉ...">
+                </div>
+                @* <div class="col-md-4">
+                    <label class="form-label">Lĩnh vực</label>
+                    <select class="form-select" name="industry">
+                        <option value="">Tất cả lĩnh vực</option>
+                        <option value="Công nghệ thông tin" @(industry == "Công nghệ thông tin" ? "selected" : "")>Công nghệ thông tin</option>
+                        <option value="Tài chính - Ngân hàng" @(industry == "Tài chính - Ngân hàng" ? "selected" : "")>Tài chính - Ngân hàng</option>
+                        <option value="Bán lẻ" @(industry == "Bán lẻ" ? "selected" : "")>Bán lẻ</option>
+                        <option value="Giáo dục" @(industry == "Giáo dục" ? "selected" : "")>Giáo dục</option>
+                        <option value="Y tế" @(industry == "Y tế" ? "selected" : "")>Y tế</option>
+                    </select>
+                </div> *@
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Danh sách công ty -->
+    <div class="mb-3">
+        <span class="text-muted">Tìm thấy @ViewBag.TotalCount công ty</span>
+    </div>
+    
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var company in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card company-card h-100 shadow-sm border-0" 
+                          onclick="location.href='@Url.Action("ChiTietCongTy", "Employer", new { id = company.MaCongTy })';">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <div class="company-logo mx-auto mb-3" style="width:80px;height:80px;overflow:hidden;border-radius:8px;">
+                                    <img src="@(string.IsNullOrEmpty(company.Logo) ? "/img/logo-congty-default.jpg" : company.Logo)" 
+                                         alt="@company.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
+                                </div>
+                                <h5 class="card-title mb-1">@company.TenCongTy</h5>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                @if (!string.IsNullOrEmpty(company.DiaChi))
+                                {
+                                    <p class="text-muted mb-2"><i class="bi bi-geo-alt me-1"></i>@company.DiaChi</p>
+                                }
+                                @if (!string.IsNullOrEmpty(company.Website))
+                                {
+                                    <p class="text-muted mb-0"><i class="bi bi-globe me-1"></i>@company.Website</p>
+                                }
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(company.MoTa))
+                            {
+                                <div class="company-description text-muted small">
+                                    @(company.MoTa.Length > 100 ? company.MoTa.Substring(0, 100) + "..." : company.MoTa)
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <div class="text-center">
+                                <a href="@Url.Action("ChiTietCongTy", "Employer", new { id = company.MaCongTy })" class="btn btn-outline-primary btn-sm">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        @* <!-- Phân trang --> *@
+        @if (totalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("DanhSachCongTy", "Home", new { keyword, page = currentPage - 1 })">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = Math.Max(1, currentPage - 2); i <= Math.Min(totalPages, currentPage + 2); i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("DanhSachCongTy", "Home", new { keyword, page = i })">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("DanhSachCongTy", "Home", new { keyword, page = currentPage + 1 })">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <img src="/img/empty-state.svg" alt="Không có kết quả" class="img-fluid mb-3" style="max-width: 200px;">
+            <h4>Không tìm thấy công ty nào phù hợp</h4>
+            <p class="text-muted">Vui lòng thử lại với các tiêu chí tìm kiếm khác</p>
+            <a asp-controller="Home" asp-action="DanhSachCongTy" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-clockwise me-2"></i>Đặt lại bộ lọc
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .company-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .company-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .company-logo img {
+        transition: transform 0.3s ease;
+    }
+    
+    .company-logo:hover img {
+        transform: scale(1.05);
+    }
+    
+    .company-description {
+        height: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>

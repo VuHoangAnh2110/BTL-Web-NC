@@ -12,7 +12,7 @@
  Target Server Version : 16001000 (16.00.1000)
  File Encoding         : 65001
 
- Date: 11/04/2025 02:14:10
+ Date: 14/04/2025 00:34:34
 */
 
 
@@ -177,7 +177,8 @@ CREATE TABLE [dbo].[tblCongViec] (
   [sCapBac] nvarchar(200) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sNganhNghe] nvarchar(225) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
   [sQuyenLoi] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
-  [sYeuCau] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL
+  [sYeuCau] nvarchar(max) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [iLuotXem] int  NULL
 )
 GO
 
@@ -188,7 +189,119 @@ GO
 -- ----------------------------
 -- Records of tblCongViec
 -- ----------------------------
-INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau]) VALUES (N'CV100425nk15', N'CT090425cf51', N'Việc làm ', N'ajdjbjdjbjfbjfbwjerbjwrweg ư weugrweuyrgwehg ưewrwer', N'Hoàng Mai, Hà Nội', N'2068000', N'Full-time', N'2025-04-10 16:14:39.080', N'Đang tuyển', N'1', NULL, NULL, NULL, NULL, NULL)
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV100425nk15', N'CT090425cf51', N'Huấn luyện viên cá nhân - PT Gym/Kick', N'Chịu trách nhiệm hoàn thành mục tiêu doanh số cá nhân và mục tiêu về tiết dạy hàng tháng
+Tập luyện cho hội viên, khách hàng
+Làm việc theo hệ thống và báo cáo
+Tham gia đào tạo, rèn luyện và phát triển kỹ năng', N'Hoàng Mai, Hà Nội', N'20 -25 triệu', N'Part-time', N'2025-04-10 16:14:39.080', N'Đang tuyển', N'8', N'2025-04-15 00:00:00.000', N'Đào tạo viên', N'Thể thao/ Thể thao nước/ Golf, Gym', N'Thu nhập = Lương cứng + hoa hồng + thưởng: thu nhập từ 8tr - 40tr
+Được phát triển theo lộ trình bài bản, chương trình đánh giá, thăng hạng cấp hằng quý.
+Môi trường làm việc chuyên nghiệp, tôn trọng và luôn đổi mới
+Chế độ thăng tiến và chính sách lương, thưởng, hoa hồng rõ ràng
+Được đào tạo về chuyên môn và kỹ năng bán hàng, kỹ năng thuyết trình, kỹ năng giao tiếp.
+Các chế độ đãi ngộ khác theo quy định của đơn vị
+Được tập luyện FREE tại phòng tập và bể bơi 5 sao', N'Đã có kinh nghiệm tập luyện hoặc làm việc tại các đơn vị Fitness. Chấp nhận đào tạo ứng viên chưa có kinh nghiệm
+Yêu cầu khả năng ngoại ngữ: Ngoại ngữ là một lợi thế
+Chăm chỉ, có trách nhiệm với công việc', N'11')
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425ax70', N'CT100425os31', N'Nhân viên tư vấn vay trả góp tại cửa hàng', N'Đứng tại cửa hàng xe máy hoặc điện máy (FPT Shop, Cellphone S, Điện máy Nguyễn Kim, Honda…) tại khu vực
+Phối hợp với đội ngũ sales tại cửa hàng
+Tiếp đón khách hàng, hỗ trợ tư vấn sản phẩm 
+Giới thiệu cho khách gói vay trả góp phù hợp
+Làm hồ sơ, chăm sóc khách hàng', N'Đoàn Văn Bơ, Phường 13, Quận 4, TPHCM', N'10 - 15 triệu', N'Thực tập', N'2025-04-13 22:33:08.907', N'Đang tuyển', N'6', N'2025-04-18 00:00:00.000', N'Đào tạo viên', N'Hành chính/ Nhân sự/ Thư ký', N'Thử việc 100% lương, 15 ngày phép năm, các ngày nghỉ lễ, tết
+​​​​​​​48 tiếng/ tuần, 1 tuần nghỉ 1 ngày theo lịch 
+Xoay ca 8 tiếng theo giờ mở cửa của cửa hàng (nghỉ trưa 1 tiếng)
+(lịch làm việc do Quản lý phân bổ hàng tháng)
+HĐLĐ 12 tháng (bao gồm 2 tháng thử việc 100% lương)', N'Tối thiểu bằng THPT trở lên
+Không yêu cầu kinh nghiệm, am hiểu về tài chính, ngân hàng là một lợi thế', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425br44', N'CT090425cf51', N'Trưởng nhóm kinh doanh - Leader Sale', N'Hiểu về các dịch vụ của công ty để giới thiệu, tư vấn và giải đáp thắc mắc cho khách hàng. 
+Chăm sóc khách hàng sau khi bán, duy trì mối quan hệ với khách hàng hiện tại. 
+Hỗ trợ, giám sát và đánh giá hiệu suất làm việc của nhân viên. 
+Tạo động lực, xây dựng môi trường làm việc tích cực cho đội nhóm.
+Tìm kiếm nguồn khách hàng mới theo data được công ty cung cấp.
+Thực hiện các công việc khác theo sự phân công của cấp trên', N'Dịch Vọng Hậu, Cầu Giấy, Hà Nôi', N'Thỏa thuận', N'Full-time', N'2025-04-13 17:33:40.257', N'Đang tuyển', N'8', N'2025-04-30 00:00:00.000', N'Trưởng bộ phận/ Trưởng phòng', N'Tài chính / Kế toán/ Thu mua/ Thủ kho', N'Thu nhập hấp dẫn từ 20tr – 25tr (mức lương cơ bản + hoa hồng + thưởng theo cơ chế mới năm 2025)
+Môi trường làm việc chuyên nghiệp tại các clb 5 sao, năng động, được đào tạo với các chuyên gia về bán hàng, lộ trình thăng tiến rõ ràng 
+Được tham gia các hoạt động chung của Công ty: du lịch, team building, sự kiện…
+Được tập luyện tại phòng tập và bể bơi 5 sao
+Review lương hằng quý, cơ hội thăng tiến tới quản lý', N'Năng động, nhiệt tình, trung thực trong công việc.
+Khả năng giao tiếp tốt và làm việc theo nhóm.
+Có kinh nghiệm ít nhất 01 năm ở vị trí tương đương. Ưu tiên có kinh nghiệm làm việc về lĩnh vực dịch vụ, thời trang, fitness.
+Có Tiếng Anh, ngoại hình là một lợi thế.', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425eg54', N'CT100425xs59', N'Tuyển Nhân Viên Cửa Hàng Gà Rán', N'*THU NGÂN:
+Nhận order từ khách hàng & tư vấn món ăn;
+Thực hiện công tác thu ngân: check bill, in bill, thanh toán tiền cho khách;
+Chuyển thông tin món vào bếp Xử lý các vấn đề phát sinh tại quầy.
+
+*PHỤC VỤ:
+Chào đón khách đến với nhà hàng;
+Mang món ăn, đồ uống lên bàn cho khách khi được chuẩn bị xong;
+Hỗ trợ dọn dẹp nhà hàng sạch sẽ, thoáng mát;
+Phục vụ khách trong suốt bữa ăn, hỗ trợ khách khi cần.', N'Quận Bình Thạnh, TP.HCM', N'3 - 5 triệu', N'Part-time', N'2025-04-13 22:49:06.270', N'Đang tuyển', N'19', N'2025-06-05 00:00:00.000', N'Nhân viên', N'Sales/ Marketing/ Guest Relation', N'Chế độ lương thưởng hấp dẫn;
+Được đào tạo các kỹ năng nghiệp vụ miễn phí;
+Làm việc trong môi trường năng động, giúp nhân viên phát triển kỹ năng giao tiếp, giải quyết vấn đề và quản lý công việc;
+Cơ hội phát triển và thăng tiến lên vị trí Store Manager rõ ràng.', N'Độ tuổi: Nam Nữ từ đủ 16t - 30t (ưu tiên gắn bó lâu dài, không tuyển thời vụ);
+Sẵn sàng làm việc các ngày cuối tuần, Lễ, Tết;
+Ngoại hình ưa nhìn, sức khỏe tốt, nhanh nhẹn, không có hình xăm, yêu thích công việc phục vụ khách hàng.', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425ej88', N'CT100425pe76', N'Tuyển Phục vụ, Lễ Tân, Pha chế', N'Nhân viên Bàn, pha chế, Lễ tân, thu ngân.
+Nhân viên phục vụ bộ phần bàn.', N'Phan Chu Trinh,  Q.Hoàn Kiếm, TP.Hà Nội', N'5 - 8 triệu', N'Part-time', N'2025-04-13 22:28:42.370', N'Đang tuyển', N'5', N'2025-05-28 00:00:00.000', N'Thực tập sinh', N'Lễ tân/ Thu ngân/ Đặt phòng/ Tổng đài/ BC', N'Làm thêm giờ/ngày lễ được hỗ trợ tăng hệ số thu nhập
+
+Hỗ trợ bữa ăn + đồng phục
+
+Có xét hỗ trợ tăng thu nhập định kỳ (6 tháng/lần)
+
+Đầy đủ hỗ trợ liên quan đến sức khỏe và phúc lợi (áp dụng theo quy định)', N'Có thể tham gia tối thiểu từ 3 – 6 tháng (ưu tiên ổn định lâu dài)
+
+Ứng viên đăng ký hoàn toàn miễn phí, không qua trung gian', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425eq15', N'CT100425xs59', N'Nhân viên Graphic Design Sàn Thương Mại Điện Tử', N'1. Thiết kế ấn phẩm truyền thông & nhận diện thương hiệu
+Thiết kế poster, banner cho Fanpage, website, TikTok Carousel và các nền tảng digital khác.
+Phát triển bộ nhận diện thương hiệu, đảm bảo tính nhất quán và chuyên nghiệp trong từng thiết kế.
+Thiết kế các ấn phẩm in ấn như brochure, flyer, standee, POSM,… phục vụ hoạt động marketing & truyền thông.
+
+2. Hợp tác & triển khai nội dung
+
+Phối hợp chặt chẽ với Content Creator để xây dựng hình ảnh phù hợp với nội dung chiến dịch.
+Đóng góp ý tưởng sáng tạo, nâng cao chất lượng hình ảnh & trải nghiệm thương hiệu.
+
+3. Nghiên cứu & tối ưu giao diện số
+Cập nhật xu hướng thiết kế hiện đại, ứng dụng vào sản phẩm nhằm nâng cao hiệu quả truyền thông.', N'Đại Kim, Hoàng Mai, Hà Nội', N'10 - 15 triệu', N'Freelance', N'2025-04-13 22:25:27.943', N'Đang tuyển', N'5', N'2025-05-05 00:00:00.000', N'Giám sát', N'IT', N'Thưởng theo KPI: Thu nhập có thể lên tới 15 triệu/tháng.
+Trợ cấp ăn trưa và xăng xe.
+Được làm việc trong một môi trường chuyên nghiệp, bài bản.
+Được đào tạo và năng cấp kỹ năng thường xuyên.
+Được cung cấp máy tính cá nhân và thiết bị quay chụp hiện đại phục vụ làm việc.
+Được làm việc với các brand nội địa hàng đầu Nhật Bản.', N'Có kinh nghiệm design từ 2 năm trở lên.
+Ứng viên vui lòng gửi sản phẩm đã làm đính kèm
+Có tư duy thiết kế sáng tạo
+Có tư duy hình ảnh tốt.
+Có khả năng làm teamwork.', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425gc59', N'CT100425ae98', N'TELESALES CA TỐI 18H30 - 21H30', N'Liên lạc với khách hàng thông qua data có sẵn để tư vấn các gói dịch vụ làm đẹp 
+Đặt lịch hẹn cho khách hàng đến sử dụng dịch vụ
+Làm ca tối, tháng off 3 ngày', N'34 Bạch Đằng, Phường 2, Tân Bình', N'3 - 5 triệu', N'Remote', N'2025-04-13 22:39:19.057', N'Đang tuyển', N'5', N'2025-05-08 00:00:00.000', N'Trưởng bộ phận/ Trưởng phòng', N'Sales/ Marketing/ Guest Relation', N'ĐƯỢC ĐÀO TẠO BÀI BẢN
+CẤP ĐATA NÓNG MỖI NGÀY
+Lương 2 triệu + HH 30k/khách ', N'GIAO TIẾP TỐT', NULL)
+GO
+
+INSERT INTO [dbo].[tblCongViec] ([PK_sMaCongViec], [FK_sMaCongTy], [sTieuDe], [sMoTa], [sDiaDiem], [sMucLuong], [sLoaiHinh], [tNgayDang], [sTrangThai], [iSoLuongTuyen], [tNgayHetHan], [sCapBac], [sNganhNghe], [sQuyenLoi], [sYeuCau], [iLuotXem]) VALUES (N'CV130425sz80', N'CT100425gp86', N'Nhân Viên Kinh Doanh Thuốc Bảo Vệ Thực Vật - Phân Bón Tại Văn Phòng', N'Chăm sóc khách hàng hiện có, duy trì và phát triển mối quan hệ lâu dài.
+Giới thiệu, Tư vấn, bán hàng và hướng dẫn sử dụng các sản phẩm phân bón, thuốc bảo vệ thực vật của công ty
+Tìm kiếm, tiếp cận và mở rộng kênh khách hàng: Đại lý, Nhà phân phối, cửa hàng vật tư nông nghiệp, Farm nông nghiệp, Nông dân,….
+Đàm phán, ký kết hợp đồng và theo dõi đơn hàng, công nợ của khách hàng.
+Cập nhật insigh khách hàng, thị trường, thu thập thông tin về đối thủ cạnh tranh và xu hướng nhu cầu phân bón.
+Báo cáo tình hình kinh doanh và đề xuất giải pháp phát triển thị trường.', N'P.Tân Phú, Q7, TP.HCM', N'10 - 15 triệu', N'Full-time', N'2025-04-13 22:17:34.303', N'Đang tuyển', N'16', N'2025-05-07 00:00:00.000', N'Nhân viên', N'Sales/ Marketing/ Guest Relation', N'Thưởng nóng hàng tháng, thưởng lễ tết, cuối năm, thưởng doanh số bán hàng...
+Lương: LCB + KPI công việc (thu nhập từ 10 - 30 triệu đồng, tùy theo khả năng đạt doanh số bán hàng
+Chế độ BHXH đầy đủ ( BH thất nghiệp, y tế, tai nạn).
+Khám sức khỏe định kỳ hằng năm và các chế độ phúc lợi khác.', N'Không yêu cầu kinh nghiệm trong lĩnh vực BVTV - Phân bón.
+Độ tuổi :22 -32 tuổi 
+Tốt nghiệp Cao đẳng trở lên, yêu thích lĩnh vực kinh doanh.
+Khả năng đàm phán tốt, nhạy bén, linh hoạt, có năng khiếu tư vấn bán hàng.
+Sử dụng tốt tin học văn phòng', NULL)
 GO
 
 
@@ -216,7 +329,31 @@ GO
 -- ----------------------------
 -- Records of tblFile
 -- ----------------------------
-INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL110425gz03', N'user_20250411_021304.pdf', N'user', N'CV', N'/upload/fiveCV/CV100425nk15/user_20250411_021304.pdf', N'2025-04-11 02:13:04.647')
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL120425bt12', N'nguoidung1_20250412_102514.pdf', N'nguoidung1', N'CV', N'/uploads/fiveCV/CV100425nk15/nguoidung1_20250412_102514.pdf', N'2025-04-12 10:25:14.937')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL120425lj18', N'nguoidung2_20250412_102610.pdf', N'nguoidung2', N'CV', N'/uploads/fiveCV/CV100425nk15/nguoidung2_20250412_102610.pdf', N'2025-04-12 10:26:10.180')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL120425oi76', N'nguoidung3_20250412_102713.pdf', N'nguoidung3', N'CV', N'/uploads/fiveCV/CV100425nk15/nguoidung3_20250412_102713.pdf', N'2025-04-12 10:27:13.843')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL120425tt78', N'vhanh2k4_20250412_155052.pdf', N'vhanh2k4', N'CV', N'/upload/fiveCV/CV100425nk15/vhanh2k4_20250412_155052.pdf', N'2025-04-12 15:50:53.010')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL130425fh28', N'nguoidung5_20250413_224522.pdf', N'nguoidung5', N'CV', N'/uploads/fiveCV/CV130425ax70/nguoidung5_20250413_224522.pdf', N'2025-04-13 22:45:22.220')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL130425ix49', N'nguoidung6_20250413_224646.pdf', N'nguoidung6', N'CV', N'/uploads/fiveCV/CV130425ax70/nguoidung6_20250413_224646.pdf', N'2025-04-13 22:46:46.270')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL130425ix99', N'nguoidung5_20250413_224418.pdf', N'nguoidung5', N'CV', N'/uploads/fiveCV/CV130425br44/nguoidung5_20250413_224418.pdf', N'2025-04-13 22:44:18.820')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL130425ue29', N'nguoidung6_20250413_224636.pdf', N'nguoidung6', N'CV', N'/uploads/fiveCV/CV130425br44/nguoidung6_20250413_224636.pdf', N'2025-04-13 22:46:36.007')
+GO
+
+INSERT INTO [dbo].[tblFile] ([PK_sMaFile], [sTenfile], [FK_sTenTaiKhoan], [sLoaiFile], [sDuongDan], [tNgayTaiLen]) VALUES (N'FL140425qw16', N'vhanh2k4_20250414_002514.pdf', N'vhanh2k4', N'CV', N'/uploads/fiveCV/CV130425gc59/vhanh2k4_20250414_002514.pdf', N'2025-04-14 00:25:14.307')
 GO
 
 
@@ -348,10 +485,76 @@ GO
 INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB100425ij25', N'user', N'Thông báo ứng tuyển', N'Ứng viên Người dùng  đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-10 18:03:50.490', N'0', N'CT090425cf51', N'CV100425nk15')
 GO
 
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425hn27', N'user', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Từ chối', N'UngTuyen', N'2025-04-11 19:30:21.350', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425mj44', N'user', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Từ chối', N'UngTuyen', N'2025-04-11 18:55:25.157', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
 INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425ms15', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Người dùng  đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-11 02:13:04.647', N'0', N'CT090425cf51', N'CV100425nk15')
 GO
 
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425nm31', N'nguoidung4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-11 18:59:01.183', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425qd53', N'user', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-11 18:51:49.880', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425qw98', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Nguyễn Nam Long đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-11 18:58:05.660', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425uv58', N'nguoidung4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-11 19:30:18.507', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425vw82', N'nguoidung4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-11 19:21:45.180', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425wb48', N'user', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Từ chối', N'UngTuyen', N'2025-04-11 19:21:53.557', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
 INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB110425zb48', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Người dùng  đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-11 02:10:36.450', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425eg96', N'nguoidung3', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-12 10:43:51.933', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425em75', N'nguoidung2', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''Việc làm '' đã được cập nhật trạng thái thành: Từ chối', N'UngTuyen', N'2025-04-12 10:44:04.220', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425ru43', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Vũ Hoàng Anh đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-12 15:50:53.017', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425wt26', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Trần Phi Vũ đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-12 10:26:10.180', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425xa44', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Hứa Quang Hán  đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-12 10:25:14.940', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB120425yw88', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Lâm Gia Đạt đã ứng tuyển vào công việc Việc làm .', N'Ứng tuyển', N'2025-04-12 10:27:13.843', N'0', N'CT090425cf51', N'CV100425nk15')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB130425ee11', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Cao Thanh Nam đã ứng tuyển vào công việc Trưởng nhóm kinh doanh - Leader Sale.', N'Ứng tuyển', N'2025-04-13 22:46:36.007', N'0', N'CT090425cf51', N'CV130425br44')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB130425iv44', N'nguoidung4', N'Thông báo ứng tuyển mới', N'Ứng viên Cao Thanh Nam đã ứng tuyển vào công việc Nhân viên tư vấn vay trả góp tại cửa hàng.', N'Ứng tuyển', N'2025-04-13 22:46:46.270', N'0', N'CT100425os31', N'CV130425ax70')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB130425rd76', N'nguoidung4', N'Thông báo ứng tuyển mới', N'Ứng viên Văn Thị Hương Giang đã ứng tuyển vào công việc Nhân viên tư vấn vay trả góp tại cửa hàng.', N'Ứng tuyển', N'2025-04-13 22:45:22.220', N'0', N'CT100425os31', N'CV130425ax70')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB130425ti19', N'vhanh2k4', N'Thông báo ứng tuyển mới', N'Ứng viên Văn Thị Hương Giang đã ứng tuyển vào công việc Trưởng nhóm kinh doanh - Leader Sale.', N'Ứng tuyển', N'2025-04-13 22:44:18.823', N'0', N'CT090425cf51', N'CV130425br44')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB140425fa74', N'vhanh2k4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''TELESALES CA TỐI 18H30 - 21H30'' đã được cập nhật trạng thái thành: Từ chối', N'UngTuyen', N'2025-04-14 00:28:32.323', N'0', N'CT100425ae98', N'CV130425gc59')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB140425rk04', N'vhanh2k4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''TELESALES CA TỐI 18H30 - 21H30'' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-14 00:33:10.270', N'0', N'CT100425ae98', N'CV130425gc59')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB140425uy62', N'vhanh2k4', N'Trạng thái ứng tuyển đã được cập nhật', N'Hồ sơ ứng tuyển của bạn cho vị trí ''TELESALES CA TỐI 18H30 - 21H30'' đã được cập nhật trạng thái thành: Chấp nhận', N'UngTuyen', N'2025-04-14 00:25:56.637', N'0', N'CT100425ae98', N'CV130425gc59')
+GO
+
+INSERT INTO [dbo].[tblThongBao] ([PK_sThongBao], [FK_sTenTaiKhoan], [sTieuDe], [sNoiDung], [sLoaiThongBao], [tNgayThongBao], [bDaXem], [FK_sMaCongTy], [FK_sMaCongViec]) VALUES (N'TB140425wg33', N'nguoidung5', N'Thông báo ứng tuyển mới', N'Ứng viên Vũ Hoàng Anh đã ứng tuyển vào công việc TELESALES CA TỐI 18H30 - 21H30.', N'Ứng tuyển', N'2025-04-14 00:25:14.307', N'0', N'CT100425ae98', N'CV130425gc59')
 GO
 
 
@@ -378,7 +581,28 @@ GO
 -- ----------------------------
 -- Records of tblUngTuyen
 -- ----------------------------
-INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT110425lc46', N'user', N'CV100425nk15', N'2025-04-11 02:13:04.647', N'Đang chờ')
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT120425bh06', N'nguoidung1', N'CV100425nk15', N'2025-04-12 10:25:14.937', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT120425hp49', N'nguoidung3', N'CV100425nk15', N'2025-04-12 10:27:13.843', N'Chấp nhận')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT120425nb60', N'nguoidung2', N'CV100425nk15', N'2025-04-12 10:26:10.180', N'Từ chối')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT130425ph13', N'nguoidung6', N'CV130425br44', N'2025-04-13 22:46:36.007', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT130425pi51', N'nguoidung5', N'CV130425br44', N'2025-04-13 22:44:18.817', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT130425vm48', N'nguoidung5', N'CV130425ax70', N'2025-04-13 22:45:22.220', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT130425xi24', N'nguoidung6', N'CV130425ax70', N'2025-04-13 22:46:46.270', N'Đang chờ')
+GO
+
+INSERT INTO [dbo].[tblUngTuyen] ([PK_sMaUngTuyen], [FK_sTenTaiKhoan], [FK_sMaCongViec], [tNgayUngTuyen], [sTrangThai]) VALUES (N'UT140425zd33', N'vhanh2k4', N'CV130425gc59', N'2025-04-14 00:25:14.307', N'Chấp nhận')
 GO
 
 
@@ -521,4 +745,15 @@ GO
 
 ALTER TABLE [dbo].[tblUngTuyen] ADD CONSTRAINT [fk_ungtuyen_congviec] FOREIGN KEY ([FK_sMaCongViec]) REFERENCES [dbo].[tblCongViec] ([PK_sMaCongViec]) ON DELETE CASCADE ON UPDATE CASCADE
 GO
+
+
+
+
+
+
+
+
+
+
+
 
