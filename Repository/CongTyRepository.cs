@@ -39,11 +39,6 @@ namespace BTL_Web_NC.Repositories
             Update(CongTy);
             await SaveChangesAsync();
         }
-        public async Task DeleteCongTyAsync(CongTy CongTy)
-        {
-            Delete(CongTy);
-            await SaveChangesAsync();
-        }
 
         public async Task<List<CongTy>> GetCongTyMoiNhatAsync(int soLuong)
         {
