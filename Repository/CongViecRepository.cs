@@ -43,6 +43,12 @@ namespace BTL_Web_NC.Repositories
             return congViec ?? new CongViec();
         }
 
+        public async Task UpdateCongViecAsync(CongViec congViec)
+        {
+            _context.CongViecs.Update(congViec);
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 }

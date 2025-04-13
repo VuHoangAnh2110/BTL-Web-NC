@@ -90,7 +90,111 @@ namespace BTL_Web_NC.Controllers
             return RedirectToAction("EmployerProfile", "Employer");
         }
         
-        //Chi tiết
+        [HttpGet]
+        public async Task<IActionResult> EditCongViec(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            // Kiểm tra đăng nhập
+            var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+            if (string.IsNullOrEmpty(tenTaiKhoan))
+            {
+                HttpContext.Session.SetString("WarningMessage", "Vui lòng đăng nhập để tiếp tục!");
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Lấy thông tin công việc
+            var congViec = await _congViecRepo.GetCongViecByIdAsync(id);
+            if (congViec == null)
+            {
+                return NotFound();
+            }
+
+            // Kiểm tra quyền truy cập (người dùng phải là chủ của công ty sở hữu công việc này)
+            var congTy = await _congTyRepo.GetByUserIdAsync(tenTaiKhoan);
+            if (congTy == null || congTy.MaCongTy != congViec.MaCongTy)
+            {
+                HttpContext.Session.SetString("WarningMessage", "Bạn không có quyền chỉnh sửa công việc này!");
+                return RedirectToAction("EmployerProfile", "Employer");
+            }
+
+            var viewModel = new EditCongViecViewModel
+            {
+                MaCongViec = congViec.MaCongViec,
+                TieuDe = congViec.TieuDe,
+                MoTa = congViec.MoTa,
+                DiaDiem = congViec.DiaDiem,
+                MucLuong = congViec.MucLuong,
+                LoaiHinh = congViec.LoaiHinh,
+                SoLuongTuyen = congViec.SoLuongTuyen ?? 1,
+                NgayHetHan = congViec.NgayHetHan,
+                CapBac = congViec.CapBac,
+                NganhNghe = congViec.NganhNghe,
+                QuyenLoi = congViec.QuyenLoi,
+                YeuCau = congViec.YeuCau,
+                TrangThai = congViec.TrangThai
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCongViec(EditCongViecViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Kiểm tra đăng nhập
+            var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+            if (string.IsNullOrEmpty(tenTaiKhoan))
+            {
+                HttpContext.Session.SetString("WarningMessage", "Vui lòng đăng nhập để tiếp tục!");
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Lấy thông tin công việc từ database
+            var congViec = await _congViecRepo.GetCongViecByIdAsync(model.MaCongViec);
+            if (congViec == null)
+            {
+                return NotFound();
+            }
+
+            // Kiểm tra quyền truy cập
+            var congTy = await _congTyRepo.GetByUserIdAsync(tenTaiKhoan);
+            if (congTy == null || congTy.MaCongTy != congViec.MaCongTy)
+            {
+                HttpContext.Session.SetString("WarningMessage", "Bạn không có quyền chỉnh sửa công việc này!");
+                return RedirectToAction("EmployerProfile", "Employer");
+            }
+
+            // Cập nhật thông tin công việc
+            congViec.TieuDe = model.TieuDe;
+            congViec.MoTa = model.MoTa;
+            congViec.DiaDiem = model.DiaDiem;
+            congViec.MucLuong = model.MucLuong;
+            congViec.LoaiHinh = model.LoaiHinh;
+            congViec.SoLuongTuyen = model.SoLuongTuyen;
+            congViec.NgayHetHan = model.NgayHetHan;
+            congViec.CapBac = model.CapBac;
+            congViec.NganhNghe = model.NganhNghe;
+            congViec.QuyenLoi = model.QuyenLoi;
+            congViec.YeuCau = model.YeuCau;
+            congViec.TrangThai = model.TrangThai;
+
+            // Lưu thay đổi vào database
+            await _congViecRepo.UpdateCongViecAsync(congViec);
+
+            // Thông báo cập nhật thành công
+            HttpContext.Session.SetString("SuccessMessage", "Cập nhật công việc thành công!");
+            return RedirectToAction("EmployerProfile", "Employer");
+        }
+
+        //Chi tiết công việc (view của công ty đó)
         public async Task<IActionResult> Detail(string id)
         {
             if (string.IsNullOrEmpty(id))

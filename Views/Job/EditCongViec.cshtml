@@ -1,0 +1,161 @@
+@model BTL_Web_NC.ViewModels.EditCongViecViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa Công Việc";
+}
+
+<div class="container">
+    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+    @* @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    } *@
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-controller="Job" asp-action="EditCongViec" method="post">
+                <input type="hidden" asp-for="MaCongViec" />
+                
+                <div class="mb-3">
+                    <label asp-for="TieuDe" class="form-label">Tiêu Đề <span class="text-danger">*</span></label>
+                    <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề công việc">
+                    <span asp-validation-for="TieuDe" class="text-danger"></span>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="NganhNghe" class="form-label">Ngành Nghề</label>
+                        <select asp-for="NganhNghe" class="form-select">
+                            <option value="Sales/ Marketing/ Guest Relation">Sales/ Marketing/ Guest Relation</option>
+                            <option value="Lễ tân/ Thu ngân/ Đặt phòng/ Tổng đài/ BC">Lễ tân/ Thu ngân/ Đặt phòng/ Tổng đài/ BC</option>
+                            <option value="Hành lý, Đứng cửa/ Bảo vệ">Hành lý, Đứng cửa/ Bảo vệ</option>
+                            <option value="Buồng/ Kho vải/ Giặt là/ VSCC/ Làm vườn">Buồng/ Kho vải/ Giặt là/ VSCC/ Làm vườn</option>
+                            <option value="Ẩm thực/ Bàn/ Bar">Ẩm thực/ Bàn/ Bar</option>
+                            <option value="Bếp/ Phụ bếp/ Rửa bát">Bếp/ Phụ bếp/ Rửa bát</option>
+                            <option value="Thể thao/ Thể thao nước/ Golf, Gym">Thể thao/ Thể thao nước/ Golf, Gym</option>
+                            <option value="Vui chơi giải trí/ Spa/ Bar/ Pub/ Vũ trường/ Karaoke">Vui chơi giải trí/ Spa/ Bar/ Pub/ Vũ trường/ Karaoke</option>
+                            <option value="Hành chính/ Nhân sự/ Thư ký">Hành chính/ Nhân sự/ Thư ký</option>
+                            <option value="Tài chính / Kế toán/ Thu mua/ Thủ kho">Tài chính / Kế toán/ Thu mua/ Thủ kho</option>
+                            <option value="Kỹ thuật/ Bảo dưỡng">Kỹ thuật/ Bảo dưỡng</option>
+                            <option value="Lái xe">Lái xe</option>
+                            <option value="Lữ hành/ Du lịch">Lữ hành/ Du lịch</option>
+                            <option value="Y tế">Y tế</option>
+                            <option value="IT">IT</option>
+                            <option value="Khác">Khác</option>
+                            <option value="Dự án BĐS/ Quản lý tòa nhà">Dự án BĐS/ Quản lý tòa nhà</option>
+                        </select>
+                        <span asp-validation-for="NganhNghe" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="CapBac" class="form-label">Cấp Bậc</label>
+                        <select asp-for="CapBac" class="form-select">
+                            <option value="Nhân viên">Nhân viên</option>
+                            <option value="Trợ lý, thư ký">Trợ lý, thư ký</option>
+                            <option value="Giám sát">Giám sát</option>
+                            <option value="Đào tạo viên">Đào tạo viên</option>
+                            <option value="Nhân viên học việc">Nhân viên học việc</option>
+                            <option value="Trưởng bộ phận/ Trưởng phòng">Trưởng bộ phận/ Trưởng phòng</option>
+                            <option value="Tổng giám đốc/ Giám đốc">Tổng giám đốc/ Giám đốc</option>
+                            <option value="Thực tập sinh">Thực tập sinh</option>
+                            <option value="Nhiều vị trí">Nhiều vị trí</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                        <span asp-validation-for="CapBac" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MoTa" class="form-label">Mô Tả <span class="text-danger">*</span></label>
+                    <textarea asp-for="MoTa" class="form-control" rows="5" placeholder="Mô tả chi tiết về công việc..."></textarea>
+                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="YeuCau" class="form-label">Yêu Cầu Công Việc</label>
+                    <textarea asp-for="YeuCau" class="form-control" rows="4" placeholder="Các yêu cầu về kỹ năng, kinh nghiệm, bằng cấp..."></textarea>
+                    <span asp-validation-for="YeuCau" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="QuyenLoi" class="form-label">Quyền Lợi</label>
+                    <textarea asp-for="QuyenLoi" class="form-control" rows="4" placeholder="Các quyền lợi, chế độ, phúc lợi dành cho nhân viên..."></textarea>
+                    <span asp-validation-for="QuyenLoi" class="text-danger"></span>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="DiaDiem" class="form-label">Địa Điểm</label>
+                        <input asp-for="DiaDiem" class="form-control" placeholder="Nhập địa điểm làm việc">
+                        <span asp-validation-for="DiaDiem" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LoaiHinh" class="form-label">Loại Hình</label>
+                        <select asp-for="LoaiHinh" class="form-select">
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Remote">Remote</option>
+                            <option value="Thực tập">Thực tập</option>
+                        </select>
+                        <span asp-validation-for="LoaiHinh" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label asp-for="MucLuong" class="form-label">Mức Lương</label>
+                        <div class="input-group">
+                            <input asp-for="MucLuong" class="form-control" placeholder="Nhập mức lương hoặc khoảng lương">
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <span asp-validation-for="MucLuong" class="text-danger"></span>
+                        <small class="text-muted">Ví dụ: 10-15 triệu, Thỏa thuận</small>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="SoLuongTuyen" class="form-label">Số Lượng Cần Tuyển</label>
+                        <input asp-for="SoLuongTuyen" type="number" min="1" class="form-control">
+                        <span asp-validation-for="SoLuongTuyen" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="NgayHetHan" class="form-label">Hạn Nộp Hồ Sơ</label>
+                        <input asp-for="NgayHetHan" type="date" class="form-control">
+                        <span asp-validation-for="NgayHetHan" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="TrangThai" class="form-label">Trạng Thái</label>
+                        <select asp-for="TrangThai" class="form-select">
+                            <option value="Đang tuyển">Đang tuyển</option>
+                            <option value="Tạm dừng">Tạm dừng</option>
+                            <option value="Đã đóng">Đã đóng</option>
+                        </select>
+                        <span asp-validation-for="TrangThai" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end mt-4">
+                    <a asp-controller="Employer" asp-action="EmployerProfile" class="btn btn-secondary">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Format date input để hiển thị từ ngày hiện tại trở đi
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelector('input[type="date"]').setAttribute('min', today);
+        });
+    </script>
+}

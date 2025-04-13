@@ -132,16 +132,18 @@
                              onclick="location.href='@Url.Action("Detail", "Job", new { id = job.MaCongViec })';">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
-                                    <div class="company-logo me-3" style="width:60px;height:60px;overflow:hidden;border-radius:8px;">
+                                    <div class="company-logo me-3 flex-shrink-0" style="width:60px;height:60px;overflow:hidden;border-radius:8px;">
                                         <img src="@(string.IsNullOrEmpty(job.CongTy?.Logo) ? "/img/logo-congty-default.jpg" : job.CongTy?.Logo)" 
-                                             alt="@job.CongTy?.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
+                                            alt="@job.CongTy?.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
                                     </div>
-                                    <div>
-                                        <h5 class="card-title mb-0 text-truncate">@job.TieuDe</h5>
-                                        <p class="text-muted small mb-0">@job.CongTy?.TenCongTy</p>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <h5 class="card-title mb-0" title="@job.TieuDe">
+                                            @(job.TieuDe != null && job.TieuDe.Length > 30 ? job.TieuDe.Substring(0, 30) + "..." : job.TieuDe)
+                                        </h5>
+                                        <p class="text-muted small mb-0 text-truncate" title="@job.CongTy?.TenCongTy">@job.CongTy?.TenCongTy</p>
                                     </div>
                                 </div>
-                                
+                                                                
                                 <div class="job-info mb-1">
                                     <span class="badge bg-light text-dark me-2"><i class="bi bi-geo-alt me-1"></i>@job.DiaDiem</span>
                                     <span class="badge bg-light text-dark me-2"><i class="bi bi-clock me-1"></i>@job.LoaiHinh</span>
@@ -152,13 +154,20 @@
                                 </p> *@
                             </div>
                             <div class="card-footer bg-white border-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-success fw-bold">
-                                        <i class="bi bi-cash me-1"></i>@(string.IsNullOrEmpty(job.MucLuong) ? "Thỏa thuận" : job.MucLuong)
-                                    </span>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-calendar-check me-1"></i>@job.NgayDang.ToString("dd/MM/yyyy")
-                                    </span>
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">
+                                            <i class="bi bi-cash me-1"></i>@(string.IsNullOrEmpty(job.MucLuong) ? "Thỏa thuận" : job.MucLuong)
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted small">
+                                            <i class="bi bi-calendar-check me-1"></i>@job.NgayDang.ToString("dd/MM/yyyy")
+                                        </span>
+                                        <span class="text-danger small">
+                                            <i class="bi bi-calendar-x me-1"></i>Hết hạn: @(job.NgayHetHan.HasValue ? job.NgayHetHan.Value.ToString("dd/MM/yyyy") : "Không giới hạn")
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

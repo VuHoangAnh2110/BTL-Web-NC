@@ -12,5 +12,10 @@ namespace BTL_Web_NC.Repositories
         Task AddCongViecAsync(CongViec congViec);
         
         Task<CongViec> GetCongViecByIdAsync(string jobId);
+
+        Task UpdateCongViecAsync(CongViec congViec);
+
+
+        
     }
 }
