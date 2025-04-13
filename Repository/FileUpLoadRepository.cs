@@ -21,6 +21,17 @@ namespace BTL_Web_NC.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<FileUpload>> GetAllFilesAsync()
+        {
+            return await _context.Files.ToListAsync();
+        }
+
+        public async Task<List<FileUpload>> GetFilesByUserIdAsync(string tenTaiKhoan)
+        {
+            return await _context.Files
+                .Where(f => f.TenTaiKhoan == tenTaiKhoan).ToListAsync();
+        }
+
 
 
 

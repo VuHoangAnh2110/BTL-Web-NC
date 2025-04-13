@@ -16,16 +16,18 @@ namespace BTL_Web_NC.Controllers
         private readonly ITaiKhoanRepository _taiKhoanRepo;
         private readonly IUngTuyenRepository _ungTuyenRepo;
         private readonly IThongBaoRepository _thongBaoRepo;
+        private readonly IFileUpLoadRepository _fileRepo; // Thêm repository cho File nếu cần
 
         public JobController(ICongViecRepository congViecRepo, ICongTyRepository congTyRepo, 
                             ITaiKhoanRepository taiKhoanRepo, IUngTuyenRepository ungTuyenRepo,
-                            IThongBaoRepository thongBaoRepo)
+                            IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileRepo)
         {
             _congViecRepo = congViecRepo;
             _congTyRepo = congTyRepo;
             _taiKhoanRepo = taiKhoanRepo;
             _ungTuyenRepo = ungTuyenRepo;
             _thongBaoRepo = thongBaoRepo;
+            _fileRepo = fileRepo; // Khởi tạo repository cho File nếu cần
         }
 
         public IActionResult CreateJob()
@@ -195,7 +197,77 @@ namespace BTL_Web_NC.Controllers
             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> XemCV(string tenTaiKhoan, string maCongViec)
+        {
+            try
+            {
+                // Kiểm tra đăng nhập
+                var currentUser = HttpContext.Session.GetString("TenTaiKhoan");
+                if (string.IsNullOrEmpty(currentUser))
+                {
+                    return Json(new { success = false, message = "Vui lòng đăng nhập để xem CV" });
+                }
 
+                // Kiểm tra tham số đầu vào
+                if (string.IsNullOrEmpty(tenTaiKhoan) || string.IsNullOrEmpty(maCongViec))
+                {
+                    return Json(new { success = false, message = "Dữ liệu không hợp lệ" });
+                }
+
+                // Lấy thông tin công việc
+                var congViec = await _congViecRepo.GetCongViecByIdAsync(maCongViec);
+                if (congViec == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin công việc" });
+                }
+
+                // Kiểm tra quyền truy cập (người dùng phải là nhà tuyển dụng của công việc này)
+                var congTy = await _congTyRepo.GetByUserIdAsync(currentUser);
+                if (congTy == null || congTy.MaCongTy != congViec.MaCongTy)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền xem CV này" });
+                }
+
+                // Lấy thông tin ứng tuyển để kiểm tra người dùng đã ứng tuyển công việc này chưa
+                var ungTuyen = await _ungTuyenRepo.GetByUserIdAndJobIdAsync(tenTaiKhoan, maCongViec);
+                if (ungTuyen == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin ứng tuyển" });
+                }
+
+                // Nếu đường dẫn CV đã được lưu trực tiếp trong bảng UngTuyen
+                // if (!string.IsNullOrEmpty(ungTuyen.DuongDanCV))
+                // {
+                //     return Json(new { success = true, fileUrl = ungTuyen.DuongDanCV });
+                // }
+
+                // Truy vấn bảng File để tìm CV của ứng viên
+                var files = await _fileRepo.GetFilesByUserIdAsync(tenTaiKhoan);
+                if (files == null || !files.Any())
+                {
+                    return Json(new { success = false, message = "Không tìm thấy CV của ứng viên" });
+                }
+
+                // Tìm file CV phù hợp với mã công việc này
+                // Đường dẫn file thường có dạng "/uploads/fiveCV/{maCongViec}/{tenFile}"
+                var cvFile = files.FirstOrDefault(f => 
+                    f.DuongDan != null && 
+                    f.DuongDan.Contains($"/fiveCV/{maCongViec}/")
+                );
+
+                if (cvFile == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy CV cho công việc này" });
+                }
+
+                return Json(new { success = true, fileUrl = cvFile.DuongDan });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Lỗi: {ex.Message}" });
+            }
+        }
 
     }
 }

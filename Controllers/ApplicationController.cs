@@ -13,10 +13,12 @@ namespace BTL_Web_NC.Controllers
         private readonly IHoSoUngVienRepository _hoSoUngVienRepo;
         private readonly IThongBaoRepository _thongBaoRepo;
         private readonly IFileUpLoadRepository _fileUploadRepo;
+        private readonly ICongTyRepository _congTyRepo;
 
         public ApplicationController(IUngTuyenRepository ungTuyenRepo, ITaiKhoanRepository taiKhoanRepo, 
                                         ICongViecRepository congViecRepo, IHoSoUngVienRepository hoSoUngVienRepo,
-                                        IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileUploadRepo)
+                                        IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileUploadRepo, 
+                                        ICongTyRepository congTyRepo)
         {
             _ungTuyenRepo = ungTuyenRepo;
             _taiKhoanRepo = taiKhoanRepo;
@@ -24,6 +26,7 @@ namespace BTL_Web_NC.Controllers
             _hoSoUngVienRepo = hoSoUngVienRepo;
             _thongBaoRepo = thongBaoRepo;
             _fileUploadRepo = fileUploadRepo;
+            _congTyRepo = congTyRepo;
         }
 
         [HttpPost]
@@ -52,6 +55,14 @@ namespace BTL_Web_NC.Controllers
                 {
                     return Json(new { success = false, message = "Công việc không tồn tại!" });
                 }
+
+                // Kiểm tra người ứng tuyển có phải là công ty không
+                var congty = await _congTyRepo.GetByUserIdAsync(tenTaiKhoan);
+                if(congty.MaCongTy == job.MaCongTy)
+                {
+                    return Json(new { success = false, message = "Bạn không thể ứng tuyển vào công việc của chính mình!" });    
+
+                } 
 
                 // Kiểm tra người dùng đã ứng tuyển chưa
                 var existingApplication = await _ungTuyenRepo.GetByUserIdAndJobIdAsync(tenTaiKhoan, maCongViec);
@@ -98,7 +109,7 @@ namespace BTL_Web_NC.Controllers
                 }
 
                 // Đường dẫn tương đối để lưu vào DB
-                var relativeFilePath = $"/upload/fiveCV/{maCongViec}/{fileName}";
+                var relativeFilePath = $"/uploads/fiveCV/{maCongViec}/{fileName}";
 
                 // Tạo mới ứng tuyển
                 var ungTuyen = new UngTuyen
