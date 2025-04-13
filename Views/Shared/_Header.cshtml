@@ -77,7 +77,7 @@
 
                 <div class="dropdown ms-3">
                     <a class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                        <img src="https://i.pravatar.cc/40" alt="User Avatar" class="rounded-circle border border-warning" width="40">
+                        <img src="/img/ava-default-nu.jpg" alt="User Avatar" class="rounded-circle border border-warning" width="40">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         @if(User.IsInRole("admin"))
@@ -87,7 +87,7 @@
                         {
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>
                         <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
-                        <li><a class="dropdown-item" href="#">Công việc đã ứng tuyển</a></li>
+                        <li><a class="dropdown-item" asp-controller="Application" asp-action="CongViecDaUngTuyen">Công việc đã ứng tuyển</a></li>
                         <li><a class="dropdown-item" asp-controller="Employer" asp-action="EmployerProfile">Thông tin công ty</a></li>
                         <li><a class="dropdown-item" href="#">Danh sách tin tuyển dụng</a></li>
                         }

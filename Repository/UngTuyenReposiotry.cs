@@ -53,6 +53,15 @@ namespace BTL_Web_NC.Repositories
             await SaveChangesAsync();
         }
 
+        public async Task<List<UngTuyen>> GetDSUngTuyenByUserIdAsync(string userId)
+        {
+            return await _context.UngTuyens
+                .Include(u => u.CongViec) 
+                .Where(u => u.TenTaiKhoan == userId)
+                .OrderByDescending(u => u.NgayUngTuyen)
+                .ToListAsync();
+        }
+
 
     }
 }

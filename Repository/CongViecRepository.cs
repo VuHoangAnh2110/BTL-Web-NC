@@ -19,6 +19,7 @@ namespace BTL_Web_NC.Repositories
         {
             return await _context.CongViecs
                 .Include(cv => cv.CongTy)
+                .OrderByDescending(c => c.NgayDang)
                 .ToListAsync();
         }
 
