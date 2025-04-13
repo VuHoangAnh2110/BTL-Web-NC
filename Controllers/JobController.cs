@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using BTL_Web_NC.Helpers;
 using BTL_Web_NC.ViewModels;
+using BTL_Web_NC.Services;
 
 namespace BTL_Web_NC.Controllers
 {
@@ -16,18 +17,21 @@ namespace BTL_Web_NC.Controllers
         private readonly ITaiKhoanRepository _taiKhoanRepo;
         private readonly IUngTuyenRepository _ungTuyenRepo;
         private readonly IThongBaoRepository _thongBaoRepo;
-        private readonly IFileUpLoadRepository _fileRepo; // Thêm repository cho File nếu cần
+        private readonly IFileUpLoadRepository _fileRepo; 
+        private readonly IEmailService _emailService; 
 
         public JobController(ICongViecRepository congViecRepo, ICongTyRepository congTyRepo, 
                             ITaiKhoanRepository taiKhoanRepo, IUngTuyenRepository ungTuyenRepo,
-                            IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileRepo)
+                            IThongBaoRepository thongBaoRepo, IFileUpLoadRepository fileRepo,
+                            IEmailService emailService)
         {
             _congViecRepo = congViecRepo;
             _congTyRepo = congTyRepo;
             _taiKhoanRepo = taiKhoanRepo;
             _ungTuyenRepo = ungTuyenRepo;
             _thongBaoRepo = thongBaoRepo;
-            _fileRepo = fileRepo; // Khởi tạo repository cho File nếu cần
+            _fileRepo = fileRepo;
+            _emailService = emailService;
         }
 
         public IActionResult CreateJob()
@@ -290,6 +294,12 @@ namespace BTL_Web_NC.Controllers
             // Cập nhật trạng thái
             ungTuyen.TrangThai = trangThai;
             await _ungTuyenRepo.UpdateUngTuyenAsync(ungTuyen);
+            // Lấy thông tin ứng viên để gửi email
+            var ungVien = await _taiKhoanRepo.GetByTenTaiKhoanAsync(ungTuyen.TenTaiKhoan);
+            if (ungVien != null && !string.IsNullOrEmpty(ungVien.Email))
+            {
+                await GuiEmailPhanHoi(ungVien, trangThai, congViec, congTy);
+            }
 
             // Tạo thông báo cho ứng viên
             var thongBao = new ThongBao
@@ -307,6 +317,92 @@ namespace BTL_Web_NC.Controllers
             await _thongBaoRepo.AddThongBaoAsync(thongBao);
 
             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+        }
+
+        private async Task GuiEmailPhanHoi(TaiKhoan taiKhoan, string TrangThai, CongViec congViec, CongTy congTy){
+            // Thiết lập ngày phỏng vấn (2 ngày sau ngày hiện tại)
+            var interviewDate = DateTime.Now.AddDays(2);
+            string subject;
+            string message;
+            
+            if (TrangThai.ToLower() == "chấp nhận")
+            {
+                // Gửi email hẹn phỏng vấn
+                subject = $"[{congTy.TenCongTy}] Hẹn phỏng vấn cho vị trí {congViec.TieuDe}";
+                message = $@"
+                    <head>
+                        <style>
+                            .header {{
+                                background-color: #4CAF50;
+                                color: white;
+                                padding: 10px;
+                                text-align: center;
+                                border-radius: 5px 5px 0 0;
+                            }}
+                        </style>
+                    </head>
+                    <div class='header'>
+                        <h2>Thư mời phỏng vấn</h2>
+                    </div>
+                    <p>Kính gửi {taiKhoan.HoTen},</p>
+                    <p>Chúng tôi rất vui mừng thông báo rằng hồ sơ ứng tuyển của bạn cho vị trí <strong>{congViec.TieuDe}</strong> tại <strong>{congTy.TenCongTy}</strong> đã được chấp nhận.</p>
+                    <p>Chúng tôi muốn mời bạn tham gia buổi phỏng vấn vào ngày <strong>{interviewDate.ToString("dd/MM/yyyy")}</strong> để thảo luận thêm về cơ hội này.</p>
+                    <p>Vui lòng xác nhận sự tham gia của bạn bằng cách liên hệ với chúng tôi qua email hoặc số điện thoại dưới đây:</p>
+                    <p>Số điện thoại: {congTy.SoDienThoai}</p>
+                    <p>Chúng tôi mong đợi được gặp bạn!</p>
+                    <p>Trân trọng,<br>{congTy.TenCongTy}</p>
+                ";
+            }
+            else if (TrangThai.ToLower() == "từ chối")
+            {
+                // Gửi email thông báo từ chối
+                subject = $"[{congTy.TenCongTy}] Thông báo về đơn ứng tuyển vị trí {congViec.TieuDe}";
+                message = $@"
+                    <head>
+                        <style>
+                            .header {{
+                                background-color:rgb(205, 29, 32);
+                                color: white;
+                                padding: 10px;
+                                text-align: center;
+                                border-radius: 5px 5px 0 0;
+                            }}
+                        </style>
+                    </head>
+                    <div class='header'>
+                        <h2>Thông báo kết quả ứng tuyển</h2>
+                    </div>
+                    <p>Kính gửi {taiKhoan.HoTen},</p>
+                    <p>Cảm ơn bạn đã quan tâm và ứng tuyển vào vị trí <strong>{congViec.TieuDe}</strong> tại <strong>{congTy.TenCongTy}</strong>.</p>
+                    <p>Sau khi xem xét kỹ lưỡng hồ sơ của bạn, chúng tôi rất tiếc phải thông báo rằng chúng tôi đã quyết định tiếp tục với các ứng viên khác phù hợp hơn với vị trí này.</p>
+                    <p>Chúng tôi đánh giá cao thời gian và nỗ lực bạn đã dành cho đơn ứng tuyển, và khuyến khích bạn theo dõi các cơ hội khác tại công ty chúng tôi trong tương lai.</p>
+                    <p>Chúc bạn may mắn trong quá trình tìm kiếm việc làm!</p>
+                    <p>Trân trọng,<br>{congTy.TenCongTy}</p>
+                ";
+            }
+            else
+            {
+                // Gửi email thông báo cập nhật trạng thái
+                subject = $"[{congTy.TenCongTy}] Cập nhật trạng thái ứng tuyển vị trí {congViec.TieuDe}";
+                message = $@"
+                    <h2>Cập nhật trạng thái ứng tuyển</h2>
+                    <p>Kính gửi {taiKhoan.HoTen},</p>
+                    <p>Chúng tôi xin thông báo rằng trạng thái hồ sơ ứng tuyển của bạn cho vị trí <strong>{congViec.TieuDe}</strong> tại <strong>{congTy.TenCongTy}</strong> đã được cập nhật thành: <strong>{TrangThai}</strong>.</p>
+                    <p>Vui lòng đăng nhập vào hệ thống để kiểm tra chi tiết.</p>
+                    <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email hoặc số điện thoại.</p>
+                    <p>Trân trọng,<br>{congTy.TenCongTy}</p>
+                ";
+            }
+            
+            try
+            {
+                await _emailService.SendEmailAsync(taiKhoan.Email, subject, message);
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi nhưng vẫn tiếp tục xử lý
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+            }
         }
 
         [HttpGet]

@@ -159,6 +159,23 @@ namespace BTL_Web_NC.Controllers
             }
         }
 
+        public async Task<IActionResult> CongViecDaUngTuyen()
+        {
+            // Kiểm tra đăng nhập
+            var tenTaiKhoan = HttpContext.Session.GetString("TenTaiKhoan");
+            if (string.IsNullOrEmpty(tenTaiKhoan))
+            {
+                HttpContext.Session.SetString("WarningMessage", "Vui lòng đăng nhập để xem công việc đã ứng tuyển!");
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Lấy danh sách công việc đã ứng tuyển
+            var danhSachUngTuyen = await _ungTuyenRepo.GetDSUngTuyenByUserIdAsync(tenTaiKhoan);
+            
+            return View(danhSachUngTuyen);
+        }
+
+
 
         
     }

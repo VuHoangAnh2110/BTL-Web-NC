@@ -1,0 +1,194 @@
+@model List<BTL_Web_NC.Models.CongViec>
+@{
+    ViewData["Title"] = "Danh sách công việc";
+    var keyword = ViewBag.Keyword ?? "";
+    @* var location = ViewBag.Location ?? "";
+    var category = ViewBag.Category ?? "";
+    var level = ViewBag.Level ?? "";
+    var jobType = ViewBag.JobType ?? ""; *@
+    var currentPage = ViewBag.CurrentPage;
+    var totalPages = ViewBag.TotalPages;
+}
+
+<div class="container py-4">
+    <h1 class="h3 mb-4">Tìm kiếm công việc</h1>
+
+    <!-- Bộ lọc -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-controller="Home" asp-action="DanhSachCongViec" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Từ khóa</label>
+                    <input type="text" class="form-control" name="keyword" value="@keyword" placeholder="Nhập từ khóa tìm kiếm">
+                </div>
+                @* <div class="col-md-4">
+                    <label class="form-label">Địa điểm</label>
+                    <select class="form-select" name="location">
+                        <option value="">Tất cả địa điểm</option>
+                        <option value="Hà Nội" @(location == "Hà Nội" ? "selected" : "")>Hà Nội</option>
+                        <option value="Hồ Chí Minh" @(location == "Hồ Chí Minh" ? "selected" : "")>TP. Hồ Chí Minh</option>
+                        <option value="Đà Nẵng" @(location == "Đà Nẵng" ? "selected" : "")>Đà Nẵng</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ngành nghề</label>
+                    <select class="form-select" name="category">
+                        <option value="">Tất cả ngành nghề</option>
+                        <option value="IT" @(category == "IT" ? "selected" : "")>IT</option>
+                        <option value="Sales/ Marketing" @(category == "Sales/ Marketing" ? "selected" : "")>Sales/ Marketing</option>
+                        <option value="Kế toán" @(category == "Kế toán" ? "selected" : "")>Kế toán</option>
+                        <option value="Nhân sự" @(category == "Nhân sự" ? "selected" : "")>Nhân sự</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cấp bậc</label>
+                    <select class="form-select" name="level">
+                        <option value="">Tất cả cấp bậc</option>
+                        <option value="Thực tập sinh" @(level == "Thực tập sinh" ? "selected" : "")>Thực tập sinh</option>
+                        <option value="Nhân viên" @(level == "Nhân viên" ? "selected" : "")>Nhân viên</option>
+                        <option value="Trưởng nhóm" @(level == "Trưởng nhóm" ? "selected" : "")>Trưởng nhóm</option>
+                        <option value="Quản lý" @(level == "Quản lý" ? "selected" : "")>Quản lý</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Loại hình</label>
+                    <select class="form-select" name="jobType">
+                        <option value="">Tất cả loại hình</option>
+                        <option value="Full-time" @(jobType == "Full-time" ? "selected" : "")>Full-time</option>
+                        <option value="Part-time" @(jobType == "Part-time" ? "selected" : "")>Part-time</option>
+                        <option value="Remote" @(jobType == "Remote" ? "selected" : "")>Remote</option>
+                        <option value="Thực tập" @(jobType == "Thực tập" ? "selected" : "")>Thực tập</option>
+                    </select>
+                </div> *@
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search me-2"></i>Tìm kiếm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kết quả tìm kiếm -->
+    <div class="mb-3">
+        <span class="text-muted">Tìm thấy @ViewBag.TotalCount công việc</span>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var job in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card job-card h-100 shadow-sm border-0" 
+                         onclick="location.href='@Url.Action("Detail", "Job", new { id = job.MaCongViec })';">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="company-logo me-3 flex-shrink-0" style="width:60px;height:60px;overflow:hidden;border-radius:8px;">
+                                    <img src="@(string.IsNullOrEmpty(job.CongTy?.Logo) ? "/img/logo-congty-default.jpg" : job.CongTy?.Logo)" 
+                                        alt="@job.CongTy?.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
+                                </div>
+                                <div class="flex-grow-1 min-w-0">
+                                    <h5 class="card-title mb-0" title="@job.TieuDe">
+                                        @(job.TieuDe?.Length > 40 ? job.TieuDe.Substring(0, 40) + "..." : job.TieuDe)
+                                    </h5>
+                                    <p class="text-muted small mb-0 text-truncate" title="@job.CongTy?.TenCongTy">@job.CongTy?.TenCongTy</p>
+                                </div>
+                            </div>
+                                                    
+                            <div class="job-info mb-3">
+                                <span class="badge bg-light text-dark me-2 mb-1"><i class="bi bi-geo-alt me-1"></i>@job.DiaDiem</span>
+                                <span class="badge bg-light text-dark me-2 mb-1"><i class="bi bi-clock me-1"></i>@job.LoaiHinh</span>
+                                @if (!string.IsNullOrEmpty(job.CapBac))
+                                {
+                                    <span class="badge bg-light text-dark me-2 mb-1"><i class="bi bi-briefcase me-1"></i>@job.CapBac</span>
+                                }
+                            </div>
+                            
+                            <p class="card-text job-description small text-truncate">
+                                @job.MoTa
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">
+                                    <i class="bi bi-cash me-1"></i>@(string.IsNullOrEmpty(job.MucLuong) ? "Thỏa thuận" : job.MucLuong)
+                                </span>
+                                <div class="text-end">
+                                    <div class="text-danger small">
+                                        <i class="bi bi-calendar-x me-1"></i>
+                                        @(job.NgayHetHan.HasValue ? job.NgayHetHan.Value.ToString("dd/MM/yyyy") : "Không giới hạn")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @* <!-- Phân trang --> *@
+        @if (totalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("DanhSachCongViec", "Home", new { keyword, page = currentPage - 1 })">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = Math.Max(1, currentPage - 2); i <= Math.Min(totalPages, currentPage + 2); i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("DanhSachCongViec", "Home", new { keyword, page = i })">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("DanhSachCongViec", "Home", new { keyword, page = currentPage + 1 })">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <img src="/img/empty-state.svg" alt="Không có kết quả" class="img-fluid mb-3" style="max-width: 200px;">
+            <h4>Không tìm thấy công việc nào phù hợp</h4>
+            <p class="text-muted">Vui lòng thử lại với các tiêu chí tìm kiếm khác</p>
+            <a asp-controller="Home" asp-action="DanhSachCongViec" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-clockwise me-2"></i>Đặt lại bộ lọc
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .job-card {
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .job-info {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>

@@ -11,8 +11,8 @@ namespace BTL_Web_NC.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ITaiKhoanRepository _TaiKhoanRepo;
-    private readonly ICongTyRepository _CongTyRepo;
+    private readonly ITaiKhoanRepository _taiKhoanRepo;
+    private readonly ICongTyRepository _congTyRepo;
     private readonly ICongViecRepository _congViecRepo;
     private readonly IBannerRepository _bannerRepository;
 
@@ -21,8 +21,8 @@ public class HomeController : Controller
                         IBannerRepository BannerRepository)
     {
         _logger = logger;
-        _TaiKhoanRepo = TaiKhoanRepo;
-        _CongTyRepo = CongTyRepo;
+        _taiKhoanRepo = TaiKhoanRepo;
+        _congTyRepo = CongTyRepo;
         _congViecRepo = CongViecRepo;
         _bannerRepository = BannerRepository;
     }
@@ -31,7 +31,7 @@ public class HomeController : Controller
     {
         var danhSachCongViec = await _congViecRepo.GetDsCongViecAsync();
         var dsBanner = await _bannerRepository.GetAllBannersAsync();
-        var danhSachCongTy = await _CongTyRepo.GetCongTyMoiNhatAsync(6);
+        var danhSachCongTy = await _congTyRepo.GetCongTyMoiNhatAsync(6);
         ViewBag.DanhSachCongViec = danhSachCongViec ?? new List<CongViec>();
         ViewBag.Banners = dsBanner ?? new List<Banner>();
         ViewBag.DanhSachCongTy = danhSachCongTy ?? new List<CongTy>();
@@ -66,14 +66,14 @@ public class HomeController : Controller
         }
        
         // Lấy thông tin người dùng từ email
-        var TaiKhoan = await _TaiKhoanRepo.GetByEmailAsync(email);
+        var TaiKhoan = await _taiKhoanRepo.GetByEmailAsync(email);
 
         if (TaiKhoan == null)
         {
             return RedirectToAction("Login", "Account");
         }
         //Kiểm tra người dùng đã có cty hay chưa
-        var CongTy = await _CongTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
+        var CongTy = await _congTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
 
         if(CongTy == null)
         {
@@ -94,6 +94,38 @@ public class HomeController : Controller
         }
 
         return RedirectToAction("Index", "Home"); // Nếu đã đăng nhập, chuyển đến trang Ứng viên
+    }
+
+    public async Task<IActionResult> DanhSachCongViec(string keyword = "", string location = "", int page = 1)
+    {
+        // Thiết lập kích thước trang
+        int pageSize = 10;
+        
+        // Lấy danh sách công việc kèm phân trang và bộ lọc
+        var result = await _congViecRepo.LocDsCongViecAsync(keyword, page, pageSize);
+        
+        // Truyền dữ liệu tìm kiếm và bộ lọc vào ViewBag để giữ lại khi chuyển trang
+        ViewBag.Keyword = keyword;
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)pageSize);
+        
+        return View(result.Items);
+    }
+
+    public async Task<IActionResult> DanhSachCongTy(string keyword = "", int page = 1)
+    {
+        // Thiết lập kích thước trang
+        int pageSize = 12;
+        
+        // Lấy danh sách công ty kèm phân trang và bộ lọc
+        var result = await _congTyRepo.LocDsCongTyAsync(keyword, page, pageSize);
+        
+        // Truyền dữ liệu tìm kiếm và bộ lọc vào ViewBag để giữ lại khi chuyển trang
+        ViewBag.Keyword = keyword;
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)pageSize);
+        
+        return View(result.Items);
     }
 
 

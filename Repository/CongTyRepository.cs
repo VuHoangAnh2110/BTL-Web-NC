@@ -48,6 +48,38 @@ namespace BTL_Web_NC.Repositories
                 .ToListAsync();
         }
 
+        public async Task<(List<CongTy> Items, int TotalCount)> LocDsCongTyAsync(
+            string keyword, int page, int pageSize)
+        {
+            var query = _context.CongTys
+                .Include(c => c.TaiKhoan);
+
+            // Áp dụng bộ lọc từ khóa
+            // if (!string.IsNullOrEmpty(keyword))
+            // {
+            //     keyword = keyword.ToLower();
+            //     query = query.Where(c => c.TenCongTy.ToLower().Contains(keyword) ||
+            //                             c.DiaChi.ToLower().Contains(keyword));
+            // }
+
+            // // Áp dụng bộ lọc ngành nghề
+            // if (!string.IsNullOrEmpty(industry))
+            // {
+            //     query = query.Where(c => c.LinhVuc.Contains(industry));
+            // }
+
+            var totalItems = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(c => c.NgayTao)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalItems);
+        }
+
+
+
 
     }
 }

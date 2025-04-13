@@ -19,6 +19,7 @@ namespace BTL_Web_NC.Repositories
         {
             return await _context.CongViecs
                 .Include(cv => cv.CongTy)
+                .OrderByDescending(c => c.NgayDang)
                 .ToListAsync();
         }
 
@@ -49,6 +50,55 @@ namespace BTL_Web_NC.Repositories
         {
             _context.CongViecs.Update(congViec);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<(List<CongViec> Items, int TotalCount)> LocDsCongViecAsync(
+            string keyword, int page, int pageSize)
+        {
+            var query = _context.CongViecs
+                .Include(c => c.CongTy)
+                .Where(c => c.TrangThai == "Đang tuyển");
+
+            // Áp dụng bộ lọc từ khóa
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                keyword = keyword.ToLower();
+                query = query.Where(c => c.TieuDe.ToLower().Contains(keyword) || 
+                                        c.MoTa.ToLower().Contains(keyword));
+            }
+
+            // // Áp dụng bộ lọc địa điểm
+            // if (!string.IsNullOrEmpty(location))
+            // {
+            //     query = query.Where(c => c.DiaDiem.Contains(location));
+            // }
+
+            // // Áp dụng bộ lọc ngành nghề
+            // if (!string.IsNullOrEmpty(category))
+            // {
+            //     query = query.Where(c => c.NganhNghe.Contains(category));
+            // }
+
+            // // Áp dụng bộ lọc cấp bậc
+            // if (!string.IsNullOrEmpty(level))
+            // {
+            //     query = query.Where(c => c.CapBac.Contains(level));
+            // }
+
+            // // Áp dụng bộ lọc loại hình công việc
+            // if (!string.IsNullOrEmpty(jobType))
+            // {
+            //     query = query.Where(c => c.LoaiHinh.Contains(jobType));
+            // }
+
+            var totalItems = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(c => c.NgayDang)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalItems);
         }
 
 

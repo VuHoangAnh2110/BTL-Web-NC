@@ -15,6 +15,8 @@ namespace BTL_Web_NC.Repositories
 
         Task UpdateCongViecAsync(CongViec congViec);
 
+        Task<(List<CongViec> Items, int TotalCount)> LocDsCongViecAsync(
+            string keyword, int page, int pageSize);
 
         
     }

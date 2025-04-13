@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Job" asp-action="DanhSachCongViec">Việc làm</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="DanhSachCongViec">Việc làm</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.TieuDe</li>
         </ol>
     </nav>
@@ -167,7 +167,7 @@
                     @if (Model.CongTy != null)
                     {
                         <div class="d-flex align-items-start">
-                            <div class="company-logo mb-2" style="width:100px;height:100px;overflow:hidden;border-radius:8px;">
+                            <div class="company-logo mb-2 flex-shrink-0" style="width:100px;height:100px;overflow:hidden;border-radius:8px;">
                                 <img src="@(string.IsNullOrEmpty(Model.CongTy.Logo) ? "/img/logo-congty-default.jpg" : Model.CongTy.Logo)" 
                                     alt="@Model.CongTy.TenCongTy" class="img-fluid" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
