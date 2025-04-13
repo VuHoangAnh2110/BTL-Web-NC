@@ -40,12 +40,14 @@ namespace BTL_Web_NC.Controllers
         {
             if (!ModelState.IsValid)
             {
+                HttpContext.Session.SetString("WarningMessage", "Thêm công việc thất bại!");
                 return View("Create", model);
             }
 
             var email = HttpContext.Session.GetString("Email");
             if (string.IsNullOrEmpty(email))
             {
+                HttpContext.Session.SetString("WarningMessage", "Vui lòng đăng nhập để tiếp tục!");
                 return RedirectToAction("Login", "Account");
             }
 
@@ -60,7 +62,7 @@ namespace BTL_Web_NC.Controllers
             var CongTy = await _congTyRepo.GetByUserIdAsync(TaiKhoan.TenTaiKhoan);
             if (CongTy == null)
             {
-                TempData["Error"] = "Bạn cần đăng ký thông tin công ty trước khi đăng việc làm.";
+                HttpContext.Session.SetString("WarningMessage", "Tài khoản chưa đăng ký công ty!");
                 return RedirectToAction("EmployerRegister", "Employer");
             }
 
@@ -76,9 +78,15 @@ namespace BTL_Web_NC.Controllers
                 LoaiHinh = model.LoaiHinh,
                 NgayDang = DateTime.Now,
                 TrangThai = "Đang tuyển",
+                SoLuongTuyen = model.SoLuongTuyen,
+                NgayHetHan = model.NgayHetHan,
+                CapBac = model.CapBac,
+                NganhNghe = model.NganhNghe,
+                QuyenLoi = model.QuyenLoi,
+                YeuCau = model.YeuCau
             };
             await _congViecRepo.AddCongViecAsync(congViec);
-
+            HttpContext.Session.SetString("SuccessMessage", "Thêm mới công việc thành công!");
             return RedirectToAction("EmployerProfile", "Employer");
         }
         
