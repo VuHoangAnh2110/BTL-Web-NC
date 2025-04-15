@@ -66,6 +66,9 @@ namespace BTL_Web_NC.Models
         [Column("sYeuCau")]
         public string? YeuCau { get; set; }
 
+        [Column("iLuotXem")]
+        public int? LuotXem { get; set; }
+
         // Quan hệ với bảng CongTy
         [ForeignKey("MaCongTy")]
         public virtual CongTy? CongTy { get; set; }

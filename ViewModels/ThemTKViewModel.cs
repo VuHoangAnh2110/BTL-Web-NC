@@ -38,5 +38,12 @@ namespace BTL_Web_NC.ViewModels
 
         [Required(ErrorMessage = "Vui lòng chọn trạng thái")]
         public int TrangThai { get; set; } = 2;
+
+    // Thi ===================================
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Phải có độ dài từ 10 ký tự")]
+        [RegularExpression(@"^[0-9].*", ErrorMessage = "Phải bắt đầu bằng số")]
+        public string? VerifyKey { get; set; }
+    // =======================================
+
     }
 }

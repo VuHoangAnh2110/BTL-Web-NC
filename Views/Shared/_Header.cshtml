@@ -19,6 +19,10 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     
                 <ul class="navbar-nav me-auto">
+                    @* Thi =================================== *@
+                    <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="QlyTaiKhoan" asp-action="DanhSachTK">DS tblTaiKhoan</a></li>
+                    @* ======================================= *@
+
                     @* @if (!string.IsNullOrEmpty(vaiTro) && vaiTro !== "admin") *@
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -26,15 +30,15 @@
                         {
                         <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                         <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="QLyTaiKhoan" asp-action="Index">Quản lý tài khoản</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Quản lý công ty</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Quản lý tin tuyển dụng</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">QL công ty</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">QL tin tuyển</a></li>
                         } 
                         else {
                         <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                         <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="DanhSachCongViec">Việc làm</a></li>
                         <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="DanhSachCongTy">Nhà tuyển dụng</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
+                        @* <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li> *@
                         <li class="nav-item">
                         <button type="button" class="btn btn-outline-secondary text-white" data-bs-toggle="modal" data-bs-target="#recruitModal">
                             Tuyển dụng
@@ -45,8 +49,8 @@
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="DanhSachCongViec">Việc làm</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="Home" asp-action="DanhSachCongTy">Nhà tuyển dụng</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li>
+                    @* <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ứng viên</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Blog</a></li> *@
                     }
                 </ul>
 
@@ -83,6 +87,11 @@
                         @if(User.IsInRole("admin"))
                         {
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>
+                        <li class="">
+                            <a class="dropdown-item" asp-controller="Home" asp-action="LichSuTruyCap">
+                                <i class="bi bi-clock-history"></i> Lịch sử truy cập
+                            </a>
+                        </li>                        
                         } else
                         {
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="ThongTinTK">Thông tin tài khoản</a></li>

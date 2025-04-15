@@ -184,7 +184,28 @@ namespace BTL_Web_NC.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
 
-            if (ModelState.IsValid)
+            // Kiểm tra nếu là AJAX request
+            bool isAjaxRequest = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            if (!ModelState.IsValid)
+            {
+                if (isAjaxRequest)
+                {
+                    // Trả về lỗi validation dạng JSON
+                    return Json(new { 
+                        success = false, 
+                        message = "Dữ liệu không hợp lệ",
+                        errors = ModelState.ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                        )
+                    });
+                }
+                
+                // Xử lý form submission thông thường
+                HttpContext.Session.SetString("WarningMessage", "Thêm tài khoản mới không thành công!");
+                return View(model);
+            } else
             {   
                 var isvalid = true;
                 // Kiểm tra email đã tồn tại
@@ -212,6 +233,18 @@ namespace BTL_Web_NC.Controllers
                     }
                 }
                 if (!isvalid){
+                    if (isAjaxRequest)
+                    {
+                        // Trả về lỗi validation dạng JSON
+                        return Json(new { 
+                            success = false, 
+                            message = "Dữ liệu không hợp lệ",
+                            errors = ModelState.ToDictionary(
+                                kvp => kvp.Key,
+                                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                            )
+                        });
+                    }
                     HttpContext.Session.SetString("WarningMessage", "Thêm tài khoản mới không thành công!");
                     return View(model);
                 }
@@ -225,6 +258,7 @@ namespace BTL_Web_NC.Controllers
                     MatKhau = BCrypt.Net.BCrypt.HashPassword(model.MatKhau), // Mã hóa mật khẩu
                     SoDienThoai = model.SoDienThoai,
                     DiaChi = model.DiaChi,
+                    VerifyKey = BCrypt.Net.BCrypt.HashPassword(model.VerifyKey),
                     VaiTro = model.VaiTro,
                     TrangThai = model.TrangThai,
                     NgayTao = DateTime.Now,
@@ -234,13 +268,17 @@ namespace BTL_Web_NC.Controllers
                 // Lưu tài khoản vào cơ sở dữ liệu
                 await _taiKhoanRepo.AddTaiKhoanAsync(taiKhoan);
 
+                if (isAjaxRequest)
+                {
+                    return Json(new { success = true, message = "Thêm tài khoản mới thành công!" });
+                }
                 // Thông báo thành công
                 HttpContext.Session.SetString("SuccessMessage", "Thêm tài khoản mới thành công!");
                 return RedirectToAction("Index");
             }
-            // Nếu có lỗi, hiển thị lại form với thông báo lỗi
-            HttpContext.Session.SetString("WarningMessage", "Thêm tài khoản mới không thành công!");
-            return View(model);
+            // // Nếu có lỗi, hiển thị lại form với thông báo lỗi
+            // HttpContext.Session.SetString("WarningMessage", "Thêm tài khoản mới không thành công!");
+            // return View(model);
         }
 
         [HttpPost]
@@ -402,7 +440,14 @@ namespace BTL_Web_NC.Controllers
             }
         }
 
-
+    // Thi ===================================
+        public async Task<IActionResult> DanhSachTK()
+        {
+            var danhSachTaiKhoan = await _taiKhoanRepo.GetAllAsync(); // Lấy tất cả tài khoản
+            return View(danhSachTaiKhoan);
+        }
+    // ========================================
+        
 
     }
 }

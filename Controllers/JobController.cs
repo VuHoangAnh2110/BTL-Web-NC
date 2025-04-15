@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using BTL_Web_NC.Helpers;
 using BTL_Web_NC.ViewModels;
 using BTL_Web_NC.Services;
+using System.Text.Json;
 
 namespace BTL_Web_NC.Controllers
 {
@@ -211,6 +212,69 @@ namespace BTL_Web_NC.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
+            if (User.Identity.IsAuthenticated){
+                // Lưu thông tin truy cập gần nhất
+                var timeHienTai = DateTime.Now;
+                var truyCapCuoi = new 
+                {
+                    MaCongViec = id,
+                    TimeTruyCap = timeHienTai
+                };
+                string truyCapCuoiJson = JsonSerializer.Serialize(truyCapCuoi);
+                // lưu giá trị dạng key-value, dùng new Dictionary<string, string> { ["JobId"] = id.ToString(), ... }
+                // Hoặc dạng object (tạm), dùng var truyCapCuoi = new { JobId = id, ... }
+            // Luyện Session =================================================
+            // 1 ============
+                var LuotXem = HttpContext.Session.GetString("LuotXem") ?? "";
+                var DSXemCongViec = !string.IsNullOrEmpty(LuotXem) 
+                    ? LuotXem.Split(',').ToList() 
+                    : new List<string>();
+
+                // Chỉ tăng lượt xem nếu chưa xem công việc này trong phiên hiện tại
+                if (!DSXemCongViec.Contains(id))
+                {
+                    // Tăng lượt xem trong DB
+                    await _congViecRepo.TangLuotXemAsync(id);
+
+                    // Cập nhật danh sách công việc đã xem trong session
+                    DSXemCongViec.Add(id);
+                    HttpContext.Session.SetString("LuotXem", string.Join(",", DSXemCongViec));
+                }
+            // 2 ============
+                HttpContext.Session.SetString("truyCapCuoi", truyCapCuoiJson);
+
+            // ===============================================================
+
+            // Luyện Cookie ==================================================
+            // 1 ============
+                var LuotXemCookie = Request.Cookies["LuotXem"] ?? "";
+                var DSXemCongViec1 = !string.IsNullOrEmpty(LuotXemCookie) 
+                    ? LuotXemCookie.Split(',').ToList() 
+                    : new List<string>();
+
+                var cookieOptions = new CookieOptions
+                {
+                    // Cookie hết hạn sau 30 ngày
+                    Expires = DateTime.Now.AddDays(30),
+                    HttpOnly = true
+                };
+
+                if (!DSXemCongViec1.Contains(id))
+                {
+                    // Tăng lượt xem trong DB
+                    await _congViecRepo.TangLuotXemAsync(id);
+
+                    // Cập nhật cookie với công việc đã xem
+                    DSXemCongViec1.Add(id);
+                    Response.Cookies.Append("LuotXem", string.Join(",", DSXemCongViec1), cookieOptions);
+                }
+            // 2 ============
+                Response.Cookies.Append("truyCapCuoi", truyCapCuoiJson, cookieOptions);
+
+            // ===============================================================
+            }
+
             return View("Detail", congViec);
         }
 

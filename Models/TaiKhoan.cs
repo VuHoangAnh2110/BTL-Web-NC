@@ -52,6 +52,13 @@ namespace BTL_Web_NC.Models
         [Column("tNgayCapNhat")]
         public DateTime NgayCapNhat { get; set; } = DateTime.Now;
 
+    // Thi ===================================
+        [Column("VerifyKey")]
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Phải có độ dài 10 ký tự")]
+        [RegularExpression(@"^[0-9].*", ErrorMessage = "Phải bắt đầu bằng số")]
+        public string? VerifyKey { get; set; }
+    // ========================================
+
         // Navigation Properties
         public virtual ICollection<CongTy>? DanhSachCongTy { get; set; }
         public virtual ICollection<FileUpload>? DanhSachFile { get; set; }

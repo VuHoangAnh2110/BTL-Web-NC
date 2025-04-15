@@ -1,0 +1,179 @@
+@model BTL_Web_NC.ViewModels.LichSuTruyCapViewModel
+
+@{
+    ViewData["Title"] = "Lịch sử truy cập";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4">Lịch sử truy cập công việc</h2>
+
+    <div class="row">
+        <!-- Truy cập gần nhất từ Session -->
+        <div class="col-md-6 mb-4">
+            <div class="card ">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Truy cập gần nhất (Session)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SessionAccess != null && Model.CongViecSession != null)
+                    {
+                        <h5 class="card-title">@Model.CongViecSession.TieuDe</h5>
+                        <p class="text-muted">@Model.CongViecSession.CongTy?.TenCongTy</p>
+                        <p>
+                            <i class="bi bi-clock"></i>
+                            Thời gian truy cập: @Model.SessionAccess.TimeTruyCap.ToString("dd/MM/yyyy HH:mm:ss")
+                        </p>
+                        <a asp-controller="Job" asp-action="Detail" asp-route-id="@Model.SessionAccess.MaCongViec" 
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-eye"></i> Xem công việc
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-2">
+                            <i class="bi bi-exclamation-circle display-4"></i><br>
+                            Không có thông tin truy cập trong phiên hiện tại
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Truy cập gần nhất từ Cookie -->
+        <div class="col-md-6 mb-4">
+            <div class="card ">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Truy cập gần nhất (Cookie - 30 ngày)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.CookieAccess != null && Model.CongViecCookie != null)
+                    {
+                        <h5 class="card-title">@Model.CongViecCookie.TieuDe</h5>
+                        <p class="text-muted">@Model.CongViecCookie.CongTy?.TenCongTy</p>
+                        <p>
+                            <i class="bi bi-clock"></i>
+                            Thời gian truy cập: @Model.CookieAccess.TimeTruyCap.ToString("dd/MM/yyyy HH:mm:ss")
+                        </p>
+                        <a asp-controller="Job" asp-action="Detail" asp-route-id="@Model.CookieAccess.MaCongViec" 
+                           class="btn btn-outline-success">
+                            <i class="bi bi-eye"></i> Xem công việc
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-2">
+                            <i class="bi bi-exclamation-circle display-4"></i><br>
+                            Không có thông tin truy cập được lưu lâu dài
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Danh sách công việc đã xem (Session) -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Công việc đã xem (Session)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.DanhSachDaXemSession.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var congViec in Model.DanhSachDaXemSession)
+                            {
+                                <a href="@Url.Action("Detail", "Job", new { id = congViec.MaCongViec })" 
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@congViec.TieuDe</h6>
+                                    </div>
+                                    <small class="text-muted">@congViec.CongTy?.TenCongTy</small>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">Không có công việc nào được xem trong phiên hiện tại</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách công việc đã xem (Cookie) -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Công việc đã xem (Cookie - 30 ngày)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.DanhSachDaXemCookie.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var congViec in Model.DanhSachDaXemCookie)
+                            {
+                                <a href="@Url.Action("Detail", "Job", new { id = congViec.MaCongViec })" 
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@congViec.TieuDe</h6>
+                                    </div>
+                                    <small class="text-muted">@congViec.CongTy?.TenCongTy</small>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">Không có công việc nào được lưu lâu dài</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4"></div>
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Tất cả Cookie</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tên Cookie (Key)</th>
+                            <th scope="col">Giá trị (Value)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.AllCookies != null && Model.AllCookies.Count > 0)
+                        {
+                            int index = 1;
+                            @foreach (var cookie in Model.AllCookies)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td><code>@cookie.Key</code></td>
+                                    <td>
+                                        <div style="max-height: 100px; overflow-y: auto;">
+                                            <code>@cookie.Value</code>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center">Không tìm thấy Cookie nào</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

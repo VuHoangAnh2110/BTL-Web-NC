@@ -1,9 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+    function showToast(type, message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end', // Vị trí góc phải trên cùng
+            icon: type, // 'success', 'error', 'warning', 'info'
+            title: message,
+            showConfirmButton: false,
+            timer: 3000 // Tự động ẩn sau 3 giây
+        });
+    }
+
     // Xử lý form thêm tài khoản
     const form = document.querySelector("#formThemTK");
     
     if (form) {
         form.addEventListener("submit", function (e) {
+            e.preventDefault();
             let isValid = true;
             
             // Xóa thông báo lỗi cũ
@@ -90,8 +102,79 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
             
-            if (!isValid) {
-                e.preventDefault();
+            if (isValid) {
+                // Hiển thị spinner hoặc thông báo đang xử lý
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang xử lý...';
+                submitBtn.disabled = true;
+                
+                // Lấy CSRF token từ form
+                // const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                
+                // Tạo FormData từ form
+                const formData = new FormData(form);
+                
+                // Gửi AJAX request bằng fetch
+                fetch('/QLyTaiKhoan/ThemTK', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        // 'RequestVerificationToken': token,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    // Chuyển response thành JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // Khôi phục nút submit
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    if (data.success) {
+                        // Hiển thị thông báo thành công
+                        showToast('success', 'Thêm tài khoản thành công!');
+                        
+                        // Xóa form sau khi thành công
+                        form.reset();
+                        
+                        // Reload trang sau 1 giây
+                        setTimeout(() => {
+                            window.location.href = '/QLyTaiKhoan/Index';
+                        }, 1000);
+                    } else {
+                        // Hiển thị lỗi từ server
+                        if (data.errors) {
+                            // Hiển thị lỗi validation
+                            Object.keys(data.errors).forEach(key => {
+                                const input = document.querySelector(`#${key}`);
+                                const message = data.errors[key][0];
+                                if (input && message != null) {
+                                    input.classList.add('is-invalid');
+                                    const errorElement = document.querySelector(`[data-valmsg-for="${key}"]`);
+                                    if (errorElement) {
+                                        errorElement.textContent = message;
+                                    }
+                                }
+                            });
+                        } else {
+                            // Hiển thị thông báo lỗi chung
+                            showToast('warning', 'Đã xảy ra lỗi khi thêm tài khoản');
+                        }
+                    }
+                })
+                .catch(error => {
+                    // Khôi phục nút submit
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    // Xử lý lỗi
+                    console.error('Lỗi:', error);
+                    showToast('error', 'Đã xảy ra lỗi khi gửi yêu cầu');
+                });
+            
             }
         });
     }
