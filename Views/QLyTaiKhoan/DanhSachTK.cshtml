@@ -1,0 +1,144 @@
+
+@model IEnumerable<BTL_Web_NC.Models.TaiKhoan>
+@{
+    ViewData["Title"] = "Danh sách tài khoản";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Danh sách tài khoản</h1>
+        <a href="@Url.Action("ThemTK", "QLyTaiKhoan")" class="btn btn-success">
+            <i class="fas fa-user-plus me-2"></i>Thêm tài khoản
+        </a>
+    </div>
+    
+    <div class="row g-4">
+        @foreach (var taiKhoan in Model)
+        {
+            <div class="col-12 col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span class="text-primary fw-bold">@taiKhoan.TenTaiKhoan</span>
+                        <div>
+                            @if (taiKhoan.VaiTro == "admin")
+                            {
+                                <span class="">Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info">User</span>
+                            }
+                            
+                            @switch (taiKhoan.TrangThai)
+                            {
+                                case 1:
+                                    <span class="badge bg-warning">Chờ duyệt</span>
+                                    break;
+                                case 2:
+                                    <span class="badge bg-success">Hoạt động</span>
+                                    break;
+                                case 3:
+                                    <span class="">Đã khóa</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                @* <img src="@(string.IsNullOrEmpty(taiKhoan.AnhDaiDien) ? "/img/avatar-default.jpg" : taiKhoan.AnhDaiDien)" 
+                                     class="rounded-circle img-thumbnail" style="width:80px;height:80px;object-fit:cover;" 
+                                     alt="@taiKhoan.HoTen" /> *@
+                            </div>
+                            
+                            <div class="col-12">
+                                <h5 class="card-title mb-3 text-center">@taiKhoan.HoTen</h5>
+                                
+                                <div class="mb-2">
+                                    <i class="fas fa-envelope text-secondary me-2"></i>
+                                    <span>@taiKhoan.Email</span>
+                                </div>
+                                
+                                @if (!string.IsNullOrEmpty(taiKhoan.SoDienThoai))
+                                {
+                                    <div class="mb-2">
+                                        <i class="fas fa-phone text-secondary me-2"></i>
+                                        <span>@taiKhoan.SoDienThoai</span>
+                                    </div>
+                                }
+                                
+                                @if (!string.IsNullOrEmpty(taiKhoan.DiaChi))
+                                {
+                                    <div class="mb-2">
+                                        <i class="fas fa-map-marker-alt text-secondary me-2"></i>
+                                        <span>@taiKhoan.DiaChi</span>
+                                    </div>
+                                }
+                                
+                                
+                                <div class="mb-2">
+                                    <i class="fas fa-calendar-alt text-secondary me-2"></i>
+                                    <span>Ngày tạo: @taiKhoan.NgayTao.ToString("dd/MM/yyyy")</span>
+                                </div>
+
+                                <div class="mb-2">
+                                    <i class="fas fa-calendar-alt text-secondary me-2"></i>
+                                    <span>Ngày sửa: @taiKhoan.NgayCapNhat.ToString("dd/MM/yyyy")</span>
+                                </div>
+
+                                <div class="mb-2">
+                                    <i class="fas fa-calendar-alt text-secondary me-2"></i>
+                                    <span>VerifyKey @taiKhoan.VerifyKey</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between">
+                        @* <a href="@Url.Action("CapNhatTK", "QLyTaiKhoan", new { id = taiKhoan.TenTaiKhoan })" class="btn btn-outline-primary">
+                            <i class="fas fa-edit me-2"></i>Sửa
+                        </a>
+                        
+                        @if (taiKhoan.TrangThai == 2)
+                        {
+                            <button class="btn btn-outline-danger btn-khoa-tk" data-id="@taiKhoan.TenTaiKhoan" data-bs-toggle="modal" data-bs-target="#modalKhoaTK">
+                                <i class="fas fa-lock me-2"></i>Khóa
+                            </button>
+                        }
+                        else if (taiKhoan.TrangThai == 3)
+                        {
+                            <button class="btn btn-outline-success btn-khoa-tk" data-id="@taiKhoan.TenTaiKhoan" data-bs-toggle="modal" data-bs-target="#modalKhoaTK">
+                                <i class="fas fa-unlock me-2"></i>Mở khóa
+                            </button>
+                        } *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal khóa/mở khóa tài khoản -->
+<div class="modal fade" id="modalKhoaTK" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" id="formKhoaTK" asp-action="KhoaTaiKhoan" asp-controller="QLyTaiKhoan">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalKhoaTKTitle">Xác nhận thay đổi trạng thái tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="taiKhoanId">
+                    <p id="modalMessage">Bạn có chắc chắn muốn thay đổi trạng thái của tài khoản này?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" id="btnXacNhan">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

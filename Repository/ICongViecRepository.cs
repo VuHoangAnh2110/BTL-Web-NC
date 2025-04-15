@@ -15,6 +15,10 @@ namespace BTL_Web_NC.Repositories
 
         Task UpdateCongViecAsync(CongViec congViec);
 
+        Task TangLuotXemAsync(string maCongViec);
+
+        Task<List<CongViec>> GetDSCongViecbyDSIdAsync(string[] maCongViecs);        
+
         Task<(List<CongViec> Items, int TotalCount)> LocDsCongViecAsync(
             string keyword, int page, int pageSize);
 

@@ -5,6 +5,8 @@ using BTL_Web_NC.Repositories;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+using BTL_Web_NC.ViewModels;
 
 namespace BTL_Web_NC.Controllers;
 
@@ -128,6 +130,93 @@ public class HomeController : Controller
         return View(result.Items);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> LichSuTruyCap()
+    {
+        // Lấy dữ liệu từ session và cookie
+        var sessionAccess = LayTruyCapTuSession();
+        var cookieAccess = LayTruyCapTuCookie();
+
+        // Tạo ViewModel để hiển thị lịch sử truy cập
+        var viewModel = new LichSuTruyCapViewModel 
+        {
+            SessionAccess = sessionAccess,
+            CookieAccess = cookieAccess
+        };
+
+        // Nếu có mã công việc, lấy thông tin chi tiết công việc
+        if (sessionAccess != null && !string.IsNullOrEmpty(sessionAccess.MaCongViec))
+        {
+            viewModel.CongViecSession = await _congViecRepo.GetCongViecByIdAsync(sessionAccess.MaCongViec);
+        }
+        
+        if (cookieAccess != null && !string.IsNullOrEmpty(cookieAccess.MaCongViec))
+        {
+            viewModel.CongViecCookie = await _congViecRepo.GetCongViecByIdAsync(cookieAccess.MaCongViec);
+        }
+
+        // Lấy danh sách công việc đã xem từ session
+        var dsXemSession = HttpContext.Session.GetString("LuotXem") ?? "";
+        if (!string.IsNullOrEmpty(dsXemSession))
+        {
+            var maCongViecs = dsXemSession.Split(',').Distinct().ToArray();
+            viewModel.DanhSachDaXemSession = await _congViecRepo.GetDSCongViecbyDSIdAsync(maCongViecs);
+        }
+
+        // Lấy danh sách công việc đã xem từ cookie
+        var dsXemCookie = Request.Cookies["LuotXem"] ?? "";
+        if (!string.IsNullOrEmpty(dsXemCookie))
+        {
+            var maCongViecs = dsXemCookie.Split(',').Distinct().ToArray();
+            viewModel.DanhSachDaXemCookie = await _congViecRepo.GetDSCongViecbyDSIdAsync(maCongViecs);
+        }
+
+        // Thêm tất cả cookie vào ViewModel
+        var allCookies = Request.Cookies.ToDictionary(c => c.Key, c => c.Value);
+        viewModel.AllCookies = allCookies;
+
+        return View(viewModel);
+    }
+
+    private TruyCapInfo LayTruyCapTuSession()
+    {
+        var lastAccessJson = HttpContext.Session.GetString("truyCapCuoi");
+        if (string.IsNullOrEmpty(lastAccessJson))
+        {
+            return null;
+        }
+        
+        try
+        {
+            // Đảm bảo deserialize đúng định dạng của JobController
+            return JsonSerializer.Deserialize<TruyCapInfo>(lastAccessJson);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Lỗi khi đọc thông tin truy cập từ session: {ex.Message}");
+            return null;
+        }
+    }
+
+    private TruyCapInfo LayTruyCapTuCookie()
+    {
+        var lastAccessJson = Request.Cookies["truyCapCuoi"];
+        if (string.IsNullOrEmpty(lastAccessJson))
+        {
+            return null;
+        }
+        
+        try
+        {
+            // Đảm bảo deserialize đúng định dạng của JobController
+            return JsonSerializer.Deserialize<TruyCapInfo>(lastAccessJson);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Lỗi khi đọc thông tin truy cập từ cookie: {ex.Message}");
+            return null;
+        }
+    }
 
 
 

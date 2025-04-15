@@ -225,6 +225,16 @@
         </div>
     </div>
 
+    <!-- Phần bên phải (4 cột) -->
+    <div class="col-md-4 text-end me-2">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalThemTK">
+            <i class="fas fa-user-plus"></i> Thêm tài khoản
+        </button>
+        @* <button class="btn btn-sm btn-outline-success me-2 btn-sua-tk" data-bs-toggle="modal" data-bs-target="#modalSuaTK" data-id="@account.TenTaiKhoan"></button>
+            <i class="fas fa-user-edit"></i>
+        </button> *@
+    </div>
+
     <!-- Modal khóa tài khoản -->
     <div class="modal fade" id="modalKhoaTK" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -252,6 +262,127 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
                         <button type="submit" id="btnKhoaTK" class="btn btn-danger">Khóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm tài khoản -->
+    <div class="modal fade" id="modalThemTK" tabindex="-1" aria-labelledby="modalThemTKLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formThemTK" method="post" asp-controller="QLyTaiKhoan" asp-action="ThemTaiKhoan">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalThemTKLabel">Thêm tài khoản mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="themTenTK" class="form-label">Tên tài khoản <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="themTenTK" name="TenTaiKhoan" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên tài khoản.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="themHoTen" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="themHoTen" name="HoTen" required>
+                            <div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="themEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="themEmail" name="Email" required>
+                            <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="themMatKhau" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="themMatKhau" name="MatKhau" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="themMatKhau">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                            <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="themVaiTro" class="form-label">Vai trò <span class="text-danger">*</span></label>
+                            <select class="form-select" id="themVaiTro" name="VaiTro" required>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="themTrangThai" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="themTrangThai" name="TrangThai">
+                                <option value="1">Chờ duyệt</option>
+                                <option value="2" selected>Hoạt động</option>
+                                <option value="3">Đã khóa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-success">Thêm tài khoản</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal sửa tài khoản -->
+    <div class="modal fade" id="modalSuaTK" tabindex="-1" aria-labelledby="modalSuaTKLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formSuaTK" method="post" asp-controller="QLyTaiKhoan" asp-action="CapNhatTaiKhoan">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalSuaTKLabel">Cập nhật thông tin tài khoản</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="suaTenTK" name="TenTaiKhoan">
+                        <div class="mb-3">
+                            <label for="displayTenTK" class="form-label">Tên tài khoản</label>
+                            <input type="text" class="form-control" id="displayTenTK" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suaHoTen" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="suaHoTen" name="HoTen" required>
+                            <div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suaEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="suaEmail" name="Email" required>
+                            <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suaMatKhau" class="form-label">Mật khẩu mới <small class="text-muted">(để trống nếu không muốn thay đổi)</small></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="suaMatKhau" name="MatKhau">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="suaMatKhau">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suaVaiTro" class="form-label">Vai trò <span class="text-danger">*</span></label>
+                            <select class="form-select" id="suaVaiTro" name="VaiTro" required>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suaTrangThai" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="suaTrangThai" name="TrangThai">
+                                <option value="1">Chờ duyệt</option>
+                                <option value="2">Hoạt động</option>
+                                <option value="3">Đã khóa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </form>
             </div>

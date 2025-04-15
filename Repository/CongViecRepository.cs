@@ -52,6 +52,24 @@ namespace BTL_Web_NC.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task TangLuotXemAsync(string maCongViec)
+        {
+            var congViec = await _context.CongViecs.FindAsync(maCongViec);
+            if (congViec != null)
+            {
+                congViec.LuotXem = (congViec.LuotXem ?? 0) + 1;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<CongViec>> GetDSCongViecbyDSIdAsync(string[] maCongViecs)
+        {
+            return await _context.CongViecs
+                .Where(c => maCongViecs.Contains(c.MaCongViec))
+                .Include(c => c.CongTy)
+                .ToListAsync();
+        }
+
         public async Task<(List<CongViec> Items, int TotalCount)> LocDsCongViecAsync(
             string keyword, int page, int pageSize)
         {
