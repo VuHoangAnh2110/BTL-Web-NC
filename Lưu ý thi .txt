@@ -1,3 +1,77 @@
+Bảo mật - OWASP
+Rủi ro đã được xử lý:
+    ✅ A01:2021 – Broken Access Control
+        Kiểm tra quyền admin trong các controller 
+        Chuyển hướng người dùng không có quyền đến trang từ chối truy cập
+        Phân quyền người dùng (Admin,user)
+    ✅ A02:2021 – Cryptographic Failures (một phần)
+        Sử dụng BCrypt để mã hóa mật khẩu, một thuật toán băm mạnh
+        Chức năng mã hóa mật khẩu tài khoản hiện có
+    ✅ A03:2021 – Injection (một phần)
+        Sử dụng Entity Framework giúp ngăn chặn SQL Injection
+        Sử dụng các tham số trong truy vấn
+    ✅ A07:2021 – Identification and Authentication Failures (một phần)
+        Kiểm tra tài khoản bị khóa/vô hiệu hóa
+        Xác thực đăng nhập với các thông báo lỗi cụ thể
+    ✅ A09:2021 - Security Logging and Monitoring Failures
+        Không hiện log lỗi ra để người người dùng thấy.
+        Thay bằng các thuật ngữ thông báo khác cho người dùng
+
+Phân công nhóm:
+Quá trình làm việc nhóm
+    Nhóm gồm 3 thành viên, ban đầu phối hợp tốt nhưng từ giữa kỳ, một bạn không tiếp tục tham gia. 
+    Tôi và bạn còn lại đã chủ động hoàn thành toàn bộ nội dung bài tập để đảm bảo tiến độ.
+
+Đánh giá hiệu quả
+    Hai thành viên tích cực phối hợp, chia sẻ công việc hợp lý và hoàn thành đúng yêu cầu đề tài.
+
+Bài học rút ra
+    Làm việc nhóm cần sự cam kết, theo sát tiến độ và hỗ trợ lẫn nhau để vượt qua khó khăn phát sinh.   
+
 
 Đề 1: 
-    ClO1: 
+    ClO1: Trong nhiệm vụ được phân công hãy chọn một bảng quản lý đối tượng sản phẩm/ dịch vụ/ con người là bảng T=......
+        Tạo một trang mới hiển thị tất cả thông tin (các cột) trong bảng T đó. Yêu cầu:
+            + Màn hình desktop: Hiện 3 bản ghi trên 1 hàng.
+            + Màn hình mobile: Hiện 1 bản ghi trên 1 hàng.
+            + Đặt link đến trang trên thanh menu (header)
+        * Lưu ý:    
+            + Dùng css thuần hơn là dùng bootstrap
+            + Link phải đặt trên menu, không được đặt trong droplist của menu
+
+    CLO2: Với bảng T vừa chọn, thêm một trường VerifyKey có kiểu dữ liệu văn bản vào bảng đó. 
+        Yêu cầu:
+            + Dữ liệu gồm 10 ký tự (đúng 10 không hơn, không kém)
+            + Bắt đầu bằng chữ số
+            + Kiểm tra đặt trong model
+        * Lưu ý: 
+            + VerifyKey là tên cột thêm vào, không được đặt tên khác (tên khác thì cook)
+            + Kiểm tra trong model và viewmodel bằng DataAnnotations, Validation (không phải dùng là js hay c#).
+
+    CL03: Thêm, thay đổi chức năng để có thể thêm dữ liệu cho trường VerifyKey.
+        Yêu cầu:
+            + Thêm vào dữ liệu được mã hóa trong db.
+            + Hiện ra dữ liệu đã giải mã.
+        * Lưu ý: 
+            + Không nên mã hóa bằng phương pháp mã hóa có sẵn mạnh nhất của Framework (vì là mã hóa 1 chiều, không giải mã được)
+            + Tự viết một hàm mã hóa hoặc sử dụng base64, ...
+            + Chức năng thì nên dùng ajax để gọi đến hàm thêm đó trong controller.
+
+Đề 2: 
+    CLo1: Tạo một trang view mới theo yêu cầu:
+        - Bố cục: 
+            + Header (View title)
+            + Sidebar nằm bên trái (gồm các chức năng thêm sửa xóa CRUD)
+            + Main Container nằm bên phải Sidebar chứa nội dung.
+            + Footer (Gồm tên nhóm, tên thành viên nhóm)  
+        - Yêu cầu: 
+            + Các chức năng trong Sidebar phải sử dụng ajaxx
+            + Phân quyền admin (all quyền), user (chỉ được xem). 
+            + Khi thêm, sủa, xóa thì chỉ cập nhật thay đổi ở main container chứ không load lại trang.
+
+    CLO2: Chọn 1 trang (view) trong btl, sử dụng cookie để lưu lần truy cập cuối cùng vào trang đó.
+        Thêm chức năng xem cookie (tạo view khác).
+        * Lưu ý:
+            + Khi người dùng đã đăng nhập, truy cập vào trang đó thì lưu cookie.
+            + Thời gian lưu đúng với thời gian truy cập trang. Không để lưu thời gian khi đăng nhập.
+    CLO3: Đánh giá công việc nhóm.       
